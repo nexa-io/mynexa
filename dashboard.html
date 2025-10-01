@@ -5,61 +5,156 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Nexa</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Montserrat', sans-serif; }
-        @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
-        .mobile-menu { display: none; }
-        .mobile-menu.active { display: block; }
+        body { font-family: 'Times New Roman', Times, serif; }
         .popup { display: none; position: fixed; top-0; left-0; right-0; bottom-0; background: rgba(0,0,0,0.5); z-index: 50; }
-        .popup-content { background: white; padding: 20px; border-radius: 16px; max-width: 500px; margin: 100px auto; border: 1px solid #f9a8d4; }
+        .popup-content { background: white; padding: 20px; border-radius: 8px; max-width: 500px; margin: 100px auto; }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-pink-50 to-white">
-    <header class="relative z-50 bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center space-x-3">
-                    <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
-                        <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                    </svg>
-                    <h1 class="text-3xl font-bold text-pink-600 tracking-wide">NEXA</h1>
+<body class="bg-gray-50 min-h-screen">
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-blue-600">Nexa Dashboard</h1>
+            <div class="relative">
+                <button id="profile-btn" class="text-gray-600 hover:text-blue-600">Profile</button>
+                <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white shadow rounded p-4">
+                    <p id="profile-name" class="font-semibold"></p>
+                    <p id="profile-email"></p>
+                    <form id="profile-form" class="mt-4 space-y-2">
+                        <input type="text" id="address" placeholder="Address" class="w-full p-2 border rounded">
+                        <input type="tel" id="phone" placeholder="Phone" class="w-full p-2 border rounded">
+                        <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Update</button>
+                    </form>
                 </div>
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="index.html#how-it-works" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">How It Works</a>
-                    <a href="index.html#features" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Features</a>
-                    <a href="pricing.html" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Pricing</a>
-                    <div class="relative">
-                        <button id="profile-btn" class="text-gray-600 hover:text-pink-600">Profile</button>
-                        <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-3xl p-4 border border-pink-100">
-                            <p id="profile-name" class="font-semibold text-gray-800"></p>
-                            <p id="profile-email" class="text-gray-600"></p>
-                            <form id="profile-form" class="mt-4 space-y-2">
-                                <input type="text" id="address" placeholder="Address" class="w-full p-2 border border-pink-200 rounded-full">
-                                <input type="tel" id="phone" placeholder="Phone" class="w-full p-2 border border-pink-200 rounded-full">
-                                <button type="submit" class="w-full bg-pink-500 text-white p-2 rounded-full hover:bg-pink-600">Update</button>
-                            </form>
-                        </div>
-                    </div>
-                </nav>
-                <button id="mobile-menu-button" class="md:hidden text-gray-600">
-                    <svg id="menu-icon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    <svg id="close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
             </div>
-            <div id="mobile-menu" class="mobile-menu md:hidden absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-pink-100 shadow-lg">
-                <nav class="flex flex-col space-y-4 p-6">
-                    <a href="index.html#how-it-works" class="text-gray
+        </div>
+    </header>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 id="welcome" class="text-2xl font-bold text-gray-800"></h2>
+        <div id="contract-details" class="mt-6 bg-white p-6 rounded shadow">
+            <h3 class="text-xl font-semibold text-blue-600">Contract Details</h3>
+            <p><strong>Status:</strong> <span id="contract-status"></span></p>
+            <p><strong>Account Size:</strong> $<span id="account-size"></span></p>
+            <p><strong>Expiry:</strong> <span id="contract-expiry"></span></p>
+            <p><strong>Payout Date:</strong> <span id="payout-date"></span></p>
+        </div>
+        <div class="mt-6 flex space-x-4">
+            <a href="payout.html" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Payout</a>
+            <a href="kyc.html" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">KYC</a>
+            <a href="faq.html" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">FAQ</a>
+            <a href="pricing.html" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Challenge</a>
+            <button id="logout-btn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Log Out</button>
+        </div>
+        <div id="contract-popup" class="popup">
+            <div class="popup-content">
+                <h3 class="text-xl font-bold">Action Required</h3>
+                <p id="contract-message"></p>
+                <a id="contract-link" href="https://docuseal.com/d/w4aYAR5LfBb41G" target="_blank" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Sign Contract</a>
+                <button id="close-contract-popup" class="mt-2 text-gray-600">Close</button>
+            </div>
+        </div>
+        <div id="kyc-popup" class="popup">
+            <div class="popup-content">
+                <h3 class="text-xl font-bold">Action Required</h3>
+                <p>Please complete KYC verification.</p>
+                <a href="https://forms.gle/esMxwUYE3fMVG1qn6" target="_blank" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Verify KYC</a>
+                <button id="close-kyc-popup" class="mt-2 text-gray-600">Close</button>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between">
+            <p>&copy; 2025 Nexa. All rights reserved.</p>
+            <div class="flex space-x-4">
+                <a href="terms.html" class="hover:text-blue-300">Terms</a>
+                <a href="privacy.html" class="hover:text-blue-300">Privacy</a>
+                <a href="contact.html" class="hover:text-blue-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (!localStorage.getItem('loggedIn')) {
+            window.location.href = 'login.html';
+        }
+        async function loadUser() {
+            const response = await fetch('https://nexa-backend-3wxt.onrender.com/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: user.email, password: user.password })
+            });
+            if (response.ok) {
+                const updatedUser = await response.json();
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+                document.getElementById('welcome').textContent = `Welcome, ${updatedUser.name || 'Trader'}`;
+                document.getElementById('profile-name').textContent = updatedUser.name || 'N/A';
+                document.getElementById('profile-email').textContent = updatedUser.email || 'N/A';
+                document.getElementById('contract-status').textContent = updatedUser.contractStatus || 'Unsigned';
+                document.getElementById('account-size').textContent = updatedUser.accountSize || 0;
+                document.getElementById('contract-expiry').textContent = updatedUser.contractExpiry || 'N/A';
+                document.getElementById('payout-date').textContent = updatedUser.payoutDate || 'N/A';
+                if (updatedUser.accountSize > 0 && updatedUser.contractStatus === 'Unsigned') {
+                    document.getElementById('contract-message').textContent = 'Please sign the Trading Agreement to proceed.';
+                    document.getElementById('contract-link').href = 'https://docuseal.com/d/w4aYAR5LfBb41G';
+                    document.getElementById('contract-popup').style.display = 'flex';
+                } else if (updatedUser.accountSize > 0 && updatedUser.contractStatus === 'Signed') {
+                    document.getElementById('contract-message').textContent = 'Contract signed. Verify here:';
+                    document.getElementById('contract-link').href = 'https://forms.gle/pGFFfzpVzzGzGrck8';
+                    document.getElementById('contract-popup').style.display = 'flex';
+                } else if (updatedUser.contractStatus === 'Funded' && updatedUser.kycStatus === 'Not Submitted') {
+                    document.getElementById('kyc-popup').style.display = 'flex';
+                }
+            }
+        }
+        loadUser();
+        document.getElementById('close-contract-popup').addEventListener('click', () => {
+            document.getElementById('contract-popup').style.display = 'none';
+        });
+        document.getElementById('close-kyc-popup').addEventListener('click', () => {
+            document.getElementById('kyc-popup').style.display = 'none';
+        });
+        document.getElementById('profile-btn').addEventListener('click', () => {
+            document.getElementById('profile-dropdown').classList.toggle('hidden');
+        });
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const response = await fetch('https://nexa-backend-3wxt.onrender.com/update-profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: user.email,
+                    address: document.getElementById('address').value,
+                    phone: document.getElementById('phone').value
+                })
+            });
+            if (response.ok) {
+                user.address = document.getElementById('address').value;
+                user.phone = document.getElementById('phone').value;
+                localStorage.setItem('user', JSON.stringify(user));
+                alert('Profile updated!');
+            }
+        });
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        });
+        const urlParams = new URLSearchParams(window.location.search);
+        const challenge = urlParams.get('challenge');
+        const validChallenges = ['Tier1-1-Step', 'Tier2-1-Step', 'Tier3-1-Step', 'Tier4-1-Step', 'Tier1-2-Step', 'Tier2-2-Step', 'Tier3-2-Step', 'Tier4-2-Step'];
+        if (challenge && validChallenges.includes(challenge)) {
+            const accountSize = challenge.includes('Tier1') ? 100 : challenge.includes('Tier2') ? 200 : challenge.includes('Tier3') ? 500 : 1000;
+            user.challenges = user.challenges || [];
+            user.challenges.push(challenge);
+            user.accountSize = accountSize;
+            user.contractStatus = 'Unsigned';
+            user.contractExpiry = new Date(Date.now() + (challenge.includes('1-Step') ? 30 : 60) * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            fetch('https://nexa-backend-3wxt.onrender.com/update-status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            }).then(() => loadUser());
+        }
+    </script>
+</body>
+</html>
