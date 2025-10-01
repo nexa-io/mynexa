@@ -3,298 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexa - Prop Trading Firm</title>
+    <title>Nexa - Trade Your Way</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Montserrat', sans-serif; }
+        body { font-family: 'Times New Roman', Times, serif; }
+        .animate-fade-in { animation: fade-in 0.6s ease-out; }
         @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
-        @keyframes gentle-float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
-        .animate-gentle-float { animation: gentle-float 3s ease-in-out infinite; }
-        .mobile-menu { display: none; }
-        .mobile-menu.active { display: block; }
     </style>
 </head>
-<body class="min-h-screen bg-white">
-    <!-- Header -->
-    <header class="relative z-50 bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center space-x-3">
-                    <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
-                        <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                    </svg>
-                    <h1 class="text-3xl font-bold text-pink-600 tracking-wide">NEXA</h1>
-                </div>
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#how-it-works" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">How It Works</a>
-                    <a href="#features" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Features</a>
-                    <a href="pricing.html" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Pricing</a>
-                    <a href="signup.html" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Sign Up</a>
-                    <a href="login.html" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Login</a>
-                </nav>
-                <button id="mobile-menu-button" class="md:hidden text-gray-600">
-                    <svg id="menu-icon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    <svg id="close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div id="mobile-menu" class="mobile-menu md:hidden absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-pink-100 shadow-lg">
-                <nav class="flex flex-col space-y-4 p-6">
-                    <a href="#how-it-works" class="text-gray-600">How It Works</a>
-                    <a href="#features" class="text-gray-600">Features</a>
-                    <a href="pricing.html" class="text-gray-600">Pricing</a>
-                    <a href="signup.html" class="text-gray-600">Sign Up</a>
-                    <a href="login.html" class="text-gray-600">Login</a>
-                </nav>
-            </div>
+<body class="bg-gray-50 min-h-screen">
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-blue-600">Nexa</h1>
+            <nav class="flex space-x-4">
+                <a href="pricing.html" class="text-gray-600 hover:text-blue-600">Pricing</a>
+                <a href="signup.html" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Sign Up</a>
+                <a href="login.html" class="text-gray-600 hover:text-blue-600">Login</a>
+            </nav>
         </div>
     </header>
-
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-pink-50 via-white to-pink-50">
-        <div class="absolute inset-0 opacity-5">
-            <div class="absolute inset-0" style="background-image: linear-gradient(rgba(236, 72, 153, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(236, 72, 153, 0.1) 1px, transparent 1px); background-size: 60px 60px;"></div>
-        </div>
-        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 text-center">
-            <div class="space-y-8 opacity-0 animate-fade-in">
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight text-gray-800">
-                    Unlock Funded Trading with <span class="text-pink-600">Nexa</span>
-                </h1>
-                <p class="text-xl md:text-2xl font-medium text-gray-600 max-w-4xl mx-auto">
-                    Join Nexa by entering a profit-sharing contract. Trade crypto, forex, stocks, indices, synthetic indices (Deriv), and energy on your chosen platform. Control your account, pass our challenges, and keep up to 160% of profits.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
-                    <a href="signup.html" class="bg-pink-500 hover:bg-pink-600 text-white text-lg px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center">
-                        <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                        Get Started
-                    </a>
-                    <a href="pricing.html" class="border border-pink-300 text-pink-600 hover:bg-pink-50 text-lg px-8 py-4 rounded-full transition-colors duration-200">
-                        View Pricing
-                    </a>
-                </div>
-                <div class="flex flex-wrap justify-center gap-6 text-lg md:text-xl">
-                    <span class="flex items-center gap-2 text-green-600">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                        </svg>
-                        Control Your Account on Any Platform
-                    </span>
-                    <span class="text-gray-300">|</span>
-                    <span class="flex items-center gap-2 text-pink-600">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                        Compliant with Nigerian Laws
-                    </span>
-                </div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <section class="text-center animate-fade-in">
+            <h2 class="text-4xl font-bold text-gray-800">Trade Your Way with Nexa</h2>
+            <p class="text-xl text-gray-600 mt-4">Join our profit-sharing program. Trade crypto, forex, stocks, indices, synthetic indices (Deriv), or energy on <strong>your chosen platform</strong>. Pass our challenges to unlock funded accounts with up to 160% profit share.</p>
+            <div class="mt-8 flex justify-center space-x-4">
+                <a href="signup.html" class="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">Get Started</a>
+                <a href="pricing.html" class="border border-blue-500 text-blue-500 px-6 py-3 rounded hover:bg-blue-50">View Pricing</a>
             </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">How It Works</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Enter a profit-sharing contract, trade on your platform, submit history, and get funded.
-                </p>
+            <p class="mt-4 text-gray-500">Compliant with Nigerian AML/CTF laws. Requires signed contract and KYC.</p>
+        </section>
+        <section class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded shadow">
+                <h3 class="text-xl font-semibold text-blue-600">Control Your Account</h3>
+                <p class="mt-2 text-gray-600">Trade on any platform (e.g., Binance, Deriv) with no leverage limits.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="relative opacity-0 animate-fade-in" style="animation-delay: 0s;">
-                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center font-bold text-lg z-10">01</div>
-                    <div class="bg-gradient-to-br from-pink-50 to-white border border-pink-100 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 h-full">
-                        <div class="p-8 text-center">
-                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-pink-500 text-white mb-6">
-                                <svg class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                </svg>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Buy a Challenge</h3>
-                            <p class="text-gray-600 leading-relaxed">Purchase a 1-Step or 2-Step challenge starting at $2. Trade on your platform (Binance, Deriv, etc.).</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative opacity-0 animate-fade-in" style="animation-delay: 0.2s;">
-                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center font-bold text-lg z-10">02</div>
-                    <div class="bg-gradient-to-br from-pink-50 to-white border border-pink-100 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 h-full">
-                        <div class="p-8 text-center">
-                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-pink-400 text-white mb-6">
-                                <svg class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Sign Contract & KYC</h3>
-                            <p class="text-gray-600 leading-relaxed">Sign the Trading Agreement via DocuSeal and complete KYC (NIN slip + selfie). Trade on your platform.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative opacity-0 animate-fade-in" style="animation-delay: 0.4s;">
-                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center font-bold text-lg z-10">03</div>
-                    <div class="bg-gradient-to-br from-pink-50 to-white border border-pink-100 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 h-full">
-                        <div class="p-8 text-center">
-                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-pink-600 text-white mb-6">
-                                <svg class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                </svg>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Get Funded & Payout</h3>
-                            <p class="text-gray-600 leading-relaxed">Pass the challenge, get funded, and request payouts (min $3, max 10% account size). Trade on your platform.</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="bg-white p-6 rounded shadow">
+                <h3 class="text-xl font-semibold text-blue-600">Flexible Challenges</h3>
+                <p class="mt-2 text-gray-600">1-Step (10% profit, 30 days) or 2-Step (8% profit/phase, 60 days).</p>
             </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="py-24 bg-gradient-to-br from-pink-50 to-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                    Why Choose <span class="text-pink-600">Nexa</span>?
-                </h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Experience prop trading with user control and compliance.
-                </p>
+            <div class="bg-white p-6 rounded shadow">
+                <h3 class="text-xl font-semibold text-blue-600">Fast Payouts</h3>
+                <p class="mt-2 text-gray-600">80/20 (demo) or 160/20 (live) splits, min $3, max 10% account size.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white border border-pink-100 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 opacity-0 animate-fade-in" style="animation-delay: 0s;">
-                    <div class="p-8 text-center">
-                        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r from-green-400 to-green-500 text-white mb-6">
-                            <svg class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Your Platform, Your Control</h3>
-                        <p class="text-gray-600 leading-relaxed">Trade on Binance, Deriv, or any platform with no leverage limits.</p>
-                    </div>
-                </div>
-                <div class="bg-white border border-pink-100 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 opacity-0 animate-fade-in" style="animation-delay: 0.2s;">
-                    <div class="p-8 text-center">
-                        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r from-pink-400 to-pink-500 text-white mb-6">
-                            <svg class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Flexible Challenges</h3>
-                        <p class="text-gray-600 leading-relaxed">Choose 1-Step (10% profit, 30 days) or 2-Step (8% profit/phase, 60 days).</p>
-                    </div>
-                </div>
-                <div class="bg-white border border-pink-100 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 opacity-0 animate-fade-in" style="animation-delay: 0.4s;">
-                    <div class="p-8 text-center">
-                        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r from-blue-400 to-blue-500 text-white mb-6">
-                            <svg class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Fast Payouts</h3>
-                        <p class="text-gray-600 leading-relaxed">80/20 (demo) or 160/20 (live) splits, min $3, max 10% account size.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Call to Action Section -->
-    <section class="py-24 bg-gradient-to-br from-pink-600 to-pink-800 text-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-            <div class="space-y-8 opacity-0 animate-fade-in">
-                <h2 class="text-4xl md:text-5xl font-bold">Ready to Trade?</h2>
-                <p class="text-xl max-w-3xl mx-auto">
-                    Start your journey with Nexa. Buy a challenge, sign the contract, and trade your way to a funded account.
-                </p>
-                <div class="flex justify-center">
-                    <a href="signup.html" class="bg-white text-pink-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-gentle-float flex items-center">
-                        <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                        Join Now
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-12">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-3 mb-6">
-                        <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
-                            <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                            <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
-                            <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                            <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                            <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
-                            <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                            <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                            <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
-                            <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                        </svg>
-                        <h3 class="text-2xl font-bold text-pink-400">NEXA</h3>
-                    </div>
-                    <p class="text-gray-400">
-                        Empowering traders with funded accounts and profit-sharing opportunities.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="pricing.html" class="hover:text-pink-400 transition-colors duration-200">Pricing</a></li>
-                        <li><a href="faq.html" class="hover:text-pink-400 transition-colors duration-200">FAQ</a></li>
-                        <li><a href="terms.html" class="hover:text-pink-400 transition-colors duration-200">Terms</a></li>
-                        <li><a href="privacy.html" class="hover:text-pink-400 transition-colors duration-200">Privacy</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-white mb-4">Support</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="contact.html" class="hover:text-pink-400 transition-colors duration-200">Contact Us</a></li>
-                        <li><a href="mailto:infocontactnexa@gmail.com" class="hover:text-pink-400 transition-colors duration-200">Email Support</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-white mb-4">Legal</h4>
-                    <p class="text-gray-400">
-                        Compliant with Nigerian AML/CTF laws. KYC required. Trading involves risk; no refunds for challenge fees.
-                    </p>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-gray-700 text-center">
-                <p class="text-gray-400">&copy; 2025 Nexa. All rights reserved.</p>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between">
+            <p>&copy; 2025 Nexa. All rights reserved.</p>
+            <div class="flex space-x-4">
+                <a href="terms.html" class="hover:text-blue-300">Terms</a>
+                <a href="privacy.html" class="hover:text-blue-300">Privacy</a>
+                <a href="contact.html" class="hover:text-blue-300">Contact</a>
             </div>
         </div>
     </footer>
-
-    <!-- Mobile Menu Script -->
-    <script>
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const menuIcon = document.getElementById('menu-icon');
-        const closeIcon = document.getElementById('close-icon');
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('active');
-            menuIcon.classList.toggle('hidden');
-            closeIcon.classList.toggle('hidden');
-        });
-    </script>
 </body>
 </html>
