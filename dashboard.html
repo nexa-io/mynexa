@@ -1,135 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nexa Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Montserrat', sans-serif; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Nexa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+        @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
+        .mobile-menu { display: none; }
+        .mobile-menu.active { display: block; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 24px; border-radius: 16px; max-width: 400px; width: 90%; border: 1px solid #f9a8d4; text-align: center; }
+        .profile-dropdown { display: none; }
+        .profile-dropdown.active { display: block; }
+    </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gradient-to-br from-pink-50 to-white flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="relative z-50 bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
+                        <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                        <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
+                        <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                        <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                        <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
+                        <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                        <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+                        <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
+                        <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+                    </svg>
+                    <h1 class="text-3xl font-bold text-pink-600 tracking-wide">NEXA</h1>
+                </div>
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="payout.html" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Payout</a>
+                    <a href="kyc.html" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">KYC</a>
+                    <a href="faq.html" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">FAQ</a>
+                    <div class="relative">
+                        <button id="profile-btn" class="text-gray-600 hover:text-pink-600 flex items-center">
+                            Profile
+                            <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div id="profile-dropdown" class="profile-dropdown absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-3xl p-4 border border-pink-100">
+                            <p class="font-semibold text-gray-800">Welcome, <span id="profile-name"></span></p>
+                            <p class="text-gray-600 text-sm" id="profile-email"></p>
+                            <form id="updateForm" class="mt-4 space-y-2">
+                                <input type="text" id="updatePhone" placeholder="Phone" class="w-full p-2 border border-pink-200 rounded-full">
+                                <input type="text" id="updateAddress" placeholder="Address" class="w-full p-2 border border-pink-200 rounded-full">
+                                <button type="submit" class="w-full bg-pink-500 text-white p-2 rounded-full hover:bg-pink-600">Update</button>
+                            </form>
+                            <button id="logoutBtn" class="w-full bg-gray-500 text-white p-2 rounded-full hover:bg-gray-600 mt-2">Logout</button>
+                        </div>
+                    </div>
+                </nav>
+                <button id="mobile-menu-button" class="md:hidden text-gray-600">
+                    <svg id="menu-icon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg id="close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="mobile-menu" class="mobile-menu md:hidden absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-pink-100 shadow-lg">
+                <nav class="flex flex-col space-y-4 p-6">
+                    <a href="payout.html" class="text-gray-600">Payout</a>
+                    <a href="kyc.html" class="text-gray-600">KYC</a>
+                    <a href="faq.html" class="text-gray-600">FAQ</a>
+                    <a href="#" id="mobile-profile-btn" class="text-gray-600">Profile</a>
+                </nav>
+            </div>
+        </div>
+    </header>
 
-  <!-- Top Nav -->
-  <nav class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-pink-600">Nexa Dashboard</h1>
-    <button id="logoutBtn" class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600">Logout</button>
-  </nav>
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-6 lg:px-8 py-12">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8 opacity-0 animate-fade-in">Active Contracts</h2>
+        <div id="contracts" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Contracts will be dynamically added here -->
+        </div>
+    </main>
 
-  <!-- Content -->
-  <div class="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-xl shadow-md">
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Account Overview</h2>
-
-    <div id="userInfo" class="space-y-3">
-      <p><strong>Name:</strong> <span id="name"></span></p>
-      <p><strong>Email:</strong> <span id="email"></span></p>
-      <p><strong>Phone:</strong> <span id="phone"></span></p>
-      <p><strong>Address:</strong> <span id="address"></span></p>
-      <p><strong>KYC Status:</strong> <span id="kycStatus"></span></p>
-      <p><strong>Contract Status:</strong> <span id="contractStatus"></span></p>
-      <p><strong>Account Size:</strong> ₦<span id="accountSize"></span></p>
-      <p><strong>Contract Expiry:</strong> <span id="contractExpiry"></span></p>
-      <p><strong>Payout Date:</strong> <span id="payoutDate"></span></p>
+    <!-- Custom Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content animate-fade-in">
+            <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-4"></h3>
+            <p id="modal-message" class="text-gray-600 mb-6"></p>
+            <button id="modal-close" class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-all duration-200">OK</button>
+        </div>
     </div>
 
-    <div class="mt-8">
-      <h3 class="text-lg font-semibold mb-2">Update Contact Info</h3>
-      <form id="updateForm" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium">Phone</label>
-          <input type="text" id="updatePhone" class="w-full border p-2 rounded-lg" placeholder="Enter new phone">
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
+                            <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                            <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
+                            <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                            <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                            <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
+                            <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                            <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+                            <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
+                            <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+                        </svg>
+                        <h3 class="text-2xl font-bold text-pink-400">NEXA</h3>
+                    </div>
+                    <p class="text-gray-400">
+                        Empowering traders with funded accounts and profit-sharing opportunities.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="faq.html" class="hover:text-pink-400 transition-colors duration-200">FAQ</a></li>
+                        <li><a href="terms.html" class="hover:text-pink-400 transition-colors duration-200">Terms</a></li>
+                        <li><a href="privacy.html" class="hover:text-pink-400 transition-colors duration-200">Privacy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="contact.html" class="hover:text-pink-400 transition-colors duration-200">Contact Us</a></li>
+                        <li><a href="mailto:infocontactnexa@gmail.com" class="hover:text-pink-400 transition-colors duration-200">Email Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Legal</h4>
+                    <p class="text-gray-400">
+                        Compliant with Nigerian AML/CTF laws. KYC required. Trading involves risk; no refunds for challenge fees.
+                    </p>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center">
+                <p class="text-gray-400">&copy; 2025 Nexa. All rights reserved.</p>
+            </div>
         </div>
-        <div>
-          <label class="block text-sm font-medium">Address</label>
-          <input type="text" id="updateAddress" class="w-full border p-2 rounded-lg" placeholder="Enter new address">
-        </div>
-        <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600">Update</button>
-      </form>
-    </div>
-  </div>
+    </footer>
 
-  <script>
-    const backendUrl = 'https://nexa-backend-3wxt.onrender.com';
+    <!-- JavaScript -->
+    <script>
+        const backendUrl = 'https://nexa-backend-3wxt.onrender.com';
+        const token = localStorage.getItem('authToken');
+        const paymentLinks = [
+            'https://paystack.shop/pay/Tier1-1-Step',
+            'https://paystack.shop/pay/Tier2-1-Step',
+            'https://paystack.shop/pay/Tier3-1-Step',
+            'https://paystack.shop/pay/Tier4-1-Step',
+            'https://paystack.shop/pay/Tier1-2-Step',
+            'https://paystack.shop/pay/Tier2-2-Step',
+            'https://paystack.shop/pay/Tier3-2-Step',
+            'https://paystack.shop/pay/Tier4-2-Step'
+        ];
 
-    // Redirect if not logged in
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      window.location.href = 'login.html';
-    }
-
-    // Load user data
-    async function loadUser() {
-      try {
-        const res = await fetch(`${backendUrl}/user-data`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!res.ok) {
-          localStorage.removeItem('authToken');
-          window.location.href = 'login.html';
-          return;
+        // Redirect if not logged in
+        if (!token) {
+            window.location.href = 'login.html';
         }
 
-        const user = await res.json();
-        document.getElementById('name').textContent = user.name;
-        document.getElementById('email').textContent = user.email;
-        document.getElementById('phone').textContent = user.phone || 'Not set';
-        document.getElementById('address').textContent = user.address || 'Not set';
-        document.getElementById('kycStatus').textContent = user.kycStatus;
-        document.getElementById('contractStatus').textContent = user.contractStatus;
-        document.getElementById('accountSize').textContent = user.accountSize;
-        document.getElementById('contractExpiry').textContent = user.contractExpiry;
-        document.getElementById('payoutDate').textContent = user.payoutDate;
+        // DOM Elements
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        const closeIcon = document.getElementById('close-icon');
+        const profileBtn = document.getElementById('profile-btn');
+        const mobileProfileBtn = document.getElementById('mobile-profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalClose = document.getElementById('modal-close');
+        const contractsDiv = document.getElementById('contracts');
 
-        document.getElementById('updatePhone').value = user.phone || '';
-        document.getElementById('updateAddress').value = user.address || '';
-      } catch (err) {
-        console.error('Error loading user:', err);
-        alert('Error loading user data');
-      }
-    }
-
-    // Update profile
-    document.getElementById('updateForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const phone = document.getElementById('updatePhone').value.trim();
-      const address = document.getElementById('updateAddress').value.trim();
-
-      try {
-        const res = await fetch(`${backendUrl}/update-profile`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ phone, address })
+        // Mobile Menu Toggle
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
         });
 
-        if (!res.ok) throw new Error('Failed to update');
+        // Profile Dropdown Toggle
+        profileBtn.addEventListener('click', () => {
+            profileDropdown.classList.toggle('active');
+        });
+        mobileProfileBtn.addEventListener('click', () => {
+            profileDropdown.classList.toggle('active');
+        });
 
-        const data = await res.json();
-        alert(data.message);
+        // Show Custom Modal
+        function showModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modal.style.display = 'flex';
+        }
+
+        // Close Modal
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Countdown Timer
+        function startCountdown(expiryDate, elementId) {
+            const end = new Date(expiryDate).getTime();
+            const timer = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = end - now;
+                if (distance < 0) {
+                    clearInterval(timer);
+                    document.getElementById(elementId).textContent = 'Expired';
+                    return;
+                }
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById(elementId).textContent = `${days}d ${hours}h ${minutes}m`;
+            }, 1000);
+        }
+
+        // Load User Data
+        async function loadUser() {
+            try {
+                const res = await fetch(`${backendUrl}/user-data`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!res.ok) {
+                    localStorage.removeItem('authToken');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                const user = await res.json();
+                document.getElementById('profile-name').textContent = user.name;
+                document.getElementById('profile-email').textContent = user.email;
+                document.getElementById('updatePhone').value = user.phone || '';
+                document.getElementById('updateAddress').value = user.address || '';
+            } catch (err) {
+                showModal('Error', 'Failed to load user data.');
+            }
+        }
+
+        // Load Contracts
+        async function loadContracts() {
+            try {
+                const res = await fetch(`${backendUrl}/contracts`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!res.ok) throw new Error('Failed to fetch contracts');
+                const contracts = await res.json();
+                contractsDiv.innerHTML = '';
+                contracts.forEach((contract, index) => {
+                    const contractCard = `
+                        <div class="bg-white border border-pink-100 rounded-3xl p-6 hover:shadow-xl transition-all duration-300 opacity-0 animate-fade-in" style="animation-delay: ${index * 0.2}s;">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Contract #${contract.id}</h3>
+                            <p><strong>Account Size:</strong> $${contract.accountSize}</p>
+                            <p><strong>Status:</strong> ${contract.contractStatus}</p>
+                            <p><strong>KYC Status:</strong> ${contract.kycStatus}</p>
+                            <p><strong>Expiry:</strong> <span id="countdown-${contract.id}"></span></p>
+                            <p><strong>Payout Date:</strong> ${contract.payoutDate}</p>
+                            <div class="mt-4 flex space-x-4">
+                                <a href="https://docuseal.com/d/w4aYAR5LfBb41G" target="_blank" class="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600">View Contract</a>
+                                <a href="https://forms.gle/esMxwUYE3fMVG1qn6" target="_blank" class="border border-pink-300 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-50">Complete KYC</a>
+                            </div>
+                        </div>
+                    `;
+                    contractsDiv.innerHTML += contractCard;
+                    startCountdown(contract.contractExpiry, `countdown-${contract.id}`);
+                });
+            } catch (err) {
+                showModal('Error', 'Failed to load contracts.');
+            }
+        }
+
+        // Check for Payment Redirect and Add Contract
+        async function checkPaymentRedirect() {
+            const referrer = document.referrer;
+            if (paymentLinks.includes(referrer)) {
+                const tier = referrer.split('/').pop();
+                const [tierNum, steps] = tier.split('-');
+                const accountSizes = { 'Tier1': 100, 'Tier2': 200, 'Tier3': 500, 'Tier4': 1000 };
+                const contract = {
+                    accountSize: accountSizes[tierNum],
+                    steps: steps === '1-Step' ? 1 : 2,
+                    contractStatus: 'Pending',
+                    kycStatus: 'Not Submitted',
+                    contractExpiry: new Date(Date.now() + (steps === '1-Step' ? 30 : 60) * 24 * 60 * 60 * 1000).toISOString(),
+                    payoutDate: 'N/A'
+                };
+                try {
+                    const res = await fetch(`${backendUrl}/add-contract`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(contract)
+                    });
+                    if (res.ok) {
+                        showModal('Success', 'New contract added! Check your email for details.');
+                        loadContracts();
+                    } else {
+                        showModal('Error', 'Failed to add contract.');
+                    }
+                } catch (err) {
+                    showModal('Error', 'Network error adding contract.');
+                }
+            }
+        }
+
+        // Update Profile
+        document.getElementById('updateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const phone = document.getElementById('updatePhone').value.trim();
+            const address = document.getElementById('updateAddress').value.trim();
+            try {
+                const res = await fetch(`${backendUrl}/update-profile`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ phone, address })
+                });
+                if (!res.ok) throw new Error('Failed to update');
+                showModal('Success', 'Profile updated successfully.');
+                loadUser();
+            } catch (err) {
+                showModal('Error', 'Could not update profile.');
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+        });
+
+        // Initialize
         loadUser();
-      } catch (err) {
-        console.error('Update error:', err);
-        alert('Could not update profile.');
-      }
-    });
-
-    // Logout
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('authToken');
-      window.location.href = 'login.html';
-    });
-
-    loadUser();
-  </script>
-
+        loadContracts();
+        checkPaymentRedirect();
+    </script>
 </body>
-</html>
+                          </html>
