@@ -1,267 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard - Nexa</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Montserrat', sans-serif; }
-        .popup { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 50; align-items: center; justify-content: center; }
-        .popup-content { background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nexa Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Montserrat', sans-serif; }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <header class="bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-4 flex justify-between items-center">
-            <h1 class="text-3xl font-bold text-pink-600">Nexa Dashboard</h1>
-            <div class="relative flex items-center space-x-4">
-                <button id="profile-btn" class="flex items-center space-x-2 text-gray-600 hover:text-pink-600 transition-colors">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                    <span id="nav-name">Profile</span>
-                </button>
-                <div id="profile-dropdown" class="hidden absolute right-0 top-10 mt-2 w-72 bg-white shadow-xl rounded-lg p-5 border border-gray-100 z-10">
-                    <p id="profile-name" class="font-bold text-lg text-gray-800"></p>
-                    <p id="profile-email" class="text-sm text-gray-500 mb-4"></p>
-                    <form id="profile-form" class="space-y-3">
-                        <input type="text" id="address" placeholder="Address (Optional)" class="w-full p-2 border border-gray-300 rounded-lg text-sm" />
-                        <input type="tel" id="phone" placeholder="Phone (Optional)" class="w-full p-2 border border-gray-300 rounded-lg text-sm" />
-                        <button type="submit" class="w-full bg-pink-500 text-white p-2 rounded-lg font-semibold hover:bg-pink-600 transition-colors">Update Profile</button>
-                    </form>
-                    <button id="logout-btn-dropdown" class="w-full mt-4 bg-red-500 text-white p-2 rounded-lg font-semibold hover:bg-red-600 transition-colors">Log Out</button>
-                </div>
-            </div>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- Top Nav -->
+  <nav class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-pink-600">Nexa Dashboard</h1>
+    <button id="logoutBtn" class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600">Logout</button>
+  </nav>
+
+  <!-- Content -->
+  <div class="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-xl shadow-md">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Account Overview</h2>
+
+    <div id="userInfo" class="space-y-3">
+      <p><strong>Name:</strong> <span id="name"></span></p>
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>Phone:</strong> <span id="phone"></span></p>
+      <p><strong>Address:</strong> <span id="address"></span></p>
+      <p><strong>KYC Status:</strong> <span id="kycStatus"></span></p>
+      <p><strong>Contract Status:</strong> <span id="contractStatus"></span></p>
+      <p><strong>Account Size:</strong> ₦<span id="accountSize"></span></p>
+      <p><strong>Contract Expiry:</strong> <span id="contractExpiry"></span></p>
+      <p><strong>Payout Date:</strong> <span id="payoutDate"></span></p>
+    </div>
+
+    <div class="mt-8">
+      <h3 class="text-lg font-semibold mb-2">Update Contact Info</h3>
+      <form id="updateForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium">Phone</label>
+          <input type="text" id="updatePhone" class="w-full border p-2 rounded-lg" placeholder="Enter new phone">
         </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
-        <h2 id="welcome" class="text-3xl font-bold text-gray-800 mb-6">Welcome, Trader!</h2>
-
-        <!-- Next Steps Section -->
-        <section class="bg-white p-6 rounded-xl shadow-md border border-pink-100 mb-10">
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Trading Journey with Nexa</h3>
-            <p class="text-gray-600 mb-4">Nexa is a prop trading firm offering a profit-sharing contract. Trade on any platform of your choice (e.g., MetaTrader, cTrader). EA and bot trading are strictly prohibited.</p>
-            <h4 class="text-lg font-medium text-gray-800 mb-2">Next Steps:</h4>
-            <ol class="list-decimal list-inside text-gray-600 space-y-2">
-                <li><strong>Sign Contract:</strong> Complete your trader contract to join our profit-sharing program.</li>
-                <li><strong>Complete KYC:</strong> Submit your KYC form for AML/CTF compliance.</li>
-                <li><strong>Purchase a Challenge:</strong> Select a challenge to start trading with a funded account.</li>
-                <li><strong>Trade & Profit:</strong> Trade manually on your preferred platform and share profits with Nexa.</li>
-            </ol>
-        </section>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-            <div class="bg-white p-6 rounded-xl shadow-md border border-pink-100">
-                <p class="text-sm font-medium text-gray-500">Contract Status</p>
-                <p id="contract-status" class="text-2xl font-bold text-pink-600 mt-1">Checking...</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md border border-pink-100">
-                <p class="text-sm font-medium text-gray-500">Account Size</p>
-                <p class="text-2xl font-bold text-gray-800 mt-1">$<span id="account-size">0</span></p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md border border-pink-100">
-                <p class="text-sm font-medium text-gray-500">Contract Expiry</p>
-                <p id="contract-expiry" class="text-2xl font-bold text-gray-800 mt-1">N/A</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md border border-pink-100">
-                <p class="text-sm font-medium text-gray-500">Next Payout Date</p>
-                <p id="payout-date" class="text-2xl font-bold text-gray-800 mt-1">N/A</p>
-            </div>
+        <div>
+          <label class="block text-sm font-medium">Address</label>
+          <input type="text" id="updateAddress" class="w-full border p-2 rounded-lg" placeholder="Enter new address">
         </div>
+        <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600">Update</button>
+      </form>
+    </div>
+  </div>
 
-        <div class="flex flex-wrap gap-4 mb-10">
-            <a href="payout.html" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-pink-600 transition-colors flex items-center space-x-2">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2-4h10a2 2 0 002-2V9a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-4m-7 4h7a2 2 0 002-2v-4a2 2 0 00-2-2h-7a2 2 0 00-2 2v4a2 2 0 002 2z" /></svg>
-                <span>Request Payout</span>
-            </a>
-            <a href="https://forms.gle/esMxwUYE3fMVG1qn6" target="_blank" class="bg-purple-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-600 transition-colors flex items-center space-x-2">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                <span>KYC Verification</span>
-            </a>
-            <a href="pricing.html" class="border border-pink-500 text-pink-600 px-6 py-3 rounded-full font-semibold hover:bg-pink-50 transition-colors flex items-center space-x-2">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-                <span>Add Challenge</span>
-            </a>
-            <a href="faq.html" class="text-gray-600 border border-gray-300 px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition-colors flex items-center space-x-2">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9.247a1 1 0 01.442-.832 1 1 0 011.121-.292 1 1 0 01.378.825v4.5M12 18h.01M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2z" /></svg>
-                <span>FAQ</span>
-            </a>
-        </div>
+  <script>
+    const backendUrl = 'http://localhost:3000';
 
-        <div id="contract-popup" class="popup" aria-hidden="true">
-            <div class="popup-content">
-                <h3 class="text-2xl font-bold text-pink-600 mb-4">Contract Required</h3>
-                <p id="contract-message" class="mb-4 text-gray-700"></p>
-                <a id="contract-link" href="https://docuseal.com/d/w4aYAR5LfBb41G" target="_blank" class="w-full inline-block text-center bg-pink-500 text-white px-5 py-3 rounded-lg font-semibold hover:bg-pink-600 transition-colors">
-                    Sign Trader Contract
-                </a>
-                <button id="close-contract-popup" class="w-full mt-3 text-gray-500 hover:text-gray-700">Close</button>
-            </div>
-        </div>
+    // Redirect if not logged in
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      window.location.href = 'login.html';
+    }
 
-        <div id="kyc-popup" class="popup" aria-hidden="true">
-            <div class="popup-content">
-                <h3 class="text-2xl font-bold text-pink-600 mb-4">KYC Verification Needed</h3>
-                <p class="mb-4 text-gray-700">Please complete your Know Your Customer (KYC) form to activate your funded status and ensure AML/CTF compliance.</p>
-                <a href="https://forms.gle/esMxwUYE3fMVG1qn6" target="_blank" class="w-full inline-block text-center bg-purple-500 text-white px-5 py-3 rounded-lg font-semibold hover:bg-purple-600 transition-colors">
-                    Complete KYC Form
-                </a>
-                <button id="close-kyc-popup" class="w-full mt-3 text-gray-500 hover:text-gray-700">Close</button>
-            </div>
-        </div>
-    </main>
+    // Load user data
+    async function loadUser() {
+      try {
+        const res = await fetch(`${backendUrl}/user-data`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
 
-    <footer class="bg-gray-800 text-white py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p>&copy; 2025 Nexa. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script>
-        // --- Config ---
-        const backendUrl = 'https://nexa-backend-3wxt.onrender.com';
-
-        // --- Cached DOM nodes ---
-        const profileBtn = document.getElementById('profile-btn');
-        const profileDropdown = document.getElementById('profile-dropdown');
-        const contractPopup = document.getElementById('contract-popup');
-        const kycPopup = document.getElementById('kyc-popup');
-        const closeContractBtn = document.getElementById('close-contract-popup');
-        const closeKycBtn = document.getElementById('close-kyc-popup');
-        const logoutBtn = document.getElementById('logout-btn-dropdown');
-
-        // --- Current user from localStorage (must be set by login/signup) ---
-        let user = JSON.parse(localStorage.getItem('user') || '{}');
-
-        // If not logged in, go to login
-        if (!localStorage.getItem('loggedIn') || !user.email) {
-            window.location.href = 'login.html';
+        if (!res.ok) {
+          localStorage.removeItem('authToken');
+          window.location.href = 'login.html';
+          return;
         }
 
-        // Toggle profile dropdown
-        profileBtn.addEventListener('click', () => {
-            profileDropdown.classList.toggle('hidden');
+        const user = await res.json();
+        document.getElementById('name').textContent = user.name;
+        document.getElementById('email').textContent = user.email;
+        document.getElementById('phone').textContent = user.phone || 'Not set';
+        document.getElementById('address').textContent = user.address || 'Not set';
+        document.getElementById('kycStatus').textContent = user.kycStatus;
+        document.getElementById('contractStatus').textContent = user.contractStatus;
+        document.getElementById('accountSize').textContent = user.accountSize;
+        document.getElementById('contractExpiry').textContent = user.contractExpiry;
+        document.getElementById('payoutDate').textContent = user.payoutDate;
+
+        document.getElementById('updatePhone').value = user.phone || '';
+        document.getElementById('updateAddress').value = user.address || '';
+      } catch (err) {
+        console.error('Error loading user:', err);
+        alert('Error loading user data');
+      }
+    }
+
+    // Update profile
+    document.getElementById('updateForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const phone = document.getElementById('updatePhone').value.trim();
+      const address = document.getElementById('updateAddress').value.trim();
+
+      try {
+        const res = await fetch(`${backendUrl}/update-profile`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ phone, address })
         });
 
-        // Close dropdown on outside click
-        document.addEventListener('click', (event) => {
-            if (!profileBtn.contains(event.target) && !profileDropdown.contains(event.target)) {
-                profileDropdown.classList.add('hidden');
-            }
-        });
+        if (!res.ok) throw new Error('Failed to update');
 
-        // Logout
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('user');
-            localStorage.removeItem('loggedIn');
-            localStorage.removeItem('authToken');
-            window.location.href = 'index.html';
-        });
-
-        // Update profile form
-        document.getElementById('profile-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const updateBtn = e.target.querySelector('button');
-            updateBtn.textContent = 'Updating...';
-            updateBtn.disabled = true;
-
-            const address = document.getElementById('address').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-
-            // Validate phone if provided
-            if (phone && !/^\+?\d{7,15}$/.test(phone)) {
-                alert('Please enter a valid phone number (7-15 digits, optional + prefix).');
-                updateBtn.textContent = 'Update Profile';
-                updateBtn.disabled = false;
-                return;
-            }
-
-            try {
-                const response = await fetch(`${backendUrl}/update-profile`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: user.email, address, phone })
-                });
-
-                const data = await response.json();
-                if (response.ok) {
-                    alert('Profile updated successfully!');
-                    await loadUser(); // reload fresh data from backend
-                } else {
-                    alert(data.message || 'Profile update failed.');
-                }
-            } catch (err) {
-                console.error('Profile update error:', err);
-                alert('An error occurred during profile update.');
-            } finally {
-                updateBtn.textContent = 'Update Profile';
-                updateBtn.disabled = false;
-                profileDropdown.classList.add('hidden');
-            }
-        });
-
-        closeContractBtn.addEventListener('click', () => {
-            contractPopup.style.display = 'none';
-        });
-        closeKycBtn.addEventListener('click', () => {
-            kycPopup.style.display = 'none';
-        });
-
-        // Load user data from backend and populate UI
-        async function loadUser() {
-            try {
-                const resp = await fetch(`${backendUrl}/user-data`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: user.email })
-                });
-
-                if (!resp.ok) {
-                    // If user not found or server error => force logout
-                    console.error('Failed fetching user-data:', resp.status);
-                    throw new Error(`HTTP ${resp.status}`);
-                }
-
-                const updatedUser = await resp.json();
-                user = updatedUser;
-                localStorage.setItem('user', JSON.stringify(updatedUser));
-
-                // Populate UI
-                document.getElementById('welcome').textContent = `Welcome, ${updatedUser.name || 'Trader'}!`;
-                document.getElementById('nav-name').textContent = (updatedUser.name || 'Profile').split(' ')[0];
-                document.getElementById('profile-name').textContent = updatedUser.name || 'N/A';
-                document.getElementById('profile-email').textContent = updatedUser.email || 'N/A';
-                document.getElementById('address').value = updatedUser.address || '';
-                document.getElementById('phone').value = updatedUser.phone || '';
-
-                document.getElementById('contract-status').textContent = updatedUser.contractStatus || 'Unsigned';
-                document.getElementById('account-size').textContent = updatedUser.accountSize || 0;
-                document.getElementById('contract-expiry').textContent = updatedUser.contractExpiry || 'N/A';
-                document.getElementById('payout-date').textContent = updatedUser.payoutDate || 'N/A';
-
-                // Popup logic: show contract or KYC if required
-                if (Number(updatedUser.accountSize) > 0) {
-                    if ((updatedUser.contractStatus || 'Unsigned') === 'Unsigned') {
-                        document.getElementById('contract-message').textContent =
-                            'Your challenge purchase is recorded. Please sign the profit-sharing contract to proceed with trading.';
-                        contractPopup.style.display = 'flex';
-                    } else if ((updatedUser.kycStatus || 'Pending') === 'Pending') {
-                        kycPopup.style.display = 'flex';
-                    }
-                }
-            } catch (err) {
-                console.error('Error loading user data:', err);
-                alert('Could not load dashboard data. Please log in again.');
-                localStorage.removeItem('user');
-                localStorage.removeItem('loggedIn');
-                localStorage.removeItem('authToken');
-                window.location.href = 'login.html';
-            }
-        }
-
-        // Initial fetch
+        const data = await res.json();
+        alert(data.message);
         loadUser();
-    </script>
+      } catch (err) {
+        console.error('Update error:', err);
+        alert('Could not update profile.');
+      }
+    });
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('authToken');
+      window.location.href = 'login.html';
+    });
+
+    loadUser();
+  </script>
+
 </body>
 </html>
