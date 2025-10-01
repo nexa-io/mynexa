@@ -3,84 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In - Nexa</title>
+    <title>Login - Nexa</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jwt-simple/0.5.6/jwt-simple.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Montserrat', sans-serif; }
         @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
-        .mobile-menu { display: none; }
-        .mobile-menu.active { display: block; }
-        /* Custom Modal Styling */
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 24px; border-radius: 16px; max-width: 400px; width: 90%; border: 1px solid #f9a8d4; text-align: center; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-pink-50 to-white flex flex-col min-h-screen">
-    <header class="relative z-50 bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center space-x-3">
-                    <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
-                        <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                        <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
-                        <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                    </svg>
-                    <h1 class="text-3xl font-bold text-pink-600 tracking-wide">NEXA</h1>
-                </div>
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="index.html#how-it-works" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">How It Works</a>
-                    <a href="index.html#features" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Features</a>
-                    <a href="pricing.html" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Pricing</a>
-                    <a href="signup.html" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Sign Up</a>
-                    <a href="login.html" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Login</a>
-                </nav>
-                <button id="mobile-menu-button" class="md:hidden text-gray-600">
-                    <svg id="menu-icon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    <svg id="close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div id="mobile-menu" class="mobile-menu md:hidden absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-pink-100 shadow-lg">
-                <nav class="flex flex-col space-y-4 p-6">
-                    <a href="index.html#how-it-works" class="text-gray-600">How It Works</a>
-                    <a href="index.html#features" class="text-gray-600">Features</a>
-                    <a href="pricing.html" class="text-gray-600">Pricing</a>
-                    <a href="signup.html" class="text-gray-600">Sign Up</a>
-                    <a href="login.html" class="text-gray-600">Login</a>
-                </nav>
-            </div>
+<body class="bg-gradient-to-br from-pink-50 to-white min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full bg-white border border-pink-100 rounded-3xl p-8 shadow-lg opacity-0 animate-fade-in">
+        <div class="flex items-center space-x-3 mb-6">
+            <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
+                <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
+                <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
+                <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+                <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
+                <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+            </svg>
+            <h1 class="text-2xl font-bold text-pink-600">NEXA</h1>
         </div>
-    </header>
-
-    <main class="flex-grow flex items-center justify-center py-12">
-        <div class="max-w-md w-full mx-auto p-6 bg-white rounded-3xl shadow-lg border border-pink-100 opacity-0 animate-fade-in">
-            <h2 class="text-3xl font-bold text-gray-800 text-center">Welcome Back</h2>
-            <p class="text-gray-600 text-center mt-2">Log in to your Nexa account.</p>
-            <form id="loginForm" class="mt-6 space-y-6">
-                <div>
-                    <label class="block text-gray-600 font-medium">Email</label>
-                    <input id="email" type="email" placeholder="Email" required class="w-full p-3 border border-pink-200 rounded-full focus:ring-2 focus:ring-pink-400 focus:border-transparent">
-                </div>
-                <div>
-                    <label class="block text-gray-600 font-medium">Password</label>
-                    <input id="password" type="password" placeholder="Password" required class="w-full p-3 border border-pink-200 rounded-full focus:ring-2 focus:ring-pink-400 focus:border-transparent">
-                </div>
-                <button type="submit" id="loginBtn" class="w-full bg-pink-500 text-white p-3 rounded-full hover:bg-pink-600 disabled:bg-gray-400 transition-all duration-200">Log In</button>
-            </form>
-            <p class="mt-4 text-center text-gray-600">No account? <a href="signup.html" class="text-pink-600 hover:underline">Sign Up</a></p>
-        </div>
-    </main>
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Login</h2>
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <input id="email" type="email" placeholder="Email" required class="w-full p-3 border border-pink-200 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-300">
+            </div>
+            <div>
+                <input id="password" type="password" placeholder="Password" required class="w-full p-3 border border-pink-200 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-300">
+            </div>
+            <button type="submit" class="w-full bg-pink-500 text-white p-3 rounded-full hover:bg-pink-600">Login</button>
+        </form>
+        <p class="mt-4 text-gray-600 text-center">Don't have an account? <a href="signup.html" class="text-pink-600 hover:underline">Sign Up</a></p>
+    </div>
 
     <div id="modal" class="modal">
         <div class="modal-content animate-fade-in">
@@ -90,137 +54,63 @@
         </div>
     </div>
 
-    <footer class="bg-gray-800 text-white py-12">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-3 mb-6">
-                        <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
-                            <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                            <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
-                            <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                            <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                            <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
-                            <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                            <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                            <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
-                            <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                        </svg>
-                        <h3 class="text-2xl font-bold text-pink-400">NEXA</h3>
-                    </div>
-                    <p class="text-gray-400">
-                        Empowering traders with funded accounts and profit-sharing opportunities.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="faq.html" class="hover:text-pink-400 transition-colors duration-200">FAQ</a></li>
-                        <li><a href="terms.html" class="hover:text-pink-400 transition-colors duration-200">Terms</a></li>
-                        <li><a href="privacy.html" class="hover:text-pink-400 transition-colors duration-200">Privacy</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-white mb-4">Support</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="contact.html" class="hover:text-pink-400 transition-colors duration-200">Contact Us</a></li>
-                        <li><a href="mailto:infocontactnexa@gmail.com" class="hover:text-pink-400 transition-colors duration-200">Email Support</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-white mb-4">Legal</h4>
-                    <p class="text-gray-400">
-                        Compliant with Nigerian AML/CTF laws. KYC required. Trading involves risk; no refunds for challenge fees.
-                    </p>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-gray-700 text-center">
-                <p class="text-gray-400">&copy; 2025 Nexa. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        const backendUrl = 'https://nexa-backend-3wxt.onrender.com';
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const menuIcon = document.getElementById('menu-icon');
-        const closeIcon = document.getElementById('close-icon');
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalMessage = document.getElementById('modal-message');
-        const modalClose = document.getElementById('modal-close');
+        const JWT_SECRET = 'your_jwt_secret';
+        let db;
 
-        // Mobile Menu Toggle
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('active');
-            menuIcon.classList.toggle('hidden');
-            closeIcon.classList.toggle('hidden');
-        });
-
-        // Show Custom Modal
-        function showModal(title, message) {
-            modalTitle.textContent = title;
-            modalMessage.textContent = message;
-            modal.style.display = 'flex';
+        async function initDatabase() {
+            const response = await fetch('data:application/octet-stream;base64,' + 'YOUR_NEXA_DB_BASE64_STRING');
+            const dbBuffer = await response.arrayBuffer();
+            const SQL = await initSqlJs();
+            db = new SQL.Database(new Uint8Array(dbBuffer));
+            localStorage.setItem('nexa_db', btoa(String.fromCharCode.apply(null, new Uint8Array(db.export()))));
         }
 
-        // Close Modal
-        modalClose.addEventListener('click', () => {
-            modal.style.display = 'none';
+        function showModal(title, message) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        document.getElementById('modal-close').addEventListener('click', () => {
+            document.getElementById('modal').style.display = 'none';
         });
 
-        // Form Submission
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('loginBtn');
-            btn.disabled = true;
-            btn.textContent = 'Logging in...';
-
             const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-
+            const password = document.getElementById('password').value.trim();
             try {
-                const res = await fetch(`${backendUrl}/login`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await res.json();
-
-                if (!res.ok) {
-                    showModal('Login Failed', data.message || 'Invalid email or password.');
+                if (!db) await initDatabase();
+                const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
+                stmt.bind([email]);
+                if (!stmt.step()) {
+                    showModal('Error', 'User not found');
+                    stmt.free();
                     return;
                 }
-
-                localStorage.setItem('authToken', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('loggedIn', 'true');
-                
-                // On success, redirect to dashboard after a small delay or instantly
-                // Using a modal for success might be slightly overkill for a successful login 
-                // that immediately redirects, but is kept for consistency.
-                showModal('Success', 'Login successful! Redirecting to dashboard...');
-                
-                modalClose.addEventListener('click', () => {
-                    window.location.href = 'dashboard.html';
-                }, { once: true });
-                
-                // Also auto-redirect after a few seconds even if modal not closed manually
-                setTimeout(() => {
-                    if (modal.style.display === 'flex') { // Check if modal is still open
-                         window.location.href = 'dashboard.html';
-                    }
-                }, 1500); 
-
+                const user = stmt.getAsObject();
+                stmt.free();
+                const isMatch = bcrypt.compareSync(password, user.password);
+                if (!isMatch) {
+                    showModal('Error', 'Incorrect password');
+                    return;
+                }
+                const token = jwt.encode({ email: user.email, isAdmin: user.isAdmin }, JWT_SECRET);
+                localStorage.setItem('authToken', token);
+                window.location.href = user.isAdmin ? 'admin.html' : 'dashboard.html';
             } catch (err) {
-                showModal('Error', 'Network error. Could not connect to the server.');
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Log In';
+                showModal('Error', 'Error during login: ' + err.message);
             }
         });
+
+        (async () => {
+            try {
+                await initDatabase();
+            } catch (err) {
+                showModal('Error', 'Failed to load database: ' + err.message);
+            }
+        })();
     </script>
 </body>
-                          </html>
-                          
+</html>
