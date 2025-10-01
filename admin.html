@@ -3,407 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Nexa</title>
+    <title>Admin - Nexa</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jwt-simple/0.5.6/jwt-simple.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Montserrat', sans-serif; }
         @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
-        .sidebar { transition: transform 0.3s ease-in-out; }
-        .sidebar-hidden { transform: translateX(-100%); }
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 24px; border-radius: 16px; max-width: 400px; width: 90%; border: 1px solid #f9a8d4; text-align: center; }
+        .sidebar { transition: transform 0.3s ease-in-out; }
+        .sidebar-hidden { transform: translateX(-100%); }
     </style>
 </head>
-<body class="bg-gradient-to-br from-pink-50 to-white flex min-h-screen">
-    <!-- Sidebar -->
-    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white/95 backdrop-blur-md border-r border-pink-100 shadow-lg sidebar-hidden z-50">
-        <div class="flex items-center space-x-3 p-6">
-            <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
-                <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
-                <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
-                <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
-                <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-            </svg>
-            <h1 class="text-2xl font-bold text-pink-600">NEXA</h1>
+<body class="bg-gradient-to-br from-pink-50 to-white min-h-screen">
+    <div class="flex">
+        <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 bg-white shadow-lg p-6">
+            <div class="flex items-center space-x-3 mb-8">
+                <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
+                    <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                    <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
+                    <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                    <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                    <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
+                    <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                    <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+                    <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
+                    <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+                </svg>
+                <h1 class="text-2xl font-bold text-pink-600">NEXA</h1>
+            </div>
+            <nav class="space-y-4">
+                <a href="#" class="block text-gray-600 hover:text-pink-600 font-medium">Admin</a>
+                <a href="pricing.html" class="block text-gray-600 hover:text-pink-600 font-medium">Pricing</a>
+                <button id="logout" class="block text-gray-600 hover:text-pink-600 font-medium">Logout</button>
+            </nav>
         </div>
-        <nav class="flex flex-col space-y-4 p-6">
-            <a href="admin.html" class="text-gray-600 hover:text-pink-600">Contracts</a>
-            <a href="#" id="logoutBtn" class="text-gray-600 hover:text-pink-600">Logout</a>
-        </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <div class="flex-1 flex flex-col">
-        <!-- Header -->
-        <header class="relative z-40 bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
-            <div class="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-20">
-                <button id="sidebar-toggle" class="text-gray-600">
-                    <svg id="menu-icon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    <svg id="close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                <div class="flex items-center space-x-8">
-                    <a href="admin.html" class="text-gray-600 hover:text-pink-600">Contracts</a>
-                    <button id="header-logoutBtn" class="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600">Logout</button>
+        <div class="flex-1 p-6 ml-64">
+            <button id="toggleSidebar" class="text-pink-600 mb-4">☰ Menu</button>
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Admin Panel</h2>
+            <div class="bg-white rounded-3xl shadow-lg p-6 mb-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Add Contract</h3>
+                <div class="space-y-4">
+                    <input id="userEmail" type="email" placeholder="User Email" required class="w-full p-3 border border-pink-200 rounded-full">
+                    <input id="accountSize" type="number" placeholder="Account Size" required class="w-full p-3 border border-pink-200 rounded-full">
+                    <input id="challengeType" type="text" placeholder="Challenge Type" required class="w-full p-3 border border-pink-200 rounded-full">
+                    <input id="contractStatus" type="text" placeholder="Contract Status" required class="w-full p-3 border border-pink-200 rounded-full">
+                    <input id="kycStatus" type="text" placeholder="KYC Status" required class="w-full p-3 border border-pink-200 rounded-full">
+                    <input id="contractExpiry" type="text" placeholder="Contract Expiry" required class="w-full p-3 border border-pink-200 rounded-full">
+                    <input id="payoutDate" type="text" placeholder="Payout Date" required class="w-full p-3 border border-pink-200 rounded-full">
+                    <button onclick="addContract()" class="w-full bg-pink-500 text-white p-3 rounded-full hover:bg-pink-600">Add Contract</button>
                 </div>
             </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="flex-grow max-w-7xl mx-auto px-6 lg:px-8 py-12">
-            <!-- Add Contract Form -->
-            <div class="bg-white border border-pink-100 rounded-3xl p-6 mb-8 opacity-0 animate-fade-in bg-gradient-to-br from-white to-pink-50">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Add New Contract</h2>
-                <form id="addContractForm" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600">User Email</label>
-                        <input id="userEmail" type="email" placeholder="Enter user email" required class="w-full p-3 border border-pink-200 rounded-full">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600">Account Size</label>
-                        <select id="accountSize" required class="w-full p-3 border border-pink-200 rounded-full">
-                            <option value="100">$100</option>
-                            <option value="200">$200</option>
-                            <option value="500">$500</option>
-                            <option value="1000">$1000</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600">Challenge Type</label>
-                        <select id="challengeType" required class="w-full p-3 border border-pink-200 rounded-full">
-                            <option value="1-Step">1-Step</option>
-                            <option value="2-Step">2-Step</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="w-full bg-pink-500 text-white p-3 rounded-full hover:bg-pink-600">Add Contract</button>
-                </form>
+            <div class="bg-white rounded-3xl shadow-lg p-6 mb-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Contracts</h3>
+                <input id="searchEmail" type="email" placeholder="Search by User Email" class="w-full p-3 border border-pink-200 rounded-full mb-4">
+                <div id="contracts" class="space-y-4"></div>
             </div>
-
-            <!-- Search Bar -->
-            <div class="mb-8 opacity-0 animate-fade-in">
-                <input id="searchInput" type="text" placeholder="Search by user email..." class="w-full p-3 border border-pink-200 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-300">
-            </div>
-
-            <!-- Active Contracts -->
-            <h2 class="text-3xl font-bold text-gray-800 mb-8 opacity-0 animate-fade-in">Active Contracts</h2>
-            <div id="contracts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Contracts will be dynamically added here -->
-            </div>
-        </main>
-
-        <!-- Custom Modal -->
-        <div id="modal" class="modal">
-            <div class="modal-content animate-fade-in">
-                <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-4"></h3>
-                <p id="modal-message" class="text-gray-600 mb-6"></p>
-                <button id="modal-close" class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-all duration-200">OK</button>
+            <div class="bg-white rounded-3xl shadow-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Send Notification</h3>
+                <div class="space-y-4">
+                    <input id="notifEmail" type="email" placeholder="User Email" required class="w-full p-3 border border-pink-200 rounded-full">
+                    <textarea id="notifMessage" placeholder="Message" required class="w-full p-3 border border-pink-200 rounded-lg"></textarea>
+                    <button onclick="sendNotification()" class="w-full bg-pink-500 text-white p-3 rounded-full hover:bg-pink-600">Send Notification</button>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- Footer -->
-        <footer class="bg-gray-800 text-white py-12">
-            <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div>
-                        <div class="flex items-center space-x-3 mb-6">
-                            <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
-                                <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                                <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
-                                <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                                <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                                <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
-                                <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                                <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                                <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
-                                <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                            </svg>
-                            <h3 class="text-2xl font-bold text-pink-400">NEXA</h3>
-                        </div>
-                        <p class="text-gray-400">Empowering traders with funded accounts and profit-sharing opportunities.</p>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
-                        <ul class="space-y-2 text-gray-400">
-                            <li><a href="faq.html" class="hover:text-pink-400">FAQ</a></li>
-                            <li><a href="terms.html" class="hover:text-pink-400">Terms</a></li>
-                            <li><a href="privacy.html" class="hover:text-pink-400">Privacy</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-semibold text-white mb-4">Support</h4>
-                        <ul class="space-y-2 text-gray-400">
-                            <li><a href="contact.html" class="hover:text-pink-400">Contact Us</a></li>
-                            <li><a href="mailto:infocontactnexa@gmail.com" class="hover:text-pink-400">Email Support</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-semibold text-white mb-4">Legal</h4>
-                        <p class="text-gray-400">Compliant with Nigerian AML/CTF laws. KYC required. Trading involves risk; no refunds for challenge fees.</p>
-                    </div>
-                </div>
-                <div class="mt-8 pt-8 border-t border-gray-700 text-center">
-                    <p class="text-gray-400">&copy; 2025 Nexa. All rights reserved.</p>
-                </div>
-            </div>
-        </footer>
+    <div id="modal" class="modal">
+        <div class="modal-content animate-fade-in">
+            <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-4"></h3>
+            <p id="modal-message" class="text-gray-600 mb-6"></p>
+            <button id="modal-close" class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-all duration-200">OK</button>
+        </div>
+    </div>
 
-        <!-- JavaScript -->
-        <script>
-            const backendUrl = 'https://nexa-backend-3wxt.onrender.com';
-            const token = localStorage.getItem('authToken');
+    <script>
+        const JWT_SECRET = 'your_jwt_secret';
+        let db;
 
-            // Redirect if not logged in or not admin
-            async function checkAdmin() {
+        async function initDatabase() {
+            const base64Db = localStorage.getItem('nexa_db') || 'U1FMaXRlIGZvcm1hdCAzABAAAQEAQCAgAAAAAwAAAAIAAAACAAAAAQAAAAIAAAAEAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAC56cQ0AAAAAEAAAD7QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASgEGFx0dAWl0YWJsZW5vdGVtcHR5bm90ZW1wdHkCQ1JFQVRFIFRBQkxFIG5vdGVtcHR5IChpZCBpbnRlZ2VyIHByaW1hcnkga2V5KQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=';
+            const dbBuffer = Uint8Array.from(atob(base64Db), c => c.charCodeAt(0));
+            const SQL = await initSqlJs();
+            db = new SQL.Database(dbBuffer);
+
+            // Create required tables if they don't exist
+            db.run('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT NOT NULL, name TEXT NOT NULL, phone TEXT, address TEXT, isAdmin INTEGER DEFAULT 0)');
+            db.run('CREATE TABLE IF NOT EXISTS contracts (id INTEGER PRIMARY KEY AUTOINCREMENT, userEmail TEXT, accountSize INTEGER, challengeType TEXT, contractStatus TEXT, kycStatus TEXT, contractExpiry TEXT, payoutDate TEXT, FOREIGN KEY(userEmail) REFERENCES users(email))');
+            db.run('CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, userEmail TEXT, message TEXT, createdAt TEXT, FOREIGN KEY(userEmail) REFERENCES users(email))');
+
+            // Insert admin user if not exists
+            const adminExists = db.exec("SELECT email FROM users WHERE email = 'infocontactnexa@gmail.com'");
+            if (!adminExists.length) {
+                const hashedPassword = bcrypt.hashSync('NexaAdmin2025', 10);
+                db.run('INSERT INTO users (email, password, name, isAdmin) VALUES (?, ?, ?, ?)', ['infocontactnexa@gmail.com', hashedPassword, 'Admin', 1]);
+            }
+
+            saveDatabase();
+        }
+
+        function saveDatabase() {
+            localStorage.setItem('nexa_db', btoa(String.fromCharCode.apply(null, new Uint8Array(db.export()))));
+        }
+
+        function showModal(title, message) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        document.getElementById('modal-close').addEventListener('click', () => {
+            document.getElementById('modal').style.display = 'none';
+        });
+
+        document.getElementById('toggleSidebar').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('sidebar-hidden');
+        });
+
+        document.getElementById('logout').addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+        });
+
+        async function loadAdmin() {
+            try {
+                await initDatabase();
+                const token = localStorage.getItem('authToken');
                 if (!token) {
-                    window.location.href = 'login.html';
+                    showModal('Error', 'Please login');
+                    setTimeout(() => { window.location.href = 'login.html'; }, 2000);
                     return;
                 }
-                try {
-                    const res = await fetch(`${backendUrl}/check-admin`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    if (!res.ok) {
-                        window.location.href = 'login.html';
-                    }
-                } catch (err) {
-                    showModal('Error', 'Failed to verify admin status.');
-                    window.location.href = 'login.html';
+                const decoded = jwt.decode(token, JWT_SECRET);
+                if (!decoded || !decoded.email || !decoded.isAdmin || decoded.email !== 'infocontactnexa@gmail.com') {
+                    showModal('Error', 'Admin access required');
+                    setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+                    return;
                 }
+                loadContracts();
+            } catch (err) {
+                showModal('Error', 'Error loading admin panel: ' + err.message);
             }
+        }
 
-            // DOM Elements
-            const sidebarToggle = document.getElementById('sidebar-toggle');
-            const sidebar = document.getElementById('sidebar');
-            const menuIcon = document.getElementById('menu-icon');
-            const closeIcon = document.getElementById('close-icon');
-            const modal = document.getElementById('modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalMessage = document.getElementById('modal-message');
-            const modalClose = document.getElementById('modal-close');
+        function loadContracts(searchEmail = '') {
             const contractsDiv = document.getElementById('contracts');
-            const searchInput = document.getElementById('searchInput');
-
-            // Sidebar Toggle
-            sidebarToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('sidebar-hidden');
-                menuIcon.classList.toggle('hidden');
-                closeIcon.classList.toggle('hidden');
-            });
-
-            // Show Custom Modal
-            function showModal(title, message) {
-                modalTitle.textContent = title;
-                modalMessage.textContent = message;
-                modal.style.display = 'flex';
+            contractsDiv.innerHTML = '';
+            const query = searchEmail ? 'SELECT * FROM contracts WHERE userEmail = ?' : 'SELECT * FROM contracts';
+            const stmt = db.prepare(query);
+            if (searchEmail) stmt.bind([searchEmail]);
+            while (stmt.step()) {
+                const contract = stmt.getAsObject();
+                const div = document.createElement('div');
+                div.className = 'border border-pink-200 rounded-lg p-4';
+                div.innerHTML = `
+                    <p><strong>ID:</strong> ${contract.id}</p>
+                    <p><strong>User Email:</strong> ${contract.userEmail}</p>
+                    <p><strong>Account Size:</strong> $${contract.accountSize}</p>
+                    <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
+                    <p><strong>Status:</strong> ${contract.contractStatus}</p>
+                    <select onchange="updateKycStatus(${contract.id}, this.value)">
+                        <option value="Not Submitted" ${contract.kycStatus === 'Not Submitted' ? 'selected' : ''}>Not Submitted</option>
+                        <option value="Pending" ${contract.kycStatus === 'Pending' ? 'selected' : ''}>Pending</option>
+                        <option value="Approved" ${contract.kycStatus === 'Approved' ? 'selected' : ''}>Approved</option>
+                        <option value="Rejected" ${contract.kycStatus === 'Rejected' ? 'selected' : ''}>Rejected</option>
+                    </select>
+                    <button onclick="disableContract(${contract.id})" class="bg-red-500 text-white px-4 py-2 rounded-full mt-2">Disable</button>
+                `;
+                contractsDiv.appendChild(div);
             }
+            stmt.free();
+        }
 
-            // Close Modal
-            modalClose.addEventListener('click', () => {
-                modal.style.display = 'none';
-            });
-
-            // Load Contracts
-            async function loadContracts(searchQuery = '') {
-                try {
-                    const res = await fetch(`${backendUrl}/all-contracts`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    if (!res.ok) throw new Error('Failed to fetch contracts');
-                    const contracts = await res.json();
-                    contractsDiv.innerHTML = '';
-                    const filteredContracts = searchQuery
-                        ? contracts.filter(contract => contract.userEmail.toLowerCase().includes(searchQuery.toLowerCase()))
-                        : contracts;
-                    filteredContracts.forEach((contract, index) => {
-                        const contractCard = `
-                            <div class="bg-white border border-pink-100 rounded-3xl p-6 hover:shadow-xl transition-all duration-300 opacity-0 animate-fade-in bg-gradient-to-br from-white to-pink-50" style="animation-delay: ${index * 0.2}s;">
-                                <h3 class="text-xl font-bold text-gray-800 mb-4">Contract #${contract.id} - ${contract.userEmail}</h3>
-                                <p><strong>Account Size:</strong> $${contract.accountSize}</p>
-                                <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
-                                <p><strong>Status:</strong> <span class="inline-block px-3 py-1 rounded-full text-sm ${contract.contractStatus === 'Active' ? 'bg-green-100 text-green-600' : contract.contractStatus === 'Pending' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}">${contract.contractStatus}</span></p>
-                                <p><strong>KYC Status:</strong> <span class="inline-block px-3 py-1 rounded-full text-sm ${contract.kycStatus === 'Approved' ? 'bg-green-100 text-green-600' : contract.kycStatus === 'Pending' ? 'bg-yellow-100 text-yellow-600' : contract.kycStatus === 'Rejected' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600'}">${contract.kycStatus}</span></p>
-                                <p><strong>Expiry:</strong> ${new Date(contract.contractExpiry).toLocaleDateString()}</p>
-                                <p><strong>Payout Date:</strong> ${contract.payoutDate}</p>
-                                <div class="mt-4">
-                                    <label class="block text-sm font-medium text-gray-600">Update KYC Status</label>
-                                    <select id="kyc-status-${contract.id}" class="w-full p-2 border border-pink-200 rounded-full">
-                                        <option value="Not Submitted" ${contract.kycStatus === 'Not Submitted' ? 'selected' : ''}>Not Submitted</option>
-                                        <option value="Pending" ${contract.kycStatus === 'Pending' ? 'selected' : ''}>Pending</option>
-                                        <option value="Approved" ${contract.kycStatus === 'Approved' ? 'selected' : ''}>Approved</option>
-                                        <option value="Rejected" ${contract.kycStatus === 'Rejected' ? 'selected' : ''}>Rejected</option>
-                                    </select>
-                                    <button onclick="updateKycStatus('${contract.id}')" class="mt-2 w-full bg-pink-500 text-white p-2 rounded-full hover:bg-pink-600">Update KYC</button>
-                                </div>
-                                <div class="mt-4">
-                                    <label class="block text-sm font-medium text-gray-600">Send Notification</label>
-                                    <textarea id="notification-message-${contract.id}" placeholder="Enter notification message" class="w-full p-2 border border-pink-200 rounded-lg" rows="3"></textarea>
-                                    <button onclick="sendNotification('${contract.userEmail}', '${contract.id}')" class="mt-2 w-full bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600">Send Notification</button>
-                                </div>
-                                <div class="mt-4 flex space-x-4">
-                                    <button onclick="disableContract('${contract.id}')" class="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600">Disable</button>
-                                    <a href="https://docuseal.com/d/w4aYAR5LfBb41G" target="_blank" class="border border-pink-300 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-50">View Contract</a>
-                                </div>
-                            </div>
-                        `;
-                        contractsDiv.innerHTML += contractCard;
-                    });
-                } catch (err) {
-                    showModal('Error', 'Failed to load contracts.');
-                }
+        function updateKycStatus(contractId, kycStatus) {
+            try {
+                db.run('UPDATE contracts SET kycStatus = ? WHERE id = ?', [kycStatus, contractId]);
+                saveDatabase();
+                showModal('Success', 'KYC status updated');
+            } catch (err) {
+                showModal('Error', 'Error updating KYC status: ' + err.message);
             }
+        }
 
-            // Search Contracts
-            searchInput.addEventListener('input', () => {
-                loadContracts(searchInput.value);
-            });
+        function disableContract(contractId) {
+            try {
+                db.run('UPDATE contracts SET contractStatus = ? WHERE id = ?', ['Disabled', contractId]);
+                saveDatabase();
+                showModal('Success', 'Contract disabled');
+                loadContracts(document.getElementById('searchEmail').value);
+            } catch (err) {
+                showModal('Error', 'Error disabling contract: ' + err.message);
+            }
+        }
 
-            // Add Contract
-            document.getElementById('addContractForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
+        async function addContract() {
+            try {
                 const userEmail = document.getElementById('userEmail').value.trim();
-                const accountSize = document.getElementById('accountSize').value;
-                const challengeType = document.getElementById('challengeType').value;
+                const checkStmt = db.prepare('SELECT email FROM users WHERE email = ?');
+                checkStmt.bind([userEmail]);
+                if (!checkStmt.step()) {
+                    showModal('Error', 'User not found');
+                    checkStmt.free();
+                    return;
+                }
+                checkStmt.free();
                 const contract = {
                     userEmail,
-                    accountSize: parseInt(accountSize),
-                    challengeType,
-                    contractStatus: 'Pending',
-                    kycStatus: 'Not Submitted',
-                    contractExpiry: new Date(Date.now() + (challengeType === '1-Step' ? 30 : 60) * 24 * 60 * 60 * 1000).toISOString(),
-                    payoutDate: 'N/A'
+                    accountSize: parseInt(document.getElementById('accountSize').value),
+                    challengeType: document.getElementById('challengeType').value.trim(),
+                    contractStatus: document.getElementById('contractStatus').value.trim(),
+                    kycStatus: document.getElementById('kycStatus').value.trim(),
+                    contractExpiry: document.getElementById('contractExpiry').value.trim(),
+                    payoutDate: document.getElementById('payoutDate').value.trim()
                 };
-                try {
-                    const res = await fetch(`${backendUrl}/add-contract`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify(contract)
-                    });
-                    if (res.ok) {
-                        showModal('Success', 'Contract added successfully. User dashboard updated.');
-                        loadContracts();
-                        await fetch(`${backendUrl}/send-contract-email`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${token}`
-                            },
-                            body: JSON.stringify({ userEmail })
-                        });
-                    } else {
-                        const data = await res.json();
-                        showModal('Error', data.message || 'Failed to add contract.');
-                    }
-                } catch (err) {
-                    showModal('Error', 'Network error adding contract.');
-                }
-            });
-
-            // Disable Contract
-            async function disableContract(contractId) {
-                try {
-                    const res = await fetch(`${backendUrl}/disable-contract`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ contractId })
-                    });
-                    if (res.ok) {
-                        showModal('Success', 'Contract disabled successfully. User dashboard updated.');
-                        loadContracts();
-                    } else {
-                        showModal('Error', 'Failed to disable contract.');
-                    }
-                } catch (err) {
-                    showModal('Error', 'Network error disabling contract.');
-                }
+                db.run(
+                    'INSERT INTO contracts (userEmail, accountSize, challengeType, contractStatus, kycStatus, contractExpiry, payoutDate) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                    [contract.userEmail, contract.accountSize, contract.challengeType, contract.contractStatus, contract.kycStatus, contract.contractExpiry, contract.payoutDate]
+                );
+                saveDatabase();
+                showModal('Success', 'Contract added');
+                document.getElementById('userEmail').value = '';
+                document.getElementById('accountSize').value = '';
+                document.getElementById('challengeType').value = '';
+                document.getElementById('contractStatus').value = '';
+                document.getElementById('kycStatus').value = '';
+                document.getElementById('contractExpiry').value = '';
+                document.getElementById('payoutDate').value = '';
+                loadContracts();
+            } catch (err) {
+                showModal('Error', 'Error adding contract: ' + err.message);
             }
+        }
 
-            // Update KYC Status
-            async function updateKycStatus(contractId) {
-                const kycStatus = document.getElementById(`kyc-status-${contractId}`).value;
-                try {
-                    const res = await fetch(`${backendUrl}/update-kyc-status`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ contractId, kycStatus })
-                    });
-                    if (res.ok) {
-                        showModal('Success', 'KYC status updated successfully.');
-                        loadContracts();
-                    } else {
-                        showModal('Error', 'Failed to update KYC status.');
-                    }
-                } catch (err) {
-                    showModal('Error', 'Network error updating KYC status.');
-                }
-            }
-
-            // Send Notification
-            async function sendNotification(userEmail, contractId) {
-                const message = document.getElementById(`notification-message-${contractId}`).value.trim();
-                if (!message) {
-                    showModal('Error', 'Notification message cannot be empty.');
+        async function sendNotification() {
+            try {
+                const userEmail = document.getElementById('notifEmail').value.trim();
+                const checkStmt = db.prepare('SELECT email FROM users WHERE email = ?');
+                checkStmt.bind([userEmail]);
+                if (!checkStmt.step()) {
+                    showModal('Error', 'User not found');
+                    checkStmt.free();
                     return;
                 }
-                try {
-                    const res = await fetch(`${backendUrl}/send-notification`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ userEmail, message })
-                    });
-                    if (res.ok) {
-                        showModal('Success', 'Notification sent successfully.');
-                        document.getElementById(`notification-message-${contractId}`).value = '';
-                    } else {
-                        showModal('Error', 'Failed to send notification.');
-                    }
-                } catch (err) {
-                    showModal('Error', 'Network error sending notification.');
-                }
+                checkStmt.free();
+                const message = document.getElementById('notifMessage').value.trim();
+                const createdAt = new Date().toISOString();
+                db.run('INSERT INTO notifications (userEmail, message, createdAt) VALUES (?, ?, ?)', [userEmail, message, createdAt]);
+                saveDatabase();
+                showModal('Success', 'Notification sent');
+                document.getElementById('notifEmail').value = '';
+                document.getElementById('notifMessage').value = '';
+            } catch (err) {
+                showModal('Error', 'Error sending notification: ' + err.message);
             }
+        }
 
-            // Logout
-            document.getElementById('logoutBtn').addEventListener('click', () => {
-                localStorage.removeItem('authToken');
-                window.location.href = 'login.html';
-            });
-            document.getElementById('header-logoutBtn').addEventListener('click', () => {
-                localStorage.removeItem('authToken');
-                window.location.href = 'login.html';
-            });
+        document.getElementById('searchEmail').addEventListener('input', (e) => {
+            loadContracts(e.target.value.trim());
+        });
 
-            // Initialize
-            checkAdmin();
-            loadContracts();
-        </script>
-    </body>
+        (async () => {
+            await loadAdmin();
+        })();
+    </script>
+</body>
 </html>
