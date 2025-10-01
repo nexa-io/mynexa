@@ -1,262 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dashboard - Nexa</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(to bottom right, #fce7f3, #fff);
-            margin: 0;
-            min-height: 100vh;
-        }
-        .flex {
-            display: flex;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0; left: 0;
-            height: 100vh;
-            width: 16rem;
-            background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-        }
-        .sidebar svg rect {
-            rx: 2;
-        }
-        .sidebar h1 {
-            color: #db2777;
-            font-weight: 700;
-            font-size: 1.25rem;
-            margin-left: 0.5rem;
-        }
-        .nav-links {
-            margin-top: 2rem;
-        }
-        .nav-links a,
-        .nav-links button {
-            display: block;
-            margin-bottom: 1rem;
-            color: #4b5563;
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-family: inherit;
-            padding: 0;
-        }
-        .nav-links a:hover,
-        .nav-links button:hover {
-            color: #db2777;
-        }
-        main {
-            margin-left: 16rem;
-            padding: 1.5rem;
-            flex: 1;
-        }
-        .card {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        h2, h3 {
-            margin-top: 0;
-            margin-bottom: 1rem;
-            color: #1f2937;
-        }
-        .contract, .notification {
-            border: 1px solid #f9a8d4;
-            border-radius: 0.75rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            color: #374151;
-        }
-        /* Modal styles */
-        #modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.5);
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        #modal .modal-content {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            max-width: 400px;
-            width: 90%;
-            border: 1px solid #f9a8d4;
-            text-align: center;
-        }
-        #modal-close {
-            background: #db2777;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 9999px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        #modal-close:hover {
-            background: #be185d;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sign Up - Nexa</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(to bottom right, #fce7f3, #fff);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  main {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    text-align: center;
+  }
+  h1 {
+    margin-top: 0;
+    color: #db2777;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  input[type="email"],
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #f9a8d4;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    font-family: inherit;
+  }
+  button {
+    background: #db2777;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  button:hover {
+    background: #be185d;
+  }
+  label {
+    font-size: 0.875rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    user-select: none;
+  }
+  label a {
+    color: #db2777;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  label a:hover {
+    text-decoration: underline;
+  }
+  p {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  a {
+    color: #db2777;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  #modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 1200;
+    justify-content: center;
+    align-items: center;
+  }
+  #modal .modal-content {
+    background: white;
+    max-width: 300px;
+    width: 90%;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid #f9a8d4;
+    text-align: center;
+    font-weight: 600;
+    color: #db2777;
+  }
+  #modal-close {
+    margin-top: 1rem;
+    background: #db2777;
+    border: none;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+  }
+  #modal-close:hover {
+    background: #be185d;
+  }
+</style>
 </head>
 <body>
-    <div class="flex">
-        <aside class="sidebar">
-            <div class="logo flex items-center space-x-2">
-                <svg width="24" height="24" viewBox="0 0 50 50" fill="none">
-                    <rect x="10" y="10" width="10" height="10" fill="#ec4899" rx="2"></rect>
-                    <rect x="30" y="10" width="10" height="10" fill="#f9a8d4" rx="2"></rect>
-                    <rect x="10" y="30" width="10" height="10" fill="#f9a8d4" rx="2"></rect>
-                    <rect x="30" y="30" width="10" height="10" fill="#ec4899" rx="2"></rect>
-                </svg>
-                <h1>NEXA</h1>
-            </div>
-            <nav class="nav-links">
-                <a href="#" aria-current="page">Dashboard</a>
-                <a href="pricing.html">Pricing</a>
-                <a href="https://docuseal.co" target="_blank" rel="noopener">Submit KYC</a>
-                <button id="logout">Logout</button>
-            </nav>
-        </aside>
-        <main>
-            <h2>Dashboard</h2>
+<main>
+  <h1>Create an Account</h1>
+  <input id="name" type="text" placeholder="Full Name" required autocomplete="name" />
+  <input id="email" type="email" placeholder="Email" required autocomplete="email" />
+  <input id="password" type="password" placeholder="Password" required autocomplete="new-password" />
+  <input id="confirmPassword" type="password" placeholder="Confirm Password" required autocomplete="new-password" />
 
-            <section class="card">
-                <h3>Your Contracts</h3>
-                <div id="contracts"></div>
-            </section>
+  <label for="agreeCheckbox">
+    <input type="checkbox" id="agreeCheckbox" />
+    I agree to the <a href="terms.html" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+  </label>
 
-            <section class="card">
-                <h3>Notifications</h3>
-                <div id="notifications"></div>
-            </section>
-        </main>
-    </div>
+  <button id="signupBtn">Sign Up</button>
+  <p>Already have an account? <a href="login.html">Login</a></p>
+</main>
 
-    <div id="modal" role="alertdialog" aria-modal="true" aria-labelledby="modal-message">
-        <div class="modal-content">
-            <p id="modal-message"></p>
-            <button id="modal-close">OK</button>
-        </div>
-    </div>
+<div id="modal" role="alertdialog" aria-modal="true" aria-labelledby="modal-message" hidden>
+  <div class="modal-content">
+    <p id="modal-message"></p>
+    <button id="modal-close" aria-label="Close message dialog">OK</button>
+  </div>
+</div>
 
-    <script>
-        // Simple JWT encode/decode simulation (no signature)
-        function encodeJWT(payload) {
-            return btoa(JSON.stringify(payload));
-        }
-        function decodeJWT(token) {
-            try {
-                return JSON.parse(atob(token));
-            } catch {
-                return null;
-            }
-        }
+<script>
+function simpleHash(text) {
+  let hash = 0;
+  for(let i=0; i < text.length; i++) {
+    hash = ((hash << 5) - hash) + text.charCodeAt(i);
+    hash |= 0;
+  }
+  return hash.toString();
+}
+function initDataStore() {
+  return JSON.parse(localStorage.getItem('nexa_data')) || {
+    users: [],
+    contracts: [],
+    notifications: []
+  };
+}
+function saveDataStore(dataStore) {
+  localStorage.setItem('nexa_data', JSON.stringify(dataStore));
+}
+function showModal(message) {
+  const modal = document.getElementById('modal');
+  document.getElementById('modal-message').innerText = message;
+  modal.hidden = false;
+  modal.style.display = 'flex';
+}
+function hideModal() {
+  const modal = document.getElementById('modal');
+  modal.hidden = true;
+  modal.style.display = 'none';
+}
+document.getElementById('modal-close').addEventListener('click', hideModal);
 
-        // Basic password hashing substitute (not secure, for demo only)
-        function simpleHash(text) {
-            let hash = 0;
-            for(let i=0; i < text.length; i++) {
-                hash = ((hash << 5) - hash) + text.charCodeAt(i);
-                hash |= 0; // Convert to 32bit integer
-            }
-            return hash.toString();
-        }
+document.getElementById('signupBtn').addEventListener('click', () => {
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  const agree = document.getElementById('agreeCheckbox').checked;
 
-        function initDataStore() {
-            let dataStore = JSON.parse(localStorage.getItem('nexa_data')) || {
-                users: [],
-                contracts: [],
-                notifications: []
-            };
-            if (!dataStore.users.find(u => u.email === 'infocontactnexa@gmail.com')) {
-                dataStore.users.push({
-                    email: 'infocontactnexa@gmail.com',
-                    password: simpleHash('Strika001$'),
-                    name: 'Admin',
-                    phone: '',
-                    address: '',
-                    isAdmin: true
-                });
-                localStorage.setItem('nexa_data', JSON.stringify(dataStore));
-            }
-            return dataStore;
-        }
+  if (!name || !email || !password || !confirmPassword) {
+    showModal('Please fill in all fields.');
+    return;
+  }
+  if (!agree) {
+    showModal('You must agree to the Terms of Service and Privacy Policy.');
+    return;
+  }
+  if (password !== confirmPassword) {
+    showModal('Passwords do not match.');
+    return;
+  }
+  const dataStore = initDataStore();
+  if (dataStore.users.find(u => u.email === email)) {
+    showModal('User already exists.');
+    return;
+  }
+  const newUser = {
+    email,
+    password: simpleHash(password),
+    name,
+    phone: '',
+    address: '',
+    isAdmin: false
+  };
+  dataStore.users.push(newUser);
+  saveDataStore(dataStore);
+  showModal('Account created successfully! Redirecting to login...');
+  setTimeout(() => {
+    window.location.href = 'login.html';
+  }, 2000);
+});
 
-        function showModal(message) {
-            const modal = document.getElementById('modal');
-            document.getElementById('modal-message').innerText = message;
-            modal.style.display = 'flex';
-        }
-        document.getElementById('modal-close').addEventListener('click', () => {
-            document.getElementById('modal').style.display = 'none';
-        });
-
-        document.getElementById('logout').addEventListener('click', () => {
-            localStorage.removeItem('authToken');
-            window.location.href = 'login.html';
-        });
-
-        function loadDashboard() {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                showModal('Please login');
-                setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-                return;
-            }
-
-            const decoded = decodeJWT(token);
-            if (!decoded || !decoded.email) {
-                showModal('Invalid token');
-                setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-                return;
-            }
-
-            const dataStore = initDataStore();
-
-            // Show contracts for logged in user
-            const contractsDiv = document.getElementById('contracts');
-            contractsDiv.innerHTML = '';
-            dataStore.contracts.filter(c => c.userEmail === decoded.email).forEach(contract => {
-                const div = document.createElement('div');
-                div.className = 'contract';
-                div.innerHTML = `
-                    <p><strong>ID:</strong> ${contract.id}</p>
-                    <p><strong>Account Size:</strong> $${contract.accountSize}</p>
-                    <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
-                    <p><strong>Status:</strong> ${contract.contractStatus}</p>
-                    <p><strong>KYC Status:</strong> ${contract.kycStatus}</p>
-                    <p><strong>Expiry:</strong> ${contract.contractExpiry}</p>
-                    <p><strong>Payout Date:</strong> ${contract.payoutDate}</p>
-                `;
-                contractsDiv.appendChild(div);
-            });
-
-            // Show notifications for logged in user
-            const notificationsDiv = document.getElementById('notifications');
-            notificationsDiv.innerHTML = '';
-            dataStore.notifications.filter(n => n.userEmail === decoded.email).forEach(notif => {
-                const div = document.createElement('div');
-                div.className = 'notification';
-                div.innerHTML = `<p>${notif.message} <br><small>${new Date(notif.createdAt).toLocaleString()}</small></p>`;
-                notificationsDiv.appendChild(div);
-            });
-        }
-
-        loadDashboard();
-    </script>
+// Ensure modal is hidden on page load
+window.addEventListener('load', () => {
+  hideModal();
+});
+</script>
 </body>
 </html>
