@@ -1,182 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login - Nexa</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(to bottom right, #fce7f3, #fff);
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        main {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            width: 320px;
-            text-align: center;
-        }
-        h1 {
-            margin-top: 0;
-            color: #db2777;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-        }
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #f9a8d4;
-            border-radius: 9999px;
-            margin-bottom: 1rem;
-            font-family: inherit;
-        }
-        button {
-            background: #db2777;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 9999px;
-            cursor: pointer;
-            font-weight: 600;
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-        button:hover {
-            background: #be185d;
-        }
-        p {
-            font-size: 0.9rem;
-            color: #555;
-        }
-        a {
-            color: #db2777;
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        #modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.5);
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        #modal .modal-content {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            max-width: 300px;
-            width: 90%;
-            border: 1px solid #f9a8d4;
-            text-align: center;
-        }
-        #modal-close {
-            background: #db2777;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 9999px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 1rem;
-        }
-        #modal-close:hover {
-            background: #be185d;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login - Nexa</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(to bottom right, #fce7f3, #fff);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  main {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    width: 320px;
+    text-align: center;
+  }
+  h1 {
+    margin-top: 0;
+    color: #db2777;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #f9a8d4;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    font-family: inherit;
+  }
+  button {
+    background: #db2777;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  button:hover {
+    background: #be185d;
+  }
+  p {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  a {
+    color: #db2777;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  #modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 1200;
+    justify-content: center;
+    align-items: center;
+  }
+  #modal .modal-content {
+    background: white;
+    max-width: 300px;
+    width: 90%;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid #f9a8d4;
+    text-align: center;
+    font-weight: 600;
+    color: #db2777;
+  }
+  #modal-close {
+    margin-top: 1rem;
+    background: #db2777;
+    border: none;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+  }
+  #modal-close:hover {
+    background: #be185d;
+  }
+</style>
 </head>
 <body>
-    <main>
-        <h1>Nexa Login</h1>
-        <input id="email" type="email" placeholder="Email" required autocomplete="username" />
-        <input id="password" type="password" placeholder="Password" required autocomplete="current-password" />
-        <button id="loginBtn">Login</button>
-        <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
-    </main>
+<main>
+  <h1>Nexa Login</h1>
+  <input id="email" type="email" placeholder="Email" required autocomplete="username" />
+  <input id="password" type="password" placeholder="Password" required autocomplete="current-password" />
+  <button id="loginBtn">Login</button>
+  <p>Forgot your password? Contact support at <a href="mailto:infocontactnexa@gmail.com">infocontactnexa@gmail.com</a></p>
+  <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+</main>
 
-    <div id="modal" role="alertdialog" aria-modal="true" aria-labelledby="modal-message">
-        <div class="modal-content">
-            <p id="modal-message"></p>
-            <button id="modal-close">OK</button>
-        </div>
-    </div>
+<div id="modal" role="alertdialog" aria-modal="true" aria-labelledby="modal-message" hidden>
+  <div class="modal-content">
+    <p id="modal-message"></p>
+    <button id="modal-close" aria-label="Close message dialog">OK</button>
+  </div>
+</div>
 
-    <script>
-        // Simple JWT encode (no signature)
-        function encodeJWT(payload) {
-            return btoa(JSON.stringify(payload));
-        }
-        // Simple hash function (not secure, demo only)
-        function simpleHash(text) {
-            let hash = 0;
-            for(let i=0; i < text.length; i++) {
-                hash = ((hash << 5) - hash) + text.charCodeAt(i);
-                hash |= 0;
-            }
-            return hash.toString();
-        }
-        function initDataStore() {
-            return JSON.parse(localStorage.getItem('nexa_data')) || {
-                users: [],
-                contracts: [],
-                notifications: []
-            };
-        }
-        function showModal(message) {
-            const modal = document.getElementById('modal');
-            document.getElementById('modal-message').innerText = message;
-            modal.style.display = 'flex';
-        }
-        document.getElementById('modal-close').addEventListener('click', () => {
-            document.getElementById('modal').style.display = 'none';
-        });
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            const email = document.getElementById('email').value.trim().toLowerCase();
-            const password = document.getElementById('password').value;
-            if (!email || !password) {
-                showModal('Please enter email and password');
-                return;
-            }
-            const dataStore = initDataStore();
-            const user = dataStore.users.find(u => u.email.toLowerCase() === email);
-            if (!user) {
-                showModal('User not found');
-                return;
-            }
-            if (user.password !== simpleHash(password)) {
-                showModal('Incorrect password');
-                return;
-            }
-            // Create a simple token with email and isAdmin flag if any
-            const token = encodeJWT({email: user.email, isAdmin: !!user.isAdmin});
-            localStorage.setItem('authToken', token);
-            // Redirect admin to admin.html, others to dashboard.html
-            if (user.isAdmin) {
-                window.location.href = 'admin.html';
-            } else {
-                window.location.href = 'dashboard.html';
-            }
-        });
-    </script>
+<script>
+  function simpleHash(text) {
+    let hash = 0;
+    for(let i=0; i < text.length; i++) {
+      hash = ((hash << 5) - hash) + text.charCodeAt(i);
+      hash |= 0;
+    }
+    return hash.toString();
+  }
+
+  function decodeJWT(token) {
+    try {
+      return JSON.parse(atob(token));
+    } catch {
+      return null;
+    }
+  }
+
+  function showModal(message) {
+    const modal = document.getElementById('modal');
+    const messageElem = document.getElementById('modal-message');
+    messageElem.textContent = message;
+    modal.hidden = false;
+    modal.style.display = 'flex';
+  }
+
+  function hideModal() {
+    const modal = document.getElementById('modal');
+    modal.hidden = true;
+    modal.style.display = 'none';
+  }
+
+  document.getElementById('modal-close').addEventListener('click', hideModal);
+
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+
+    if(!email || !password){
+      showModal('Please enter email and password.');
+      return;
+    }
+
+    const dataStore = JSON.parse(localStorage.getItem('nexa_data')) || {users: []};
+
+    const user = dataStore.users.find(u => u.email === email);
+
+    if(!user){
+      showModal('User not found.');
+      return;
+    }
+
+    if(user.password !== simpleHash(password)){
+      showModal('Incorrect password.');
+      return;
+    }
+
+    // Generate simple token and save
+    const token = btoa(JSON.stringify({email: user.email, isAdmin: !!user.isAdmin}));
+    localStorage.setItem('authToken', token);
+
+    // Redirect to admin or user dashboard
+    if(user.isAdmin){
+      window.location.href = 'admin.html'; // admin has separate login anyway
+    } else {
+      window.location.href = 'dashboard.html';
+    }
+  });
+
+  // Hide modal at page load to prevent empty dialog
+  window.addEventListener('load', () => {
+    const modal = document.getElementById('modal');
+    modal.hidden = true;
+    modal.style.display = 'none';
+  });
+</script>
 </body>
 </html>
-window.addEventListener('load', () => {
-  const modal = document.getElementById('modal');
-  modal.hidden = true;
-  modal.style.display = 'none';
-});
