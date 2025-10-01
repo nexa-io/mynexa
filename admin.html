@@ -60,7 +60,7 @@
     <!-- Main Content -->
     <main class="flex-grow max-w-7xl mx-auto px-6 lg:px-8 py-12">
         <!-- Add Contract Form -->
-        <div class="bg-white border border-pink-100 rounded-3xl p-6 mb-8 opacity-0 animate-fade-in">
+        <div class="bg-white border border-pink-100 rounded-3xl p-6 mb-8 opacity-0 animate-fade-in bg-gradient-to-br from-white to-pink-50">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Add New Contract</h2>
             <form id="addContractForm" class="space-y-4">
                 <div>
@@ -87,9 +87,14 @@
             </form>
         </div>
 
+        <!-- Search Bar -->
+        <div class="mb-8 opacity-0 animate-fade-in">
+            <input id="searchInput" type="text" placeholder="Search by user email..." class="w-full p-3 border border-pink-200 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-300">
+        </div>
+
         <!-- Active Contracts -->
         <h2 class="text-3xl font-bold text-gray-800 mb-8 opacity-0 animate-fade-in">Active Contracts</h2>
-        <div id="contracts" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div id="contracts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Contracts will be dynamically added here -->
         </div>
     </main>
@@ -122,30 +127,26 @@
                         </svg>
                         <h3 class="text-2xl font-bold text-pink-400">NEXA</h3>
                     </div>
-                    <p class="text-gray-400">
-                        Empowering traders with funded accounts and profit-sharing opportunities.
-                    </p>
+                    <p class="text-gray-400">Empowering traders with funded accounts and profit-sharing opportunities.</p>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="faq.html" class="hover:text-pink-400 transition-colors duration-200">FAQ</a></li>
-                        <li><a href="terms.html" class="hover:text-pink-400 transition-colors duration-200">Terms</a></li>
-                        <li><a href="privacy.html" class="hover:text-pink-400 transition-colors duration-200">Privacy</a></li>
+                        <li><a href="faq.html" class="hover:text-pink-400">FAQ</a></li>
+                        <li><a href="terms.html" class="hover:text-pink-400">Terms</a></li>
+                        <li><a href="privacy.html" class="hover:text-pink-400">Privacy</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold text-white mb-4">Support</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="contact.html" class="hover:text-pink-400 transition-colors duration-200">Contact Us</a></li>
-                        <li><a href="mailto:infocontactnexa@gmail.com" class="hover:text-pink-400 transition-colors duration-200">Email Support</a></li>
+                        <li><a href="contact.html" class="hover:text-pink-400">Contact Us</a></li>
+                        <li><a href="mailto:infocontactnexa@gmail.com" class="hover:text-pink-400">Email Support</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold text-white mb-4">Legal</h4>
-                    <p class="text-gray-400">
-                        Compliant with Nigerian AML/CTF laws. KYC required. Trading involves risk; no refunds for challenge fees.
-                    </p>
+                    <p class="text-gray-400">Compliant with Nigerian AML/CTF laws. KYC required. Trading involves risk; no refunds for challenge fees.</p>
                 </div>
             </div>
             <div class="mt-8 pt-8 border-t border-gray-700 text-center">
@@ -192,6 +193,7 @@
         const modalMessage = document.getElementById('modal-message');
         const modalClose = document.getElementById('modal-close');
         const contractsDiv = document.getElementById('contracts');
+        const searchInput = document.getElementById('searchInput');
 
         // Mobile Menu Toggle
         mobileMenuButton.addEventListener('click', () => {
@@ -213,7 +215,7 @@
         });
 
         // Load Contracts
-        async function loadContracts() {
+        async function loadContracts(searchQuery = '') {
             try {
                 const res = await fetch(`${backendUrl}/all-contracts`, {
                     method: 'GET',
@@ -225,13 +227,16 @@
                 if (!res.ok) throw new Error('Failed to fetch contracts');
                 const contracts = await res.json();
                 contractsDiv.innerHTML = '';
-                contracts.forEach((contract, index) => {
+                const filteredContracts = searchQuery
+                    ? contracts.filter(contract => contract.userEmail.toLowerCase().includes(searchQuery.toLowerCase()))
+                    : contracts;
+                filteredContracts.forEach((contract, index) => {
                     const contractCard = `
-                        <div class="bg-white border border-pink-100 rounded-3xl p-6 hover:shadow-xl transition-all duration-300 opacity-0 animate-fade-in" style="animation-delay: ${index * 0.2}s;">
+                        <div class="bg-white border border-pink-100 rounded-3xl p-6 hover:shadow-xl transition-all duration-300 opacity-0 animate-fade-in bg-gradient-to-br from-white to-pink-50" style="animation-delay: ${index * 0.2}s;">
                             <h3 class="text-xl font-bold text-gray-800 mb-4">Contract #${contract.id} - ${contract.userEmail}</h3>
                             <p><strong>Account Size:</strong> $${contract.accountSize}</p>
                             <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
-                            <p><strong>Status:</strong> ${contract.contractStatus}</p>
+                            <p><strong>Status:</strong> <span class="inline-block px-3 py-1 rounded-full text-sm ${contract.contractStatus === 'Active' ? 'bg-green-100 text-green-600' : contract.contractStatus === 'Pending' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}">${contract.contractStatus}</span></p>
                             <p><strong>KYC Status:</strong> ${contract.kycStatus}</p>
                             <p><strong>Expiry:</strong> ${new Date(contract.contractExpiry).toLocaleDateString()}</p>
                             <p><strong>Payout Date:</strong> ${contract.payoutDate}</p>
@@ -247,6 +252,11 @@
                 showModal('Error', 'Failed to load contracts.');
             }
         }
+
+        // Search Contracts
+        searchInput.addEventListener('input', () => {
+            loadContracts(searchInput.value);
+        });
 
         // Add Contract
         document.getElementById('addContractForm').addEventListener('submit', async (e) => {
