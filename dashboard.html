@@ -31,7 +31,7 @@
     transition: padding-left 0.3s ease;
   }
 
-  /* Sidebar styles */
+  /* Sidebar */
   #sidebar {
     position: fixed;
     top: 0; left: 0;
@@ -204,6 +204,11 @@
     padding: 1.15rem 1.5rem;
     background: #fff0f6;
     box-shadow: inset 0 0 6px rgb(219 39 119 / 0.05);
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  .contract:hover {
+    background-color: #fde6f0;
   }
   .contract p, .notification p {
     margin: 0.25rem 0;
@@ -265,6 +270,72 @@
     border-bottom: 1px solid var(--pink-light);
     padding: 0.5rem 0;
   }
+  /* Modal */
+  #modal,
+  #contractModal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 1300;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-content {
+    background: white;
+    max-width: 600px;
+    width: 90%;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--pink-light);
+    text-align: left;
+    color: var(--pink);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  #modal-close,
+  #contractModal-close {
+    margin-top: 1rem;
+    background: var(--pink);
+    border: none;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+  }
+  #modal-close:hover,
+  #contractModal-close:hover {
+    background: #be185d;
+  }
+  /* Contract Modal buttons */
+  #contract-buttons {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  #contract-buttons button {
+    flex: 1 1 45%;
+    padding: 0.7rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--pink);
+    color: white;
+    border: none;
+    transition: background-color 0.3s;
+  }
+  #contract-buttons button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  #contract-buttons button:hover:not(:disabled) {
+    background: #be185d;
+  }
   /* Responsive */
   @media (max-width: 768px) {
     #sidebar {
@@ -294,47 +365,14 @@
     .summary-card {
       width: 100%;
     }
-  }
-  /* Modal */
-  #modal {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.5);
-    display: none;
-    z-index: 1200;
-    justify-content: center;
-    align-items: center;
-  }
-  #modal .modal-content {
-    background: white;
-    max-width: 400px;
-    width: 90%;
-    padding: 1.5rem;
-    border-radius: 1rem;
-    border: 1px solid var(--pink-light);
-    text-align: center;
-    font-weight: 600;
-    color: var(--pink);
-  }
-  #modal-close {
-    margin-top: 1rem;
-    background: var(--pink);
-    border: none;
-    color: white;
-    padding: 0.5rem 1.5rem;
-    border-radius: 9999px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1rem;
-    transition: background-color 0.2s ease;
-  }
-  #modal-close:hover {
-    background: #be185d;
+    #contract-buttons button {
+      flex: 1 1 100%;
+    }
   }
 </style>
 </head>
 <body>
+
 <aside id="sidebar" aria-label="Sidebar Navigation">
   <div class="logo" aria-label="Nexa Logo">
     <svg width="32" height="32" viewBox="0 0 50 50" fill="none" aria-hidden="true" focusable="false">
@@ -358,6 +396,14 @@
       <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M3 6v12h18V6H3zm2 4h14v4H5v-4z"/></svg>
       <span>Submit KYC</span>
     </a>
+    <a href="contact.html">
+      <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M21 8V7l-3 2-2-2-6 6-4-4-1 1v7h18v-7z"/></svg>
+      <span>Contact Support</span>
+    </a>
+    <a href="faq.html">
+      <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm.87 17.38-.14-.13-2.56-2.7a1 1 0 0 1-.28-.77V11.7a1 1 0 0 1 1-1h1a1 1 0 0 1 0 2h-.5v1.64l1.5 1.58a.75.75 0 1 1-1.33 1zM12 7a1.5 1.5 0 1 1-1.5 1.5A1.5 1.5 0 0 1 12 7z"/></svg>
+      <span>FAQ</span>
+    </a>
     <button id="logout" aria-label="Logout">
       <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M14 7v2H7v6h7v2l5-5-5-5zM19 19h-2v-2h2V7h-2V5h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2z"/></svg>
       <span>Logout</span>
@@ -369,10 +415,12 @@
     <path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 </button>
+
 <main>
   <div id="welcomeBanner" role="region" aria-label="Welcome banner">
     <img src="https://ui-avatars.com/api/?name=User&background=DB2777&color=fff&rounded=true" alt="User Profile Picture" />
     <span id="welcomeText">Welcome, User</span>
+    <button id="profileBtn" style="margin-left:auto; padding:0.3rem 0.8rem; font-weight:600; border:none;background-color:var(--pink);color:#fff;border-radius:9999px;cursor:pointer;">Profile</button>
   </div>
 
   <section id="summary" aria-label="Dashboard summary statistics">
@@ -395,8 +443,8 @@
   </section>
 
   <section class="card" aria-labelledby="contractsHeading">
-    <h3 id="contractsHeading">Your Contracts</h3>
-    <div id="contracts" role="list" aria-live="polite">Loading contracts...</div>
+    <h3 id="contractsHeading">Your Contracts (Click to View Details)</h3>
+    <div id="contracts" role="list" aria-live="polite"></div>
   </section>
 
   <section class="card" aria-labelledby="notificationsHeading">
@@ -412,6 +460,26 @@
   </section>
 </main>
 
+<!-- Contract Detail Modal -->
+<div id="contractModal" role="dialog" aria-modal="true" aria-labelledby="contractModalTitle" hidden>
+  <div class="modal-content" tabindex="0">
+    <h2 id="contractModalTitle">Contract Details</h2>
+    <div id="contractDetails"></div>
+    <div id="contractTimer" style="font-weight:bold; color:var(--pink); margin-top:0.5rem;"></div>
+
+    <div id="contract-buttons">
+      <button id="signContractBtn" disabled>Sign Contract</button>
+      <button id="verifySigningBtn" disabled>Verify Signing</button>
+      <button id="submitKycBtn" disabled>Submit KYC</button>
+      <button id="moveNextPhaseBtn" disabled>Move to Next Phase</button>
+      <button id="requestPayoutBtn" disabled>Request Payout</button>
+    </div>
+
+    <button id="contractModal-close" style="margin-top:1.5rem;">Close</button>
+  </div>
+</div>
+
+<!-- Generic Modal -->
 <div id="modal" role="alertdialog" aria-modal="true" aria-labelledby="modal-message" aria-describedby="modal-desc" hidden>
   <div class="modal-content">
     <p id="modal-message" role="heading" aria-level="3"></p>
@@ -420,12 +488,58 @@
 </div>
 
 <script>
-  function decodeJWT(token) {
-    try {
-      return JSON.parse(atob(token));
-    } catch {
-      return null;
+(() => {
+  // State
+  let dataStore;
+  let currentUser;
+  let activeContract = null;
+  let countdownInterval = null;
+
+  // Hardcoded Paystack tiers mapping
+  const PAYSTACK_TIER_MAP = {
+    "https://paystack.shop/pay/Tier1-1-Step": {tier: 1, accountSize: 100, step: 1},
+    "https://paystack.shop/pay/Tier1-2-Step": {tier: 1, accountSize: 100, step: 2},
+    "https://paystack.shop/pay/Tier2-1-Step": {tier: 2, accountSize: 250, step: 1},
+    "https://paystack.shop/pay/Tier2-2-Step": {tier: 2, accountSize: 250, step: 2},
+    "https://paystack.shop/pay/Tier3-1-Step": {tier: 3, accountSize: 500, step: 1},
+    "https://paystack.shop/pay/Tier3-2-Step": {tier: 3, accountSize: 500, step: 2},
+    "https://paystack.shop/pay/Tier4-1-Step": {tier: 4, accountSize: 1000, step: 1},
+    "https://paystack.shop/pay/Tier4-2-Step": {tier: 4, accountSize: 1000, step: 2}
+  };
+
+  const PHASE_STATUS = {
+    'unfunded': 'Unfunded',
+    'funded': 'Funded',
+    'phase1': 'Phase1',
+    'phase2': 'Phase2',
+    'disabled': 'Disabled'
+  };
+
+  // For countdown durations based on account type
+  const CONTRACT_RULES = {
+    "1step": {
+      expirationDays: 30,
+      target: '10%',
+      maxDrawdown: '6%',
+      buttonLabel: 'Move to Funded'
+    },
+    "2step": {
+      expirationDaysPerStep: 60,
+      phases: [
+        {target: '8%', dailyDrawdown: '5%'},
+        {target: '5%', dailyDrawdown: '5%'}
+      ],
+      maxDrawdown: '10%',
+      buttonLabels: ['Move to Phase 2', 'Move to Funded']
     }
+  };
+
+  // Utility functions
+
+  // Simple JWT decode
+  function decodeJWT(token) {
+    try {return JSON.parse(atob(token));}
+    catch {return null;}
   }
 
   function simpleHash(text) {
@@ -437,13 +551,60 @@
     return hash.toString();
   }
 
-  function initDataStore() {
-    let dataStore = JSON.parse(localStorage.getItem('nexa_data')) || {
-      users: [],
-      contracts: [],
-      notifications: []
-    };
+  // Save dataStore
+  function saveDataStore() {
+    localStorage.setItem('nexa_data', JSON.stringify(dataStore));
+  }
 
+  // Show Modal
+  function showModal(message) {
+    const modal = document.getElementById('modal');
+    const messageElem = document.getElementById('modal-message');
+    messageElem.textContent = message;
+    modal.hidden = false;
+    modal.style.display = 'flex';
+    modal.querySelector('button').focus();
+  }
+
+  // Hide Modal
+  function hideModal() {
+    const modal = document.getElementById('modal');
+    modal.hidden = true;
+    modal.style.display = 'none';
+  }
+
+  // Sidebar toggle
+  function initSidebarToggle() {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggleSidebar');
+    toggleBtn.addEventListener('click', () => {
+      const collapsed = sidebar.classList.toggle('collapsed');
+      toggleBtn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+    });
+  }
+
+  // Load user & dataStore from localStorage / token
+  function loadUserData() {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      showModal('Please login');
+      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+      return false;
+    }
+    const userInfo = decodeJWT(token);
+    if (!userInfo || !userInfo.email) {
+      showModal('Invalid or expired token');
+      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+      return false;
+    }
+    dataStore = JSON.parse(localStorage.getItem('nexa_data')) || {users: [], contracts: [], notifications: []};
+    currentUser = dataStore.users.find(u => u.email === userInfo.email);
+    if (!currentUser) {
+      showModal('User not found');
+      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+      return false;
+    }
+    // Ensure admin user added if missing
     if (!dataStore.users.find(u => u.email === 'infocontactnexa@gmail.com')) {
       dataStore.users.push({
         email: 'infocontactnexa@gmail.com',
@@ -453,136 +614,327 @@
         address: '',
         isAdmin: true
       });
-      localStorage.setItem('nexa_data', JSON.stringify(dataStore));
+      saveDataStore();
     }
-    return dataStore;
+    return true;
   }
 
-  function showModal(message) {
-    const modal = document.getElementById('modal');
-    const messageElem = document.getElementById('modal-message');
-    messageElem.textContent = message;
+  // Check if user has been redirected from paystack payment URLs
+  function checkRedirectForPayment() {
+    const redirectURL = sessionStorage.getItem('redirected_from_paystack_url');
+    if (!redirectURL) return;
+
+    const tierData = PAYSTACK_TIER_MAP[redirectURL];
+    if (tierData) {
+      // Add or update challenge for user: challengeType, accountSize
+      const contractIndex = dataStore.contracts.findIndex(c => c.userEmail === currentUser.email && c.challengeType === `Tier${tierData.tier} ${tierData.step}-Step`);
+      if (contractIndex < 0) {
+        // Add new contract for this challenge
+        const newContract = {
+          id: dataStore.contracts.length + 1,
+          userEmail: currentUser.email,
+          accountSize: tierData.accountSize,
+          challengeType: `Tier${tierData.tier} ${tierData.step}-Step`,
+          contractStatus: PHASE_STATUS.unfunded,
+          kycStatus: "Not Submitted",
+          contractExpiry: "",
+          payoutDate: "",
+          isFunded: false,
+          phaseStep: 1,
+          phaseStatus: "unfunded",
+          fundedDateISO: null
+        };
+        dataStore.contracts.push(newContract);
+        saveDataStore();
+        showModal(`New challenge added: Tier${tierData.tier} ${tierData.step}-Step`);
+      }
+    }
+    sessionStorage.removeItem('redirected_from_paystack_url');
+  }
+
+  // Listen for redirection URLs and store for dashboard to pick
+  function captureRedirectURL() {
+    const referer = document.referrer;
+    if (Object.keys(PAYSTACK_TIER_MAP).some(url => referer.startsWith(url))) {
+      sessionStorage.setItem('redirected_from_paystack_url', referer);
+    }
+  }
+
+  // Calculate contract expiry and countdown for the contract modal
+  function calculateExpiry(contract) {
+    // Returns time remaining in ms or 0 if expired
+    if (!contract.fundedDateISO) return 0;
+
+    const fundedDate = new Date(contract.fundedDateISO);
+    const now = new Date();
+    const msPerDay = 24 * 60 * 60 * 1000;
+
+    if (contract.challengeType.includes('1-Step')) {
+      // 30 days expiry
+      const expiryDate = new Date(fundedDate.getTime() + 30 * msPerDay);
+      const diff = expiryDate - now;
+      return Math.max(diff, 0);
+    } else if(contract.challengeType.includes('2-Step')) {
+      // 60 days per phase step
+      let days = 0;
+      if (contract.phaseStatus === 'phase1' || contract.phaseStatus === 'unfunded') {
+        days = 60;
+      } else if (contract.phaseStatus === 'phase2') {
+        days = 60;
+      } else {
+        days = 0;
+      }
+      const expiryDate = new Date(fundedDate.getTime() + days * msPerDay);
+      const diff = expiryDate - now;
+      return Math.max(diff, 0);
+    }
+    return 0;
+  }
+
+  // Format countdown as d hh:mm:ss
+  function formatCountdown(ms) {
+    if (ms <= 0) return "Expired";
+    let totalSeconds = Math.floor(ms / 1000);
+    const days = Math.floor(totalSeconds / (24 * 3600));
+    totalSeconds %= (24 * 3600);
+    const hh = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+    totalSeconds %= 3600;
+    const mm = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+    const ss = String(totalSeconds % 60).padStart(2, '0');
+    return `${days}d ${hh}:${mm}:${ss}`;
+  }
+
+  // Disable contract when countdown ends
+  function disableContract(contract) {
+    contract.contractStatus = PHASE_STATUS.disabled;
+    saveDataStore();
+    showModal('Contract automatically disabled due to expiry.');
+    loadContracts();
+    closeContractModal();
+  }
+
+  // Open Contract detail modal
+  function openContractModal(contract) {
+    activeContract = contract;
+    const modal = document.getElementById('contractModal');
+    const detailsDiv = document.getElementById('contractDetails');
+    const timerDiv = document.getElementById('contractTimer');
+
+    // Phase and step info for button logic
+    const is1Step = contract.challengeType.includes('1-Step');
+    const is2Step = contract.challengeType.includes('2-Step');
+    const phase = contract.phaseStatus;  // unfunded, phase1, phase2, funded
+    const funded = contract.phaseStatus === 'funded';
+
+    detailsDiv.innerHTML = `
+      <p><strong>ID:</strong> ${contract.id}</p>
+      <p><strong>Account Size:</strong> $${contract.accountSize}</p>
+      <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
+      <p><strong>Status:</strong> ${contract.contractStatus}</p>
+      <p><strong>KYC Status:</strong> ${contract.kycStatus}</p>
+      <p><strong>Expiry:</strong> ${contract.contractExpiry || 'N/A'}</p>
+      <p><strong>Payout Date:</strong> ${contract.payoutDate || 'N/A'}</p>
+      <p><strong>Phase Status:</strong> ${phase}</p>
+    `;
+
+    // Button references
+    const signBtn = document.getElementById('signContractBtn');
+    const verifyBtn = document.getElementById('verifySigningBtn');
+    const kycBtn = document.getElementById('submitKycBtn');
+    const nextPhaseBtn = document.getElementById('moveNextPhaseBtn');
+    const payoutBtn = document.getElementById('requestPayoutBtn');
+
+    // Enable buttons only if phase is funded or beyond
+    const buttonsEnabled = funded || phase === 'phase2' || phase === 'phase1';
+    signBtn.disabled = !buttonsEnabled || contract.contractStatus === PHASE_STATUS.disabled;
+    verifyBtn.disabled = !buttonsEnabled || contract.contractStatus === PHASE_STATUS.disabled;
+    kycBtn.disabled = !buttonsEnabled || contract.contractStatus === PHASE_STATUS.disabled;
+
+    // Move to next phase button logic
+    nextPhaseBtn.disabled = (phase === 'funded' || contract.contractStatus === PHASE_STATUS.disabled);
+
+    // Determine nextPhaseBtn label
+    if (is1Step) {
+      nextPhaseBtn.textContent = 'Move to Funded';
+      if (phase === 'funded' || contract.contractStatus === PHASE_STATUS.disabled) nextPhaseBtn.disabled = true;
+    } else if (is2Step) {
+      if (phase === 'unfunded' || phase === 'phase1') {
+        nextPhaseBtn.textContent = phase === 'unfunded' ? 'Move to Phase 1' : 'Move to Phase 2';
+      } else if (phase === 'phase2') {
+        nextPhaseBtn.textContent = 'Move to Funded';
+      } else {
+        nextPhaseBtn.disabled = true;
+      }
+    } else {
+      nextPhaseBtn.disabled = true;
+    }
+
+    // Payout button enabled only if funded > 30 days ago
+    payoutBtn.disabled = true;
+    if (contract.fundedDateISO && (new Date() - new Date(contract.fundedDateISO)) >= 30*24*60*60*1000 && funded) {
+      payoutBtn.disabled = false;
+    }
+
+    // Countdown timer setup
+    clearInterval(countdownInterval);
+    function updateTimer() {
+      const timeLeft = calculateExpiry(contract);
+      timerDiv.textContent = 'Time Left: ' + formatCountdown(timeLeft);
+      if (timeLeft <= 0) {
+        disableContract(contract);
+        clearInterval(countdownInterval);
+      }
+    }
+    updateTimer();
+    countdownInterval = setInterval(updateTimer, 1000);
+
+    // Button event handlers
+    signBtn.onclick = () => {
+      window.open('https://docuseal.co', '_blank');
+    };
+    verifyBtn.onclick = () => {
+      window.location.href = 'verifysigning.html';
+    };
+    kycBtn.onclick = () => {
+      window.location.href = 'kyc.html';
+    };
+    payoutBtn.onclick = () => {
+      window.location.href = 'payout.html';
+    };
+    nextPhaseBtn.onclick = () => {
+      handleNextPhase(contract);
+    };
+
     modal.hidden = false;
     modal.style.display = 'flex';
+    modal.querySelector('.modal-content').focus();
   }
 
-  function hideModal() {
-    const modal = document.getElementById('modal');
+  // Close contract modal and clear interval
+  function closeContractModal() {
+    clearInterval(countdownInterval);
+    activeContract = null;
+    const modal = document.getElementById('contractModal');
     modal.hidden = true;
     modal.style.display = 'none';
   }
+  document.getElementById('contractModal-close').addEventListener('click', closeContractModal);
 
-  document.getElementById('modal-close').addEventListener('click', hideModal);
+  // Next phase handler for user contracts
+  function handleNextPhase(contract) {
+    const is1Step = contract.challengeType.includes('1-Step');
+    const is2Step = contract.challengeType.includes('2-Step');
 
-  document.getElementById('logout').addEventListener('click', () => {
-    localStorage.removeItem('authToken');
-    window.location.href = 'login.html';
-  });
+    if (!confirm('Are you sure you want to move this contract to the next phase?')) return;
 
-  const sidebar = document.getElementById('sidebar');
-  const toggleBtn = document.getElementById('toggleSidebar');
-
-  toggleBtn.addEventListener('click', () => {
-    const collapsed = sidebar.classList.toggle('collapsed');
-    toggleBtn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
-  });
-
-  function loadDashboard() {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      showModal('Please login');
-      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-      return;
+    if (is1Step) {
+      if(contract.phaseStatus === 'unfunded') {
+        contract.phaseStatus = 'funded';
+        contract.contractStatus = PHASE_STATUS.funded;
+        contract.fundedDateISO = new Date().toISOString();
+      }
+    } else if (is2Step) {
+      if(contract.phaseStatus === 'unfunded') {
+        contract.phaseStatus = 'phase1';
+      } else if(contract.phaseStatus === 'phase1') {
+        contract.phaseStatus = 'phase2';
+      } else if(contract.phaseStatus === 'phase2') {
+        contract.phaseStatus = 'funded';
+        contract.contractStatus = PHASE_STATUS.funded;
+        contract.fundedDateISO = new Date().toISOString();
+      }
     }
+    saveDataStore();
+    showModal('Contract phase updated successfully!');
+    closeContractModal();
+    loadContracts();
+  }
 
-    const user = decodeJWT(token);
-    if (!user || !user.email) {
-      showModal('Invalid token');
-      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-      return;
-    }
-
-    const dataStore = initDataStore();
-
-    const currentUser = dataStore.users.find(u => u.email === user.email);
-    if (!currentUser) {
-      showModal('User no longer exists');
-      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-      return;
-    }
-
-    // Welcome banner update
-    const welcomeText = document.getElementById('welcomeText');
-    welcomeText.textContent = `Welcome, ${currentUser.name || currentUser.email}`;
-
-    const avatarImg = document.querySelector('#welcomeBanner img');
-    if (currentUser.name) {
-      avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=DB2777&color=fff&rounded=true`;
-      avatarImg.alt = `${currentUser.name} Profile Picture`;
-    }
-
-    // Contracts
+  // Load contracts for current user
+  function loadContracts() {
     const contractsDiv = document.getElementById('contracts');
     contractsDiv.innerHTML = '';
-    const userContracts = dataStore.contracts.filter(c => c.userEmail === user.email);
+
+    const userContracts = dataStore.contracts.filter(c => c.userEmail === currentUser.email);
+
     if (userContracts.length === 0) {
       contractsDiv.innerHTML = '<p>No contracts found.</p>';
-    } else {
-      userContracts.forEach(contract => {
-        const div = document.createElement('div');
-        div.className = 'contract';
-        div.innerHTML = `
-          <p><strong>ID:</strong> ${contract.id}</p>
-          <p><strong>Account Size:</strong> $${contract.accountSize}</p>
-          <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
-          <p><strong>Status:</strong> ${contract.contractStatus}</p>
-          <p><strong>KYC Status:</strong> ${contract.kycStatus}</p>
-          <p><strong>Expiry:</strong> ${contract.contractExpiry}</p>
-          <p><strong>Payout Date:</strong> ${contract.payoutDate}</p>
-        `;
-        contractsDiv.appendChild(div);
-      });
+      return;
     }
 
-    // Notifications
+    userContracts.forEach(contract => {
+      const div = document.createElement('div');
+      div.className = 'contract';
+      div.setAttribute('tabindex', '0');
+      div.setAttribute('role', 'button');
+      div.setAttribute('aria-pressed', 'false');
+      div.innerHTML = `
+        <p><strong>ID:</strong> ${contract.id}</p>
+        <p><strong>Account Size:</strong> $${contract.accountSize}</p>
+        <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
+        <p><strong>Status:</strong> ${contract.contractStatus}</p>
+        <p><strong>Phase Status:</strong> ${contract.phaseStatus || 'unfunded'}</p>
+      `;
+      div.addEventListener('click', () => openContractModal(contract));
+      div.addEventListener('keypress', e => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openContractModal(contract);
+        }
+      });
+      contractsDiv.appendChild(div);
+    });
+  }
+
+  // Load notifications for user
+  function loadNotifications() {
     const notificationsDiv = document.getElementById('notifications');
     notificationsDiv.innerHTML = '';
-    const userNotifications = dataStore.notifications.filter(n => n.userEmail === user.email);
+
+    const userNotifications = dataStore.notifications.filter(n => n.userEmail === currentUser.email);
     if (userNotifications.length === 0) {
       notificationsDiv.innerHTML = '<p>No notifications.</p>';
-    } else {
-      userNotifications.forEach(notif => {
-        const div = document.createElement('div');
-        div.className = 'notification';
-        const date = new Date(notif.createdAt);
-        div.innerHTML = `<p>${notif.message} <br><small>${date.toLocaleString()}</small></p>`;
-        notificationsDiv.appendChild(div);
-      });
+      return;
     }
+    userNotifications.forEach(notif => {
+      const div = document.createElement('div');
+      div.className = 'notification';
+      const date = new Date(notif.createdAt);
+      div.innerHTML = `<p>${notif.message} <br><small>${date.toLocaleString()}</small></p>`;
+      notificationsDiv.appendChild(div);
+    });
+  }
 
-    // Summary stats
+  // Load summary stats and recent activities
+  function loadSummaryAndActivity() {
+    const userContracts = dataStore.contracts.filter(c => c.userEmail === currentUser.email);
+    const userNotifications = dataStore.notifications.filter(n => n.userEmail === currentUser.email);
+
     document.getElementById('totalContracts').textContent = userContracts.length;
-    document.getElementById('activeContracts').textContent = userContracts.filter(c => c.contractStatus.toLowerCase() !== 'disabled').length;
+    document.getElementById('activeContracts').textContent = userContracts.filter(c => c.contractStatus !== PHASE_STATUS.disabled).length;
     document.getElementById('pendingKyc').textContent = userContracts.filter(c => c.kycStatus.toLowerCase() === 'pending').length;
     document.getElementById('unreadNotifications').textContent = userNotifications.length;
 
-    // Recent activity (from contracts & notifications)
     const activityList = document.getElementById('activityList');
     activityList.innerHTML = '';
     let activities = [];
 
     userContracts.forEach(c => {
-      const dt = new Date(c.contractExpiry);
-      if (!isNaN(dt))
-        activities.push({date: dt, text: `Contract #${c.id} expires on ${c.contractExpiry}`});
-    });
-    userNotifications.forEach(n => {
-      const dt = new Date(n.createdAt);
-      if (!isNaN(dt))
-        activities.push({date: dt, text: `Notification: ${n.message}`});
+      let expiryDate = c.fundedDateISO ? new Date(c.fundedDateISO) : null;
+      if (expiryDate) {
+        if (c.challengeType.includes('1-Step')) {
+          expiryDate = new Date(expiryDate.getTime() + 30 * 24*60*60*1000);
+        } else if(c.challengeType.includes('2-Step')) {
+          expiryDate = new Date(expiryDate.getTime() + 60 * 24*60*60*1000);
+        }
+        activities.push({date: expiryDate, text: `Contract #${c.id} expiry`});
+      }
     });
 
-    activities.sort((a,b) => b.date - a.date);
+    userNotifications.forEach(n => {
+      activities.push({date: new Date(n.createdAt), text: `Notification: ${n.message}`});
+    });
+    activities.sort((a, b) => b.date - a.date);
 
     if (activities.length === 0) {
       activityList.innerHTML = '<li>No recent activities</li>';
@@ -595,12 +947,97 @@
     }
   }
 
+  // Profile modal and update feature
+  function openProfileModal() {
+    const profileModal = document.createElement('div');
+    profileModal.id = 'profileModal';
+    profileModal.setAttribute('role', 'dialog');
+    profileModal.setAttribute('aria-modal', 'true');
+    profileModal.setAttribute('aria-labelledby', 'profileModalTitle');
+    profileModal.style.position = 'fixed';
+    profileModal.style.top = '0';
+    profileModal.style.left = '0';
+    profileModal.style.width = '100vw';
+    profileModal.style.height = '100vh';
+    profileModal.style.background = 'rgba(0,0,0,0.5)';
+    profileModal.style.display = 'flex';
+    profileModal.style.justifyContent = 'center';
+    profileModal.style.alignItems = 'center';
+    profileModal.style.zIndex = '1400';
+
+    profileModal.innerHTML = `
+      <div style="background:white;max-width:400px;width:90%;padding:1.5rem;border-radius:1rem;text-align:left;color:var(--pink);" tabindex="0">
+        <h2 id="profileModalTitle">Update Profile</h2>
+        <label for="profileName">Name:</label><br/>
+        <input type="text" id="profileName" value="${currentUser.name || ''}" style="width:100%;padding:0.5rem;margin-bottom:1rem;border-radius:0.5rem;border:1px solid var(--pink-light);"/>
+        <label for="profileEmail">Email:</label><br/>
+        <input type="email" id="profileEmail" value="${currentUser.email}" disabled style="width:100%;padding:0.5rem;margin-bottom:1rem;border-radius:0.5rem;border:1px solid var(--pink-light);background:#eee;"/>
+        <button id="saveProfileBtn" style="background:var(--pink);color:#fff;padding:0.5rem 1rem;border:none;border-radius:9999px;cursor:pointer;font-weight:700;margin-right:1rem;">Save</button>
+        <button id="cancelProfileBtn" style="background:#ddd;color:var(--pink);padding:0.5rem 1rem;border:none;border-radius:9999px;cursor:pointer;">Cancel</button>
+      </div>
+    `;
+
+    document.body.appendChild(profileModal);
+
+    // Focus on modal container
+    profileModal.querySelector('div').focus();
+
+    // Button handlers
+    profileModal.querySelector('#cancelProfileBtn').addEventListener('click', () => {
+      document.body.removeChild(profileModal);
+    });
+
+    profileModal.querySelector('#saveProfileBtn').addEventListener('click', () => {
+      const newName = profileModal.querySelector('#profileName').value.trim();
+      if (!newName) {
+        alert('Name cannot be empty.');
+        return;
+      }
+      currentUser.name = newName;
+      saveDataStore();
+      showModal('Profile updated successfully!');
+      document.body.removeChild(profileModal);
+      document.getElementById('welcomeText').textContent = `Welcome, ${currentUser.name}`;
+      const avatarImg = document.querySelector('#welcomeBanner img');
+      avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=DB2777&color=fff&rounded=true`;
+      avatarImg.alt = `${currentUser.name} Profile Picture`;
+    });
+  }
+
+  // Initialize page
+  function init() {
+    if(!loadUserData()) return;
+    captureRedirectURL();
+    checkRedirectForPayment();
+    initSidebarToggle();
+
+    document.getElementById('profileBtn').addEventListener('click', openProfileModal);
+
+    document.getElementById('modal-close').addEventListener('click', hideModal);
+
+    loadContracts();
+    loadNotifications();
+    loadSummaryAndActivity();
+  }
+
+  // Capture redirect url for paystack logic
+  function captureRedirectURL() {
+    const referer = document.referrer;
+    if (referer && Object.keys(PAYSTACK_TIER_MAP).some(url => referer.startsWith(url))) {
+      sessionStorage.setItem('redirected_from_paystack_url', referer);
+    }
+  }
+
+  // On load
   window.addEventListener('load', () => {
-    const modal = document.getElementById('modal');
-    modal.hidden = true;
-    modal.style.display = 'none';
-    loadDashboard();
+    document.getElementById('modal').hidden = true;
+    document.getElementById('modal').style.display = 'none';
+    document.getElementById('contractModal').hidden = true;
+    document.getElementById('contractModal').style.display = 'none';
+    init();
   });
+})();
 </script>
+
 </body>
 </html>
