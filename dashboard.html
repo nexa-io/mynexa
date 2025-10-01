@@ -270,6 +270,7 @@
                         <div class="bg-white border border-pink-100 rounded-3xl p-6 hover:shadow-xl transition-all duration-300 opacity-0 animate-fade-in" style="animation-delay: ${index * 0.2}s;">
                             <h3 class="text-xl font-bold text-gray-800 mb-4">Contract #${contract.id}</h3>
                             <p><strong>Account Size:</strong> $${contract.accountSize}</p>
+                            <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
                             <p><strong>Status:</strong> ${contract.contractStatus}</p>
                             <p><strong>KYC Status:</strong> ${contract.kycStatus}</p>
                             <p><strong>Expiry:</strong> <span id="countdown-${contract.id}"></span></p>
@@ -296,8 +297,9 @@
                 const [tierNum, steps] = tier.split('-');
                 const accountSizes = { 'Tier1': 100, 'Tier2': 200, 'Tier3': 500, 'Tier4': 1000 };
                 const contract = {
+                    userEmail: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).email : '',
                     accountSize: accountSizes[tierNum],
-                    steps: steps === '1-Step' ? 1 : 2,
+                    challengeType: steps,
                     contractStatus: 'Pending',
                     kycStatus: 'Not Submitted',
                     contractExpiry: new Date(Date.now() + (steps === '1-Step' ? 30 : 60) * 24 * 60 * 60 * 1000).toISOString(),
@@ -358,4 +360,4 @@
         checkPaymentRedirect();
     </script>
 </body>
-                          </html>
+</html>
