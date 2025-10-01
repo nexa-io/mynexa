@@ -3,115 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Nexa</title>
+    <title>Admin Panel - Nexa</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Times New Roman', Times, serif; }
+        body { font-family: 'Montserrat', sans-serif; }
+        @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
+        .mobile-menu { display: none; }
+        .mobile-menu.active { display: block; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 24px; border-radius: 16px; max-width: 400px; width: 90%; border: 1px solid #f9a8d4; text-align: center; }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <div id="admin-login" class="flex items-center justify-center min-h-screen">
-        <div class="max-w-md w-full mx-auto p-6 bg-white rounded shadow">
-            <h2 class="text-2xl font-bold text-gray-800 text-center">Admin Login</h2>
-            <form id="admin-form" class="mt-6 space-y-4">
+<body class="bg-gradient-to-br from-pink-50 to-white flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="relative z-50 bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
+                        <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                        <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
+                        <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                        <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                        <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
+                        <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                        <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+                        <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
+                        <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+                    </svg>
+                    <h1 class="text-3xl font-bold text-pink-600 tracking-wide">NEXA Admin</h1>
+                </div>
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="admin.html" class="text-gray-600 hover:text-pink-600 transition-colors duration-200">Contracts</a>
+                    <button id="logoutBtn" class="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600">Logout</button>
+                </nav>
+                <button id="mobile-menu-button" class="md:hidden text-gray-600">
+                    <svg id="menu-icon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg id="close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="mobile-menu" class="mobile-menu md:hidden absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-pink-100 shadow-lg">
+                <nav class="flex flex-col space-y-4 p-6">
+                    <a href="admin.html" class="text-gray-600">Contracts</a>
+                    <button id="mobile-logoutBtn" class="text-gray-600 text-left">Logout</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-6 lg:px-8 py-12">
+        <!-- Add Contract Form -->
+        <div class="bg-white border border-pink-100 rounded-3xl p-6 mb-8 opacity-0 animate-fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Add New Contract</h2>
+            <form id="addContractForm" class="space-y-4">
                 <div>
-                    <label class="block text-gray-600">Email</label>
-                    <input type="email" id="admin-email" class="w-full p-2 border rounded" value="infocontactnexa@gmail.com" required>
+                    <label class="block text-sm font-medium text-gray-600">User Email</label>
+                    <input id="userEmail" type="email" placeholder="Enter user email" required class="w-full p-3 border border-pink-200 rounded-full">
                 </div>
                 <div>
-                    <label class="block text-gray-600">Password</label>
-                    <input type="password" id="admin-password" class="w-full p-2 border rounded" required>
+                    <label class="block text-sm font-medium text-gray-600">Account Size</label>
+                    <select id="accountSize" required class="w-full p-3 border border-pink-200 rounded-full">
+                        <option value="100">$100</option>
+                        <option value="200">$200</option>
+                        <option value="500">$500</option>
+                        <option value="1000">$1000</option>
+                    </select>
                 </div>
-                <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Log In</button>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Challenge Type</label>
+                    <select id="challengeType" required class="w-full p-3 border border-pink-200 rounded-full">
+                        <option value="1-Step">1-Step</option>
+                        <option value="2-Step">2-Step</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-pink-500 text-white p-3 rounded-full hover:bg-pink-600">Add Contract</button>
             </form>
         </div>
+
+        <!-- Active Contracts -->
+        <h2 class="text-3xl font-bold text-gray-800 mb-8 opacity-0 animate-fade-in">Active Contracts</h2>
+        <div id="contracts" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Contracts will be dynamically added here -->
+        </div>
+    </main>
+
+    <!-- Custom Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content animate-fade-in">
+            <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-4"></h3>
+            <p id="modal-message" class="text-gray-600 mb-6"></p>
+            <button id="modal-close" class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-all duration-200">OK</button>
+        </div>
     </div>
-    <div id="admin-dashboard" class="hidden">
-        <header class="bg-white shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                <h1 class="text-3xl font-bold text-blue-600">Admin Dashboard</h1>
-                <button id="admin-logout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Log Out</button>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
+                            <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                            <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
+                            <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
+                            <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                            <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
+                            <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
+                            <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+                            <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
+                            <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+                        </svg>
+                        <h3 class="text-2xl font-bold text-pink-400">NEXA</h3>
+                    </div>
+                    <p class="text-gray-400">
+                        Empowering traders with funded accounts and profit-sharing opportunities.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="faq.html" class="hover:text-pink-400 transition-colors duration-200">FAQ</a></li>
+                        <li><a href="terms.html" class="hover:text-pink-400 transition-colors duration-200">Terms</a></li>
+                        <li><a href="privacy.html" class="hover:text-pink-400 transition-colors duration-200">Privacy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="contact.html" class="hover:text-pink-400 transition-colors duration-200">Contact Us</a></li>
+                        <li><a href="mailto:infocontactnexa@gmail.com" class="hover:text-pink-400 transition-colors duration-200">Email Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Legal</h4>
+                    <p class="text-gray-400">
+                        Compliant with Nigerian AML/CTF laws. KYC required. Trading involves risk; no refunds for challenge fees.
+                    </p>
+                </div>
             </div>
-        </header>
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h2 class="text-2xl font-bold text-gray-800">Users</h2>
-            <table id="users-table" class="mt-6 w-full bg-white rounded shadow">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="p-2 text-left">User ID</th>
-                        <th class="p-2 text-left">Name</th>
-                        <th class="p-2 text-left">Email</th>
-                        <th class="p-2 text-left">KYC Status</th>
-                        <th class="p-2 text-left">Contract Status</th>
-                        <th class="p-2 text-left">Account Size</th>
-                        <th class="p-2 text-left">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="users-tbody">
-                </tbody>
-            </table>
-        </main>
-    </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center">
+                <p class="text-gray-400">&copy; 2025 Nexa. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
     <script>
-        const adminForm = document.getElementById('admin-form');
-        const adminLogin = document.getElementById('admin-login');
-        const adminDashboard = document.getElementById('admin-dashboard');
-        const adminLogout = document.getElementById('admin-logout');
-        const usersTbody = document.getElementById('users-tbody');
-        const ADMIN_EMAIL = 'infocontactnexa@gmail.com';
-        const ADMIN_PASSWORD = 'admin123'; // Change this in production
-        adminForm.addEventListener('submit', async (e) => {
+        const backendUrl = 'https://nexa-backend-3wxt.onrender.com';
+        const token = localStorage.getItem('authToken');
+
+        // Redirect if not logged in or not admin
+        async function checkAdmin() {
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+            try {
+                const res = await fetch(`${backendUrl}/check-admin`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!res.ok) {
+                    window.location.href = 'login.html';
+                }
+            } catch (err) {
+                showModal('Error', 'Failed to verify admin status.');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // DOM Elements
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        const closeIcon = document.getElementById('close-icon');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalClose = document.getElementById('modal-close');
+        const contractsDiv = document.getElementById('contracts');
+
+        // Mobile Menu Toggle
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        });
+
+        // Show Custom Modal
+        function showModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modal.style.display = 'flex';
+        }
+
+        // Close Modal
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Load Contracts
+        async function loadContracts() {
+            try {
+                const res = await fetch(`${backendUrl}/all-contracts`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!res.ok) throw new Error('Failed to fetch contracts');
+                const contracts = await res.json();
+                contractsDiv.innerHTML = '';
+                contracts.forEach((contract, index) => {
+                    const contractCard = `
+                        <div class="bg-white border border-pink-100 rounded-3xl p-6 hover:shadow-xl transition-all duration-300 opacity-0 animate-fade-in" style="animation-delay: ${index * 0.2}s;">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Contract #${contract.id} - ${contract.userEmail}</h3>
+                            <p><strong>Account Size:</strong> $${contract.accountSize}</p>
+                            <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
+                            <p><strong>Status:</strong> ${contract.contractStatus}</p>
+                            <p><strong>KYC Status:</strong> ${contract.kycStatus}</p>
+                            <p><strong>Expiry:</strong> ${new Date(contract.contractExpiry).toLocaleDateString()}</p>
+                            <p><strong>Payout Date:</strong> ${contract.payoutDate}</p>
+                            <div class="mt-4 flex space-x-4">
+                                <button onclick="disableContract('${contract.id}')" class="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600">Disable</button>
+                                <a href="https://docuseal.com/d/w4aYAR5LfBb41G" target="_blank" class="border border-pink-300 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-50">View Contract</a>
+                            </div>
+                        </div>
+                    `;
+                    contractsDiv.innerHTML += contractCard;
+                });
+            } catch (err) {
+                showModal('Error', 'Failed to load contracts.');
+            }
+        }
+
+        // Add Contract
+        document.getElementById('addContractForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-                adminLogin.style.display = 'none';
-                adminDashboard.classList.remove('hidden');
-                loadUsers();
-            } else {
-                alert('Invalid admin credentials.');
+            const userEmail = document.getElementById('userEmail').value.trim();
+            const accountSize = document.getElementById('accountSize').value;
+            const challengeType = document.getElementById('challengeType').value;
+            const contract = {
+                userEmail,
+                accountSize: parseInt(accountSize),
+                challengeType,
+                contractStatus: 'Pending',
+                kycStatus: 'Not Submitted',
+                contractExpiry: new Date(Date.now() + (challengeType === '1-Step' ? 30 : 60) * 24 * 60 * 60 * 1000).toISOString(),
+                payoutDate: 'N/A'
+            };
+            try {
+                const res = await fetch(`${backendUrl}/add-contract`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(contract)
+                });
+                if (res.ok) {
+                    showModal('Success', 'Contract added successfully. User dashboard updated.');
+                    loadContracts();
+                    // Send email via backend
+                    await fetch(`${backendUrl}/send-contract-email`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ userEmail })
+                    });
+                } else {
+                    const data = await res.json();
+                    showModal('Error', data.message || 'Failed to add contract.');
+                }
+            } catch (err) {
+                showModal('Error', 'Network error adding contract.');
             }
         });
-        adminLogout.addEventListener('click', () => {
-            adminDashboard.classList.add('hidden');
-            adminLogin.style.display = 'flex';
-            document.getElementById('admin-email').value = '';
-            document.getElementById('admin-password').value = '';
+
+        // Disable Contract
+        async function disableContract(contractId) {
+            try {
+                const res = await fetch(`${backendUrl}/disable-contract`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ contractId })
+                });
+                if (res.ok) {
+                    showModal('Success', 'Contract disabled successfully. User dashboard updated.');
+                    loadContracts();
+                } else {
+                    showModal('Error', 'Failed to disable contract.');
+                }
+            } catch (err) {
+                showModal('Error', 'Network error disabling contract.');
+            }
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
         });
-        async function loadUsers() {
-            const response = await fetch('https://nexa-backend-3wxt.onrender.com/admin/users', {
-                method: 'GET',
-                headers: { 'Authorization': 'Basic ' + btoa(ADMIN_EMAIL + ':' + ADMIN_PASSWORD) }
-            });
-            if (response.ok) {
-                const users = await response.json();
-                usersTbody.innerHTML = users.map(user => `
-                    <tr>
-                        <td class="p-2">${user.userId}</td>
-                        <td class="p-2">${user.name}</td>
-                        <td class="p-2">${user.email}</td>
-                        <td class="p-2">${user.kycStatus}</td>
-                        <td class="p-2">${user.contractStatus}</td>
-                        <td class="p-2">$${user.accountSize}</td>
-                        <td class="p-2">
-                            <button onclick="updateStatus('${user.userId}', 'kycStatus', 'Verified')" class="bg-green-500 text-white px-2 py-1 rounded mr-1">Verify KYC</button>
-                            <button onclick="updateStatus('${user.userId}', 'contractStatus', 'Signed')" class="bg-green-500 text-white px-2 py-1 rounded mr-1">Sign Contract</button>
-                            <button onclick="updateStatus('${user.userId}', 'payoutStatus', 'Paid')" class="bg-green-500 text-white px-2 py-1 rounded">Pay Payout</button>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-        }
-        async function updateStatus(userId, field, value) {
-            const response = await fetch('https://nexa-backend-3wxt.onrender.com/admin/update', {
-                method: 'POST',
-                headers: { 'Authorization': 'Basic ' + btoa(ADMIN_EMAIL + ':' + ADMIN_PASSWORD), 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, [field]: value })
-            });
-            if (response.ok) {
-                loadUsers();
-            }
-        }
+        document.getElementById('mobile-logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+        });
+
+        // Initialize
+        checkAdmin();
+        loadContracts();
     </script>
 </body>
 </html>
