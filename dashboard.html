@@ -3,86 +3,299 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sign Up - Nexa</title>
+<title>Dashboard - Nexa</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+  :root {
+    --pink: #db2777;
+    --pink-light: #f9a8d4;
+    --gray-dark: #1f2937;
+    --gray-medium: #4b5563;
+    --gray-light: #f3f4f6;
+    --bg-gradient: linear-gradient(to bottom right, #fce7f3, #fff);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(to bottom right, #fce7f3, #fff);
     margin: 0;
+    background: var(--bg-gradient);
     min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+    color: var(--gray-dark);
+    transition: padding-left 0.3s ease;
+  }
+
+  /* Sidebar styles */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    width: 240px;
+    background: white;
+    box-shadow: 2px 0 8px rgb(219 39 119 / 0.15);
+    padding: 1.5rem 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    transition: width 0.3s ease;
+    z-index: 1000;
+  }
+  #sidebar.collapsed {
+    width: 70px;
+  }
+  #sidebar .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: default;
+  }
+  #sidebar.collapsed .logo h1,
+  #sidebar.collapsed nav a span {
+    display: none;
+  }
+  #sidebar svg rect {
+    rx: 2;
+  }
+  #sidebar h1 {
+    color: var(--pink);
+    font-weight: 700;
+    font-size: 1.7rem;
+    user-select: none;
+  }
+  nav {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  nav a,
+  nav button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.5rem;
+    font-weight: 600;
+    color: var(--gray-medium);
+    border: none;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  nav a:hover,
+  nav button:hover {
+    background-color: var(--pink-light);
+    color: var(--pink);
+  }
+  #sidebar.collapsed nav a,
+  #sidebar.collapsed nav button {
+    justify-content: center;
+    padding: 0.5rem 0;
+  }
+  /* Icons */
+  .nav-icon {
+    width: 24px;
+    height: 24px;
+    fill: var(--gray-medium);
+    flex-shrink: 0;
+    transition: fill 0.2s;
+  }
+  nav a:hover .nav-icon,
+  nav button:hover .nav-icon {
+    fill: var(--pink);
+  }
+  /* Toggle button */
+  #toggleSidebar {
+    position: fixed;
+    top: 18px;
+    left: 250px;
+    background: var(--pink);
+    border: none;
+    color: white;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 8px rgb(219 39 119 / 0.3);
+    transition: left 0.3s ease;
+    z-index: 1100;
   }
+  #sidebar.collapsed + #toggleSidebar {
+    left: 82px;
+  }
+  #toggleSidebar svg {
+    transition: transform 0.3s ease;
+  }
+  #toggleSidebar[aria-pressed="true"] svg {
+    transform: rotate(180deg);
+  }
+  /* Main content */
   main {
+    margin-left: 240px;
+    padding: 2.5rem 2rem 3rem;
+    transition: margin-left 0.3s ease;
+    flex-grow: 1;
+    min-height: 100vh;
+    max-width: calc(100vw - 240px);
+    box-sizing: border-box;
+  }
+  #sidebar.collapsed ~ main {
+    margin-left: 70px;
+    max-width: calc(100vw - 70px);
+  }
+  /* Welcome Banner */
+  #welcomeBanner {
     background: white;
-    padding: 2rem;
+    padding: 1rem 1.5rem;
     border-radius: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    width: 320px;
-    text-align: center;
-  }
-  h1 {
-    margin-top: 0;
-    color: #db2777;
+    box-shadow: 0 8px 20px rgb(219 39 119 / 0.12);
+    color: var(--pink);
     font-weight: 700;
-    margin-bottom: 1.5rem;
-  }
-  input[type="email"],
-  input[type="text"],
-  input[type="password"] {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #f9a8d4;
-    border-radius: 9999px;
-    margin-bottom: 1rem;
-    font-family: inherit;
-  }
-  button {
-    background: #db2777;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 9999px;
-    cursor: pointer;
-    font-weight: 600;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  button:hover {
-    background: #be185d;
-  }
-  label {
-    font-size: 0.875rem;
-    color: #555;
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    margin-bottom: 1rem;
+    gap: 1.5rem;
     user-select: none;
   }
-  label a {
-    color: #db2777;
-    text-decoration: none;
-    font-weight: 600;
+  #welcomeBanner img {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--pink);
   }
-  label a:hover {
-    text-decoration: underline;
+  /* Cards */
+  .card {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 8px 16px rgb(219 39 119 / 0.15);
+    color: var(--gray-dark);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
-  p {
-    font-size: 0.9rem;
-    color: #555;
+  .card h3 {
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--pink);
+    border-bottom: 2px solid var(--pink-light);
+    padding-bottom: 0.25rem;
+    margin-bottom: 1rem;
   }
-  a {
-    color: #db2777;
-    text-decoration: none;
-    font-weight: 600;
-    cursor: pointer;
+  /* Contract & Notification Items */
+  .contract, .notification {
+    border: 1px solid var(--pink-light);
+    border-radius: 1rem;
+    padding: 1.15rem 1.5rem;
+    background: #fff0f6;
+    box-shadow: inset 0 0 6px rgb(219 39 119 / 0.05);
   }
-  a:hover {
-    text-decoration: underline;
+  .contract p, .notification p {
+    margin: 0.25rem 0;
+    font-size: 1rem;
+    line-height: 1.3;
   }
+  .contract p strong, .notification p strong {
+    color: var(--pink);
+  }
+  /* Summary cards */
+  #summary {
+    display: flex;
+    gap: 1.75rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .summary-card {
+    background: white;
+    flex: 1 1 220px;
+    padding: 1.5rem;
+    border-radius: 1.25rem;
+    box-shadow: 0 6px 15px rgb(219 39 119 / 0.1);
+    color: var(--gray-dark);
+    text-align: center;
+  }
+  .summary-card h4 {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--pink);
+  }
+  .summary-value {
+    font-size: 2.1rem;
+    font-weight: 900;
+    color: var(--pink);
+  }
+  /* Recent Activity */
+  #recentActivity {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 1.8rem;
+    box-shadow: 0 6px 15px rgb(219 39 119 / 0.1);
+    margin-bottom: 2.5rem;
+  }
+  #recentActivity h3 {
+    margin-bottom: 1.25rem;
+  }
+  #recentActivity ul {
+    list-style: none;
+    color: var(--gray-medium);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+  }
+  #recentActivity ul li {
+    border-bottom: 1px solid var(--pink-light);
+    padding: 0.5rem 0;
+  }
+  /* Responsive */
+  @media (max-width: 768px) {
+    #sidebar {
+      width: 70px;
+      padding: 1rem 0.5rem;
+    }
+    #sidebar.collapsed {
+      width: 70px;
+    }
+    #sidebar.collapsed .logo h1,
+    #sidebar.collapsed nav a span {
+      display: none;
+    }
+    main {
+      margin-left: 70px;
+      max-width: calc(100vw - 70px);
+      padding: 1.5rem;
+    }
+    #toggleSidebar {
+      left: 82px !important;
+      top: 14px;
+    }
+    #summary {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .summary-card {
+      width: 100%;
+    }
+  }
+  /* Modal */
   #modal {
     position: fixed;
     top: 0; left: 0;
@@ -95,18 +308,18 @@
   }
   #modal .modal-content {
     background: white;
-    max-width: 300px;
+    max-width: 400px;
     width: 90%;
     padding: 1.5rem;
     border-radius: 1rem;
-    border: 1px solid #f9a8d4;
+    border: 1px solid var(--pink-light);
     text-align: center;
     font-weight: 600;
-    color: #db2777;
+    color: var(--pink);
   }
   #modal-close {
     margin-top: 1rem;
-    background: #db2777;
+    background: var(--pink);
     border: none;
     color: white;
     padding: 0.5rem 1.5rem;
@@ -122,105 +335,272 @@
 </style>
 </head>
 <body>
+<aside id="sidebar" aria-label="Sidebar Navigation">
+  <div class="logo" aria-label="Nexa Logo">
+    <svg width="32" height="32" viewBox="0 0 50 50" fill="none" aria-hidden="true" focusable="false">
+      <rect x="10" y="10" width="10" height="10" fill="#ec4899" rx="2"></rect>
+      <rect x="30" y="10" width="10" height="10" fill="#f9a8d4" rx="2"></rect>
+      <rect x="10" y="30" width="10" height="10" fill="#f9a8d4" rx="2"></rect>
+      <rect x="30" y="30" width="10" height="10" fill="#ec4899" rx="2"></rect>
+    </svg>
+    <h1>NEXA</h1>
+  </div>
+  <nav>
+    <a href="#" aria-current="page" tabindex="0">
+      <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8v-10h-8v10zm0-18v6h8V3h-8z"/></svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="pricing.html">
+      <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.66 0-8 1.34-8 4v2h16v-2c0-2.66-5.34-4-8-4z"/></svg>
+      <span>Pricing</span>
+    </a>
+    <a href="https://docuseal.co" target="_blank" rel="noopener noreferrer">
+      <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M3 6v12h18V6H3zm2 4h14v4H5v-4z"/></svg>
+      <span>Submit KYC</span>
+    </a>
+    <button id="logout" aria-label="Logout">
+      <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M14 7v2H7v6h7v2l5-5-5-5zM19 19h-2v-2h2V7h-2V5h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2z"/></svg>
+      <span>Logout</span>
+    </button>
+  </nav>
+</aside>
+<button id="toggleSidebar" aria-label="Toggle sidebar menu" aria-pressed="false" title="Toggle Menu">
+  <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+    <path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
 <main>
-  <h1>Create an Account</h1>
-  <input id="name" type="text" placeholder="Full Name" required autocomplete="name" />
-  <input id="email" type="email" placeholder="Email" required autocomplete="email" />
-  <input id="password" type="password" placeholder="Password" required autocomplete="new-password" />
-  <input id="confirmPassword" type="password" placeholder="Confirm Password" required autocomplete="new-password" />
+  <div id="welcomeBanner" role="region" aria-label="Welcome banner">
+    <img src="https://ui-avatars.com/api/?name=User&background=DB2777&color=fff&rounded=true" alt="User Profile Picture" />
+    <span id="welcomeText">Welcome, User</span>
+  </div>
 
-  <label for="agreeCheckbox">
-    <input type="checkbox" id="agreeCheckbox" />
-    I agree to the <a href="terms.html" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-  </label>
+  <section id="summary" aria-label="Dashboard summary statistics">
+    <div class="summary-card">
+      <h4>Total Contracts</h4>
+      <div class="summary-value" id="totalContracts">0</div>
+    </div>
+    <div class="summary-card">
+      <h4>Active Contracts</h4>
+      <div class="summary-value" id="activeContracts">0</div>
+    </div>
+    <div class="summary-card">
+      <h4>Pending KYC</h4>
+      <div class="summary-value" id="pendingKyc">0</div>
+    </div>
+    <div class="summary-card">
+      <h4>Unread Notifications</h4>
+      <div class="summary-value" id="unreadNotifications">0</div>
+    </div>
+  </section>
 
-  <button id="signupBtn">Sign Up</button>
-  <p>Already have an account? <a href="login.html">Login</a></p>
+  <section class="card" aria-labelledby="contractsHeading">
+    <h3 id="contractsHeading">Your Contracts</h3>
+    <div id="contracts" role="list" aria-live="polite">Loading contracts...</div>
+  </section>
+
+  <section class="card" aria-labelledby="notificationsHeading">
+    <h3 id="notificationsHeading">Notifications</h3>
+    <div id="notifications" role="list" aria-live="polite">Loading notifications...</div>
+  </section>
+
+  <section id="recentActivity" class="card" aria-labelledby="recentActivityHeading">
+    <h3 id="recentActivityHeading">Recent Activity</h3>
+    <ul id="activityList" role="list" aria-live="polite" tabindex="0">
+      <li>No recent activities</li>
+    </ul>
+  </section>
 </main>
 
-<div id="modal" role="alertdialog" aria-modal="true" aria-labelledby="modal-message" hidden>
+<div id="modal" role="alertdialog" aria-modal="true" aria-labelledby="modal-message" aria-describedby="modal-desc" hidden>
   <div class="modal-content">
-    <p id="modal-message"></p>
-    <button id="modal-close" aria-label="Close message dialog">OK</button>
+    <p id="modal-message" role="heading" aria-level="3"></p>
+    <button id="modal-close" aria-label="Close modal">OK</button>
   </div>
 </div>
 
 <script>
-function simpleHash(text) {
-  let hash = 0;
-  for(let i=0; i < text.length; i++) {
-    hash = ((hash << 5) - hash) + text.charCodeAt(i);
-    hash |= 0;
+  function decodeJWT(token) {
+    try {
+      return JSON.parse(atob(token));
+    } catch {
+      return null;
+    }
   }
-  return hash.toString();
-}
-function initDataStore() {
-  return JSON.parse(localStorage.getItem('nexa_data')) || {
-    users: [],
-    contracts: [],
-    notifications: []
-  };
-}
-function saveDataStore(dataStore) {
-  localStorage.setItem('nexa_data', JSON.stringify(dataStore));
-}
-function showModal(message) {
-  const modal = document.getElementById('modal');
-  document.getElementById('modal-message').innerText = message;
-  modal.hidden = false;
-  modal.style.display = 'flex';
-}
-function hideModal() {
-  const modal = document.getElementById('modal');
-  modal.hidden = true;
-  modal.style.display = 'none';
-}
-document.getElementById('modal-close').addEventListener('click', hideModal);
 
-document.getElementById('signupBtn').addEventListener('click', () => {
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim().toLowerCase();
-  const password = document.getElementById('password').value;
-  const confirmPassword = document.getElementById('confirmPassword').value;
-  const agree = document.getElementById('agreeCheckbox').checked;
+  function simpleHash(text) {
+    let hash = 0;
+    for(let i=0; i < text.length; i++) {
+      hash = ((hash << 5) - hash) + text.charCodeAt(i);
+      hash |= 0;
+    }
+    return hash.toString();
+  }
 
-  if (!name || !email || !password || !confirmPassword) {
-    showModal('Please fill in all fields.');
-    return;
+  function initDataStore() {
+    let dataStore = JSON.parse(localStorage.getItem('nexa_data')) || {
+      users: [],
+      contracts: [],
+      notifications: []
+    };
+
+    if (!dataStore.users.find(u => u.email === 'infocontactnexa@gmail.com')) {
+      dataStore.users.push({
+        email: 'infocontactnexa@gmail.com',
+        password: simpleHash('Strika001$'),
+        name: 'Admin',
+        phone: '',
+        address: '',
+        isAdmin: true
+      });
+      localStorage.setItem('nexa_data', JSON.stringify(dataStore));
+    }
+    return dataStore;
   }
-  if (!agree) {
-    showModal('You must agree to the Terms of Service and Privacy Policy.');
-    return;
+
+  function showModal(message) {
+    const modal = document.getElementById('modal');
+    const messageElem = document.getElementById('modal-message');
+    messageElem.textContent = message;
+    modal.hidden = false;
+    modal.style.display = 'flex';
   }
-  if (password !== confirmPassword) {
-    showModal('Passwords do not match.');
-    return;
+
+  function hideModal() {
+    const modal = document.getElementById('modal');
+    modal.hidden = true;
+    modal.style.display = 'none';
   }
-  const dataStore = initDataStore();
-  if (dataStore.users.find(u => u.email === email)) {
-    showModal('User already exists.');
-    return;
-  }
-  const newUser = {
-    email,
-    password: simpleHash(password),
-    name,
-    phone: '',
-    address: '',
-    isAdmin: false
-  };
-  dataStore.users.push(newUser);
-  saveDataStore(dataStore);
-  showModal('Account created successfully! Redirecting to login...');
-  setTimeout(() => {
+
+  document.getElementById('modal-close').addEventListener('click', hideModal);
+
+  document.getElementById('logout').addEventListener('click', () => {
+    localStorage.removeItem('authToken');
     window.location.href = 'login.html';
-  }, 2000);
-});
+  });
 
-// Ensure modal is hidden on page load
-window.addEventListener('load', () => {
-  hideModal();
-});
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.getElementById('toggleSidebar');
+
+  toggleBtn.addEventListener('click', () => {
+    const collapsed = sidebar.classList.toggle('collapsed');
+    toggleBtn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+  });
+
+  function loadDashboard() {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      showModal('Please login');
+      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+      return;
+    }
+
+    const user = decodeJWT(token);
+    if (!user || !user.email) {
+      showModal('Invalid token');
+      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+      return;
+    }
+
+    const dataStore = initDataStore();
+
+    const currentUser = dataStore.users.find(u => u.email === user.email);
+    if (!currentUser) {
+      showModal('User no longer exists');
+      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+      return;
+    }
+
+    // Welcome banner update
+    const welcomeText = document.getElementById('welcomeText');
+    welcomeText.textContent = `Welcome, ${currentUser.name || currentUser.email}`;
+
+    const avatarImg = document.querySelector('#welcomeBanner img');
+    if (currentUser.name) {
+      avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=DB2777&color=fff&rounded=true`;
+      avatarImg.alt = `${currentUser.name} Profile Picture`;
+    }
+
+    // Contracts
+    const contractsDiv = document.getElementById('contracts');
+    contractsDiv.innerHTML = '';
+    const userContracts = dataStore.contracts.filter(c => c.userEmail === user.email);
+    if (userContracts.length === 0) {
+      contractsDiv.innerHTML = '<p>No contracts found.</p>';
+    } else {
+      userContracts.forEach(contract => {
+        const div = document.createElement('div');
+        div.className = 'contract';
+        div.innerHTML = `
+          <p><strong>ID:</strong> ${contract.id}</p>
+          <p><strong>Account Size:</strong> $${contract.accountSize}</p>
+          <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
+          <p><strong>Status:</strong> ${contract.contractStatus}</p>
+          <p><strong>KYC Status:</strong> ${contract.kycStatus}</p>
+          <p><strong>Expiry:</strong> ${contract.contractExpiry}</p>
+          <p><strong>Payout Date:</strong> ${contract.payoutDate}</p>
+        `;
+        contractsDiv.appendChild(div);
+      });
+    }
+
+    // Notifications
+    const notificationsDiv = document.getElementById('notifications');
+    notificationsDiv.innerHTML = '';
+    const userNotifications = dataStore.notifications.filter(n => n.userEmail === user.email);
+    if (userNotifications.length === 0) {
+      notificationsDiv.innerHTML = '<p>No notifications.</p>';
+    } else {
+      userNotifications.forEach(notif => {
+        const div = document.createElement('div');
+        div.className = 'notification';
+        const date = new Date(notif.createdAt);
+        div.innerHTML = `<p>${notif.message} <br><small>${date.toLocaleString()}</small></p>`;
+        notificationsDiv.appendChild(div);
+      });
+    }
+
+    // Summary stats
+    document.getElementById('totalContracts').textContent = userContracts.length;
+    document.getElementById('activeContracts').textContent = userContracts.filter(c => c.contractStatus.toLowerCase() !== 'disabled').length;
+    document.getElementById('pendingKyc').textContent = userContracts.filter(c => c.kycStatus.toLowerCase() === 'pending').length;
+    document.getElementById('unreadNotifications').textContent = userNotifications.length;
+
+    // Recent activity (from contracts & notifications)
+    const activityList = document.getElementById('activityList');
+    activityList.innerHTML = '';
+    let activities = [];
+
+    userContracts.forEach(c => {
+      const dt = new Date(c.contractExpiry);
+      if (!isNaN(dt))
+        activities.push({date: dt, text: `Contract #${c.id} expires on ${c.contractExpiry}`});
+    });
+    userNotifications.forEach(n => {
+      const dt = new Date(n.createdAt);
+      if (!isNaN(dt))
+        activities.push({date: dt, text: `Notification: ${n.message}`});
+    });
+
+    activities.sort((a,b) => b.date - a.date);
+
+    if (activities.length === 0) {
+      activityList.innerHTML = '<li>No recent activities</li>';
+    } else {
+      activities.slice(0, 8).forEach(a => {
+        const li = document.createElement('li');
+        li.textContent = `${a.text} (${a.date.toLocaleDateString()})`;
+        activityList.appendChild(li);
+      });
+    }
+  }
+
+  window.addEventListener('load', () => {
+    const modal = document.getElementById('modal');
+    modal.hidden = true;
+    modal.style.display = 'none';
+    loadDashboard();
+  });
 </script>
 </body>
 </html>
