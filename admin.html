@@ -5,35 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Nexa</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jwt-simple/0.5.6/jwt-simple.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Montserrat', sans-serif; }
-        @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 24px; border-radius: 16px; max-width: 400px; width: 90%; border: 1px solid #f9a8d4; text-align: center; }
-        .sidebar { transition: transform 0.3s ease-in-out; }
-        .sidebar-hidden { transform: translateX(-100%); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; display: flex; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 12px; max-width: 400px; width: 90%; border: 1px solid #f9a8d4; text-align: center; }
     </style>
 </head>
 <body class="bg-gradient-to-br from-pink-50 to-white min-h-screen">
     <div class="flex">
-        <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 bg-white shadow-lg p-6">
-            <div class="flex items-center space-x-3 mb-8">
-                <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
-                    <rect x="20" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                    <rect x="45" y="20" width="15" height="15" fill="#f9a8d4" rx="3" />
-                    <rect x="70" y="20" width="15" height="15" fill="#ec4899" rx="3" />
-                    <rect x="20" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                    <rect x="45" y="45" width="15" height="15" fill="#ec4899" rx="3" />
-                    <rect x="70" y="45" width="15" height="15" fill="#f9a8d4" rx="3" />
-                    <rect x="20" y="70" width="15" height="15" fill="#ec4899" rx="3" />
-                    <rect x="45" y="70" width="15" height="15" fill="#f9a8d4" rx="3" />
-                    <rect x="70" y="70" width="15" height="15" fill="#ec4899" rx="3" />
+        <div class="fixed top-0 left-0 h-full w-64 bg-white shadow-md p-6">
+            <div class="flex items-center space-x-2 mb-8">
+                <svg class="w-6 h-6" viewBox="0 0 50 50" fill="none">
+                    <rect x="10" y="10" width="10" height="10" fill="#ec4899" rx="2"/>
+                    <rect x="30" y="10" width="10" height="10" fill="#f9a8d4" rx="2"/>
+                    <rect x="10" y="30" width="10" height="10" fill="#f9a8d4" rx="2"/>
+                    <rect x="30" y="30" width="10" height="10" fill="#ec4899" rx="2"/>
                 </svg>
-                <h1 class="text-2xl font-bold text-pink-600">NEXA</h1>
+                <h1 class="text-xl font-bold text-pink-600">NEXA</h1>
             </div>
             <nav class="space-y-4">
                 <a href="#" class="block text-gray-600 hover:text-pink-600 font-medium">Admin</a>
@@ -42,122 +32,104 @@
             </nav>
         </div>
         <div class="flex-1 p-6 ml-64">
-            <button id="toggleSidebar" class="text-pink-600 mb-4">☰ Menu</button>
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">Admin Panel</h2>
-            <div class="bg-white rounded-3xl shadow-lg p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Admin Panel</h2>
+            <div class="bg-white rounded-2xl shadow-md p-6 mb-6">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4">Add Contract</h3>
                 <div class="space-y-4">
-                    <input id="userEmail" type="email" placeholder="User Email" required class="w-full p-3 border border-pink-200 rounded-full">
-                    <input id="accountSize" type="number" placeholder="Account Size" required class="w-full p-3 border border-pink-200 rounded-full">
-                    <input id="challengeType" type="text" placeholder="Challenge Type" required class="w-full p-3 border border-pink-200 rounded-full">
-                    <input id="contractStatus" type="text" placeholder="Contract Status" required class="w-full p-3 border border-pink-200 rounded-full">
-                    <input id="kycStatus" type="text" placeholder="KYC Status" required class="w-full p-3 border border-pink-200 rounded-full">
-                    <input id="contractExpiry" type="text" placeholder="Contract Expiry" required class="w-full p-3 border border-pink-200 rounded-full">
-                    <input id="payoutDate" type="text" placeholder="Payout Date" required class="w-full p-3 border border-pink-200 rounded-full">
-                    <button onclick="addContract()" class="w-full bg-pink-500 text-white p-3 rounded-full hover:bg-pink-600">Add Contract</button>
+                    <input id="userEmail" type="email" placeholder="User Email" required class="w-full p-2 border border-pink-200 rounded-full">
+                    <input id="accountSize" type="number" placeholder="Account Size" required class="w-full p-2 border border-pink-200 rounded-full">
+                    <input id="challengeType" type="text" placeholder="Challenge Type" required class="w-full p-2 border border-pink-200 rounded-full">
+                    <input id="contractStatus" type="text" placeholder="Contract Status" required class="w-full p-2 border border-pink-200 rounded-full">
+                    <input id="kycStatus" type="text" placeholder="KYC Status" required class="w-full p-2 border border-pink-200 rounded-full">
+                    <input id="contractExpiry" type="text" placeholder="Contract Expiry" required class="w-full p-2 border border-pink-200 rounded-full">
+                    <input id="payoutDate" type="text" placeholder="Payout Date" required class="w-full p-2 border border-pink-200 rounded-full">
+                    <button onclick="addContract()" class="w-full bg-pink-500 text-white p-2 rounded-full hover:bg-pink-600">Add Contract</button>
                 </div>
             </div>
-            <div class="bg-white rounded-3xl shadow-lg p-6 mb-6">
+            <div class="bg-white rounded-2xl shadow-md p-6 mb-6">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4">Contracts</h3>
-                <input id="searchEmail" type="email" placeholder="Search by User Email" class="w-full p-3 border border-pink-200 rounded-full mb-4">
+                <input id="searchEmail" type="email" placeholder="Search by User Email" class="w-full p-2 border border-pink-200 rounded-full mb-4">
                 <div id="contracts" class="space-y-4"></div>
             </div>
-            <div class="bg-white rounded-3xl shadow-lg p-6">
+            <div class="bg-white rounded-2xl shadow-md p-6">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4">Send Notification</h3>
                 <div class="space-y-4">
-                    <input id="notifEmail" type="email" placeholder="User Email" required class="w-full p-3 border border-pink-200 rounded-full">
-                    <textarea id="notifMessage" placeholder="Message" required class="w-full p-3 border border-pink-200 rounded-lg"></textarea>
-                    <button onclick="sendNotification()" class="w-full bg-pink-500 text-white p-3 rounded-full hover:bg-pink-600">Send Notification</button>
+                    <input id="notifEmail" type="email" placeholder="User Email" required class="w-full p-2 border border-pink-200 rounded-full">
+                    <textarea id="notifMessage" placeholder="Message" required class="w-full p-2 border border-pink-200 rounded-lg"></textarea>
+                    <button onclick="sendNotification()" class="w-full bg-pink-500 text-white p-2 rounded-full hover:bg-pink-600">Send Notification</button>
                 </div>
             </div>
         </div>
     </div>
-
     <div id="modal" class="modal">
-        <div class="modal-content animate-fade-in">
-            <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-4"></h3>
-            <p id="modal-message" class="text-gray-600 mb-6"></p>
-            <button id="modal-close" class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-all duration-200">OK</button>
+        <div class="modal-content">
+            <p id="modal-message" class="text-gray-800 mb-4"></p>
+            <button id="modal-close" class="bg-pink-500 text-white px-4 py-1 rounded-full hover:bg-pink-600">OK</button>
         </div>
     </div>
-
     <script>
-        const JWT_SECRET = 'your_jwt_secret';
-        let db;
-
-        async function initDatabase() {
-            const base64Db = localStorage.getItem('nexa_db') || 'U1FMaXRlIGZvcm1hdCAzABAAAQEAQCAgAAAAAwAAAAIAAAACAAAAAQAAAAIAAAAEAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAC56cQ0AAAAAEAAAD7QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASgEGFx0dAWl0YWJsZW5vdGVtcHR5bm90ZW1wdHkCQ1JFQVRFIFRBQkxFIG5vdGVtcHR5IChpZCBpbnRlZ2VyIHByaW1hcnkga2V5KQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=';
-            const dbBuffer = Uint8Array.from(atob(base64Db), c => c.charCodeAt(0));
-            const SQL = await initSqlJs();
-            db = new SQL.Database(dbBuffer);
-
-            // Create required tables if they don't exist
-            db.run('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT NOT NULL, name TEXT NOT NULL, phone TEXT, address TEXT, isAdmin INTEGER DEFAULT 0)');
-            db.run('CREATE TABLE IF NOT EXISTS contracts (id INTEGER PRIMARY KEY AUTOINCREMENT, userEmail TEXT, accountSize INTEGER, challengeType TEXT, contractStatus TEXT, kycStatus TEXT, contractExpiry TEXT, payoutDate TEXT, FOREIGN KEY(userEmail) REFERENCES users(email))');
-            db.run('CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, userEmail TEXT, message TEXT, createdAt TEXT, FOREIGN KEY(userEmail) REFERENCES users(email))');
-
-            // Insert admin user if not exists
-            const adminExists = db.exec("SELECT email FROM users WHERE email = 'infocontactnexa@gmail.com'");
-            if (!adminExists.length) {
-                const hashedPassword = bcrypt.hashSync('NexaAdmin2025', 10);
-                db.run('INSERT INTO users (email, password, name, isAdmin) VALUES (?, ?, ?, ?)', ['infocontactnexa@gmail.com', hashedPassword, 'Admin', 1]);
+        const JWT_SECRET = 'nexa_secure_2025';
+        function initDataStore() {
+            let dataStore = JSON.parse(localStorage.getItem('nexa_data')) || {
+                users: [],
+                contracts: [],
+                notifications: []
+            };
+            if (!dataStore.users.find(u => u.email === 'infocontactnexa@gmail.com')) {
+                dataStore.users.push({
+                    email: 'infocontactnexa@gmail.com',
+                    password: bcrypt.hashSync('NexaAdmin2025', 10),
+                    name: 'Admin',
+                    phone: '',
+                    address: '',
+                    isAdmin: true
+                });
+                localStorage.setItem('nexa_data', JSON.stringify(dataStore));
             }
-
-            saveDatabase();
+            return dataStore;
         }
-
-        function saveDatabase() {
-            localStorage.setItem('nexa_db', btoa(String.fromCharCode.apply(null, new Uint8Array(db.export()))));
+        function saveDataStore(dataStore) {
+            localStorage.setItem('nexa_data', JSON.stringify(dataStore));
         }
-
-        function showModal(title, message) {
-            document.getElementById('modal-title').innerText = title;
+        function showModal(message) {
             document.getElementById('modal-message').innerText = message;
             document.getElementById('modal').style.display = 'flex';
         }
-
         document.getElementById('modal-close').addEventListener('click', () => {
             document.getElementById('modal').style.display = 'none';
         });
-
-        document.getElementById('toggleSidebar').addEventListener('click', () => {
-            document.getElementById('sidebar').classList.toggle('sidebar-hidden');
-        });
-
         document.getElementById('logout').addEventListener('click', () => {
             localStorage.removeItem('authToken');
             window.location.href = 'login.html';
         });
-
-        async function loadAdmin() {
-            try {
-                await initDatabase();
-                const token = localStorage.getItem('authToken');
-                if (!token) {
-                    showModal('Error', 'Please login');
-                    setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-                    return;
-                }
-                const decoded = jwt.decode(token, JWT_SECRET);
-                if (!decoded || !decoded.email || !decoded.isAdmin || decoded.email !== 'infocontactnexa@gmail.com') {
-                    showModal('Error', 'Admin access required');
-                    setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-                    return;
-                }
-                loadContracts();
-            } catch (err) {
-                showModal('Error', 'Error loading admin panel: ' + err.message);
+        function loadAdmin() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                showModal('Please login');
+                setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+                return;
             }
+            let decoded;
+            try {
+                decoded = jwt.decode(token, JWT_SECRET);
+            } catch (err) {
+                showModal('Invalid token');
+                setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+                return;
+            }
+            if (!decoded.isAdmin || decoded.email !== 'infocontactnexa@gmail.com') {
+                showModal('Admin access required');
+                setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+                return;
+            }
+            loadContracts();
         }
-
         function loadContracts(searchEmail = '') {
+            const dataStore = initDataStore();
             const contractsDiv = document.getElementById('contracts');
             contractsDiv.innerHTML = '';
-            const query = searchEmail ? 'SELECT * FROM contracts WHERE userEmail = ?' : 'SELECT * FROM contracts';
-            const stmt = db.prepare(query);
-            if (searchEmail) stmt.bind([searchEmail]);
-            while (stmt.step()) {
-                const contract = stmt.getAsObject();
+            const contracts = searchEmail ? dataStore.contracts.filter(c => c.userEmail === searchEmail) : dataStore.contracts;
+            contracts.forEach(contract => {
                 const div = document.createElement('div');
                 div.className = 'border border-pink-200 rounded-lg p-4';
                 div.innerHTML = `
@@ -172,103 +144,82 @@
                         <option value="Approved" ${contract.kycStatus === 'Approved' ? 'selected' : ''}>Approved</option>
                         <option value="Rejected" ${contract.kycStatus === 'Rejected' ? 'selected' : ''}>Rejected</option>
                     </select>
-                    <button onclick="disableContract(${contract.id})" class="bg-red-500 text-white px-4 py-2 rounded-full mt-2">Disable</button>
+                    <button onclick="disableContract(${contract.id})" class="bg-red-500 text-white px-4 py-1 rounded-full mt-2">Disable</button>
                 `;
                 contractsDiv.appendChild(div);
-            }
-            stmt.free();
+            });
         }
-
         function updateKycStatus(contractId, kycStatus) {
-            try {
-                db.run('UPDATE contracts SET kycStatus = ? WHERE id = ?', [kycStatus, contractId]);
-                saveDatabase();
-                showModal('Success', 'KYC status updated');
-            } catch (err) {
-                showModal('Error', 'Error updating KYC status: ' + err.message);
+            const dataStore = initDataStore();
+            const contract = dataStore.contracts.find(c => c.id === contractId);
+            if (contract) {
+                contract.kycStatus = kycStatus;
+                saveDataStore(dataStore);
+                showModal('KYC status updated');
             }
         }
-
         function disableContract(contractId) {
-            try {
-                db.run('UPDATE contracts SET contractStatus = ? WHERE id = ?', ['Disabled', contractId]);
-                saveDatabase();
-                showModal('Success', 'Contract disabled');
+            const dataStore = initDataStore();
+            const contract = dataStore.contracts.find(c => c.id === contractId);
+            if (contract) {
+                contract.contractStatus = 'Disabled';
+                saveDataStore(dataStore);
+                showModal('Contract disabled');
                 loadContracts(document.getElementById('searchEmail').value);
-            } catch (err) {
-                showModal('Error', 'Error disabling contract: ' + err.message);
             }
         }
-
-        async function addContract() {
-            try {
-                const userEmail = document.getElementById('userEmail').value.trim();
-                const checkStmt = db.prepare('SELECT email FROM users WHERE email = ?');
-                checkStmt.bind([userEmail]);
-                if (!checkStmt.step()) {
-                    showModal('Error', 'User not found');
-                    checkStmt.free();
-                    return;
-                }
-                checkStmt.free();
-                const contract = {
-                    userEmail,
-                    accountSize: parseInt(document.getElementById('accountSize').value),
-                    challengeType: document.getElementById('challengeType').value.trim(),
-                    contractStatus: document.getElementById('contractStatus').value.trim(),
-                    kycStatus: document.getElementById('kycStatus').value.trim(),
-                    contractExpiry: document.getElementById('contractExpiry').value.trim(),
-                    payoutDate: document.getElementById('payoutDate').value.trim()
-                };
-                db.run(
-                    'INSERT INTO contracts (userEmail, accountSize, challengeType, contractStatus, kycStatus, contractExpiry, payoutDate) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                    [contract.userEmail, contract.accountSize, contract.challengeType, contract.contractStatus, contract.kycStatus, contract.contractExpiry, contract.payoutDate]
-                );
-                saveDatabase();
-                showModal('Success', 'Contract added');
-                document.getElementById('userEmail').value = '';
-                document.getElementById('accountSize').value = '';
-                document.getElementById('challengeType').value = '';
-                document.getElementById('contractStatus').value = '';
-                document.getElementById('kycStatus').value = '';
-                document.getElementById('contractExpiry').value = '';
-                document.getElementById('payoutDate').value = '';
-                loadContracts();
-            } catch (err) {
-                showModal('Error', 'Error adding contract: ' + err.message);
+        function addContract() {
+            const dataStore = initDataStore();
+            const userEmail = document.getElementById('userEmail').value.trim();
+            if (!dataStore.users.find(u => u.email === userEmail)) {
+                showModal('User not found');
+                return;
             }
+            const contract = {
+                id: dataStore.contracts.length + 1,
+                userEmail,
+                accountSize: parseInt(document.getElementById('accountSize').value),
+                challengeType: document.getElementById('challengeType').value.trim(),
+                contractStatus: document.getElementById('contractStatus').value.trim(),
+                kycStatus: document.getElementById('kycStatus').value.trim(),
+                contractExpiry: document.getElementById('contractExpiry').value.trim(),
+                payoutDate: document.getElementById('payoutDate').value.trim()
+            };
+            dataStore.contracts.push(contract);
+            saveDataStore(dataStore);
+            showModal('Contract added');
+            document.getElementById('userEmail').value = '';
+            document.getElementById('accountSize').value = '';
+            document.getElementById('challengeType').value = '';
+            document.getElementById('contractStatus').value = '';
+            document.getElementById('kycStatus').value = '';
+            document.getElementById('contractExpiry').value = '';
+            document.getElementById('payoutDate').value = '';
+            loadContracts();
         }
-
-        async function sendNotification() {
-            try {
-                const userEmail = document.getElementById('notifEmail').value.trim();
-                const checkStmt = db.prepare('SELECT email FROM users WHERE email = ?');
-                checkStmt.bind([userEmail]);
-                if (!checkStmt.step()) {
-                    showModal('Error', 'User not found');
-                    checkStmt.free();
-                    return;
-                }
-                checkStmt.free();
-                const message = document.getElementById('notifMessage').value.trim();
-                const createdAt = new Date().toISOString();
-                db.run('INSERT INTO notifications (userEmail, message, createdAt) VALUES (?, ?, ?)', [userEmail, message, createdAt]);
-                saveDatabase();
-                showModal('Success', 'Notification sent');
-                document.getElementById('notifEmail').value = '';
-                document.getElementById('notifMessage').value = '';
-            } catch (err) {
-                showModal('Error', 'Error sending notification: ' + err.message);
+        function sendNotification() {
+            const dataStore = initDataStore();
+            const userEmail = document.getElementById('notifEmail').value.trim();
+            if (!dataStore.users.find(u => u.email === userEmail)) {
+                showModal('User not found');
+                return;
             }
+            const notification = {
+                id: dataStore.notifications.length + 1,
+                userEmail,
+                message: document.getElementById('notifMessage').value.trim(),
+                createdAt: new Date().toISOString()
+            };
+            dataStore.notifications.push(notification);
+            saveDataStore(dataStore);
+            showModal('Notification sent');
+            document.getElementById('notifEmail').value = '';
+            document.getElementById('notifMessage').value = '';
         }
-
         document.getElementById('searchEmail').addEventListener('input', (e) => {
             loadContracts(e.target.value.trim());
         });
-
-        (async () => {
-            await loadAdmin();
-        })();
+        loadAdmin();
     </script>
 </body>
 </html>
