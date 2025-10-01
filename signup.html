@@ -12,11 +12,13 @@
         .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
         .mobile-menu { display: none; }
         .mobile-menu.active { display: block; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 24px; border-radius: 16px; max-width: 400px; width: 90%; border: 1px solid #f9a8d4; text-align: center; }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-pink-50 to-white flex items-center justify-center">
+<body class="bg-gradient-to-br from-pink-50 to-white flex flex-col min-h-screen">
     <!-- Header -->
-    <header class="absolute top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
+    <header class="relative z-50 bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center space-x-3">
@@ -62,30 +64,41 @@
     </header>
 
     <!-- Signup Form -->
-    <main class="max-w-md w-full mx-auto p-6 bg-white rounded-3xl shadow-lg border border-pink-100 opacity-0 animate-fade-in">
-        <h2 class="text-3xl font-bold text-gray-800 text-center">Create Account</h2>
-        <p class="text-gray-600 text-center mt-2">Join Nexa to start trading.</p>
-        <form id="signupForm" class="mt-6 space-y-6">
-            <div>
-                <label class="block text-gray-600 font-medium">Full Name</label>
-                <input id="name" type="text" placeholder="Full Name" required class="w-full p-3 border border-pink-200 rounded-full focus:ring-2 focus:ring-pink-400 focus:border-transparent">
-            </div>
-            <div>
-                <label class="block text-gray-600 font-medium">Email</label>
-                <input id="email" type="email" placeholder="Email" required class="w-full p-3 border border-pink-200 rounded-full focus:ring-2 focus:ring-pink-400 focus:border-transparent">
-            </div>
-            <div>
-                <label class="block text-gray-600 font-medium">Password</label>
-                <input id="password" type="password" placeholder="Password" required class="w-full p-3 border border-pink-200 rounded-full focus:ring-2 focus:ring-pink-400 focus:border-transparent">
-            </div>
-            <div class="flex items-center">
-                <input type="checkbox" id="terms" class="h-4 w-4 text-pink-600 focus:ring-pink-400 border-gray-300 rounded">
-                <label for="terms" class="ml-2 text-gray-600">I accept the <a href="terms.html" target="_blank" class="text-pink-600 hover:underline">Terms</a> and <a href="privacy.html" target="_blank" class="text-pink-600 hover:underline">Privacy Policy</a>.</label>
-            </div>
-            <button type="submit" id="signupBtn" class="w-full bg-pink-500 text-white p-3 rounded-full hover:bg-pink-600 disabled:bg-gray-400 transition-all duration-200" disabled>Sign Up</button>
-        </form>
-        <p class="mt-4 text-center text-gray-600">Already have an account? <a href="login.html" class="text-pink-600 hover:underline">Log In</a></p>
+    <main class="flex-grow flex items-center justify-center py-12">
+        <div class="max-w-md w-full mx-auto p-6 bg-white rounded-3xl shadow-lg border border-pink-100 opacity-0 animate-fade-in">
+            <h2 class="text-3xl font-bold text-gray-800 text-center">Create Account</h2>
+            <p class="text-gray-600 text-center mt-2">Join Nexa to start trading.</p>
+            <form id="signupForm" class="mt-6 space-y-6">
+                <div>
+                    <label class="block text-gray-600 font-medium">Full Name</label>
+                    <input id="name" type="text" placeholder="Full Name" required class="w-full p-3 border border-pink-200 rounded-full focus:ring-2 focus:ring-pink-400 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-gray-600 font-medium">Email</label>
+                    <input id="email" type="email" placeholder="Email" required class="w-full p-3 border border-pink-200 rounded-full focus:ring-2 focus:ring-pink-400 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-gray-600 font-medium">Password</label>
+                    <input id="password" type="password" placeholder="Password" required class="w-full p-3 border border-pink-200 rounded-full focus:ring-2 focus:ring-pink-400 focus:border-transparent">
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="terms" class="h-4 w-4 text-pink-600 focus:ring-pink-400 border-gray-300 rounded">
+                    <label for="terms" class="ml-2 text-gray-600">I accept the <a href="terms.html" target="_blank" class="text-pink-600 hover:underline">Terms</a> and <a href="privacy.html" target="_blank" class="text-pink-600 hover:underline">Privacy Policy</a>.</label>
+                </div>
+                <button type="submit" id="signupBtn" class="w-full bg-pink-500 text-white p-3 rounded-full hover:bg-pink-600 disabled:bg-gray-400 transition-all duration-200" disabled>Sign Up</button>
+            </form>
+            <p class="mt-4 text-center text-gray-600">Already have an account? <a href="login.html" class="text-pink-600 hover:underline">Log In</a></p>
+        </div>
     </main>
+
+    <!-- Custom Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content animate-fade-in">
+            <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-4"></h3>
+            <p id="modal-message" class="text-gray-600 mb-6"></p>
+            <button id="modal-close" class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-all duration-200">OK</button>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-12">
@@ -147,12 +160,28 @@
         const closeIcon = document.getElementById('close-icon');
         const termsCheckbox = document.getElementById('terms');
         const signupBtn = document.getElementById('signupBtn');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalClose = document.getElementById('modal-close');
 
         // Mobile Menu Toggle
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('active');
             menuIcon.classList.toggle('hidden');
             closeIcon.classList.toggle('hidden');
+        });
+
+        // Show Custom Modal
+        function showModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modal.style.display = 'flex';
+        }
+
+        // Close Modal
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
         });
 
         // Enable/Disable Sign Up Button
@@ -164,7 +193,7 @@
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!termsCheckbox.checked) {
-                alert('Please accept the Terms and Privacy Policy.');
+                showModal('Action Required', 'Please accept the Terms and Privacy Policy.');
                 return;
             }
 
@@ -185,21 +214,21 @@
                 });
                 const data = await res.json();
                 if (!res.ok) {
-                    alert(data.message || 'Signup failed');
+                    showModal('Signup Failed', data.message || 'An error occurred during signup.');
                     return;
                 }
 
                 localStorage.setItem('authToken', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 localStorage.setItem('loggedIn', 'true');
-                alert('Signup successful! Check your email for contract and KYC links.');
+                showModal('Success', 'Signup successful! Check your email for contract and KYC links.');
 
-                // Simulate MailerSend email (handled by backend)
-                // Backend should use: mlsn.9d22578db1a5c02f535c13f03a433ea042d7615bd612594fe90b1f9afe3cefe2
-                // Sender: infocontactnexa@gmail.com
-                window.location.href = 'dashboard.html';
+                // Redirect after closing modal
+                modalClose.addEventListener('click', () => {
+                    window.location.href = 'dashboard.html';
+                }, { once: true });
             } catch (err) {
-                alert('Network error');
+                showModal('Error', 'Network error. Please try again later.');
             } finally {
                 signupBtn.disabled = !termsCheckbox.checked;
                 signupBtn.textContent = 'Sign Up';
@@ -207,4 +236,4 @@
         });
     </script>
 </body>
-                          </html>
+                    </html>
