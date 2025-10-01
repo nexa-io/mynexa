@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payout - Nexa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Times New Roman', Times, serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-blue-600">Nexa</h1>
+            <a href="dashboard.html" class="text-gray-600 hover:text-blue-600">Back to Dashboard</a>
+        </div>
+    </header>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div id="payout-content">
+            <h2 class="text-2xl font-bold text-gray-800">Request Payout</h2>
+            <p id="payout-message" class="mt-4 text-gray-600"></p>
+            <a id="payout-link" href="https://forms.gle/JnNrSTXj75WmUTKJ6" target="_blank" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 hidden">Submit Payout Request</a>
+        </div>
+    </main>
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between">
+            <p>&copy; 2025 Nexa. All rights reserved.</p>
+            <div class="flex space-x-4">
+                <a href="terms.html" class="hover:text-blue-300">Terms</a>
+                <a href="privacy.html" class="hover:text-blue-300">Privacy</a>
+                <a href="contact.html" class="hover:text-blue-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (!localStorage.getItem('loggedIn')) {
+            window.location.href = 'login.html';
+        }
+        const payoutMessage = document.getElementById('payout-message');
+        const payoutLink = document.getElementById('payout-link');
+        const fundedDate = new Date(user.contractExpiry);
+        const daysSinceFunded = user.contractStatus === 'Funded' ? (new Date() - fundedDate) / (1000 * 60 * 60 * 24) : 0;
+        if (user.contractStatus !== 'Funded') {
+            payoutMessage.textContent = 'Payouts are available only after reaching funded status. Pass your challenge to get funded!';
+        } else if (daysSinceFunded < 30) {
+            payoutMessage.textContent = `Payouts available 30 days after funded status. Check back on ${new Date(fundedDate.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}.`;
+        } else if (user.kycStatus !== 'Verified') {
+            window.location.href = 'kyc.html';
+        } else {
+            payoutMessage.textContent = 'Submit your payout request below. Processed in 48-72 hours (min $3, max 10% account size).';
+            payoutLink.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
