@@ -1,226 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sign Up - Nexa</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
-  body {
-    font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(to bottom right, #fce7f3, #fff);
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  main {
-    background: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    width: 320px;
-    text-align: center;
-  }
-  h1 {
-    margin-top: 0;
-    color: #db2777;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-  }
-  input[type="email"],
-  input[type="text"],
-  input[type="password"] {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #f9a8d4;
-    border-radius: 9999px;
-    margin-bottom: 1rem;
-    font-family: inherit;
-  }
-  button {
-    background: #db2777;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 9999px;
-    cursor: pointer;
-    font-weight: 600;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  button:hover {
-    background: #be185d;
-  }
-  label {
-    font-size: 0.875rem;
-    color: #555;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-bottom: 1rem;
-    user-select: none;
-  }
-  label a {
-    color: #db2777;
-    text-decoration: none;
-    font-weight: 600;
-  }
-  label a:hover {
-    text-decoration: underline;
-  }
-  p {
-    font-size: 0.9rem;
-    color: #555;
-  }
-  a {
-    color: #db2777;
-    text-decoration: none;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-  #modal {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.5);
-    display: none;
-    z-index: 1200;
-    justify-content: center;
-    align-items: center;
-  }
-  #modal .modal-content {
-    background: white;
-    max-width: 300px;
-    width: 90%;
-    padding: 1.5rem;
-    border-radius: 1rem;
-    border: 1px solid #f9a8d4;
-    text-align: center;
-    font-weight: 600;
-    color: #db2777;
-  }
-  #modal-close {
-    margin-top: 1rem;
-    background: #db2777;
-    border: none;
-    color: white;
-    padding: 0.5rem 1.5rem;
-    border-radius: 9999px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1rem;
-    transition: background-color 0.2s ease;
-  }
-  #modal-close:hover {
-    background: #be185d;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - Nexa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>body { font-family: 'Montserrat', sans-serif; background: linear-gradient(to bottom right, #fce7f3, #fff); }</style>
 </head>
-<body>
-<main>
-  <h1>Create an Account</h1>
-  <input id="name" type="text" placeholder="Full Name" required autocomplete="name" />
-  <input id="email" type="email" placeholder="Email" required autocomplete="email" />
-  <input id="password" type="password" placeholder="Password" required autocomplete="new-password" />
-  <input id="confirmPassword" type="password" placeholder="Confirm Password" required autocomplete="new-password" />
-
-  <label for="agreeCheckbox">
-    <input type="checkbox" id="agreeCheckbox" />
-    I agree to the <a href="terms.html" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-  </label>
-
-  <button id="signupBtn">Sign Up</button>
-  <p>Already have an account? <a href="login.html">Login</a></p>
-</main>
-
-<div id="modal" role="alertdialog" aria-modal="true" aria-labelledby="modal-message" hidden>
-  <div class="modal-content">
-    <p id="modal-message"></p>
-    <button id="modal-close" aria-label="Close message dialog">OK</button>
+<body class="min-h-screen flex items-center justify-center">
+  <div class="bg-white p-8 rounded-xl shadow-lg border border-pink-200 max-w-md w-full">
+    <h1 class="text-3xl font-bold text-pink-600 text-center mb-6">Create an Account</h1>
+    <form id="signupForm" class="space-y-4">
+      <div>
+        <label for="name" class="block text-gray-700 font-medium">Full Name</label>
+        <input type="text" id="name" class="w-full p-2 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required autocomplete="name" />
+      </div>
+      <div>
+        <label for="email" class="block text-gray-700 font-medium">Email</label>
+        <input type="email" id="email" class="w-full p-2 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required autocomplete="email" />
+      </div>
+      <div>
+        <label for="password" class="block text-gray-700 font-medium">Password</label>
+        <input type="password" id="password" class="w-full p-2 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required autocomplete="new-password" />
+      </div>
+      <div>
+        <label for="confirmPassword" class="block text-gray-700 font-medium">Confirm Password</label>
+        <input type="password" id="confirmPassword" class="w-full p-2 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required autocomplete="new-password" />
+      </div>
+      <div class="flex items-center">
+        <input type="checkbox" id="agreeCheckbox" class="h-4 w-4 text-pink-500 focus:ring-pink-500 border-gray-300 rounded" />
+        <label for="agreeCheckbox" class="ml-2 text-sm text-gray-600">
+          I agree to the <a href="terms.html" target="_blank" rel="noopener noreferrer" class="text-pink-500 hover:underline">Terms of Service</a> and <a href="privacy.html" target="_blank" rel="noopener noreferrer" class="text-pink-500 hover:underline">Privacy Policy</a>
+        </label>
+      </div>
+      <div id="errorMessage" class="text-red-500 text-sm hidden"></div>
+      <button type="submit" class="w-full bg-pink-500 text-white p-2 rounded-full hover:bg-pink-600 transition-colors font-semibold">Sign Up</button>
+    </form>
+    <p class="text-center text-gray-600 mt-4">
+      Already have an account? <a href="login.html" class="text-pink-500 hover:underline">Login</a>
+    </p>
   </div>
-</div>
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center" role="alertdialog" aria-modal="true" aria-labelledby="modal-message">
+    <div class="bg-white max-w-sm w-full p-6 rounded-lg border border-pink-200 text-center">
+      <p id="modal-message" class="text-pink-600 font-semibold"></p>
+      <button id="modal-close" class="mt-4 bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition-colors font-semibold" aria-label="Close message dialog">OK</button>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const JWT_SECRET = 'nexa_secure_2025';
 
-<script>
-function simpleHash(text) {
-  let hash = 0;
-  for(let i=0; i < text.length; i++) {
-    hash = ((hash << 5) - hash) + text.charCodeAt(i);
-    hash |= 0;
-  }
-  return hash.toString();
-}
-function initDataStore() {
-  return JSON.parse(localStorage.getItem('nexa_data')) || {
-    users: [],
-    contracts: [],
-    notifications: []
-  };
-}
-function saveDataStore(dataStore) {
-  localStorage.setItem('nexa_data', JSON.stringify(dataStore));
-}
-function showModal(message) {
-  const modal = document.getElementById('modal');
-  document.getElementById('modal-message').innerText = message;
-  modal.hidden = false;
-  modal.style.display = 'flex';
-}
-function hideModal() {
-  const modal = document.getElementById('modal');
-  modal.hidden = true;
-  modal.style.display = 'none';
-}
-document.getElementById('modal-close').addEventListener('click', hideModal);
+      // JWT-lite implementation
+      function base64url(str) {
+        return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      }
+      async function hmacSha256(data, secret) {
+        const encoder = new TextEncoder();
+        const key = await crypto.subtle.importKey(
+          'raw',
+          encoder.encode(secret),
+          { name: 'HMAC', hash: 'SHA-256' },
+          false,
+          ['sign']
+        );
+        const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(data));
+        return base64url(String.fromCharCode(...new Uint8Array(signature)));
+      }
+      async function encodeJwt(payload, secret) {
+        const header = { alg: 'HS256', typ: 'JWT' };
+        const encodedHeader = base64url(JSON.stringify(header));
+        const encodedPayload = base64url(JSON.stringify(payload));
+        const signature = await hmacSha256(`${encodedHeader}.${encodedPayload}`, secret);
+        return `${encodedHeader}.${encodedPayload}.${signature}`;
+      }
+      async function decodeJwt(token, secret) {
+        try {
+          const [encodedHeader, encodedPayload, signature] = token.split('.');
+          const expectedSignature = await hmacSha256(`${encodedHeader}.${encodedPayload}`, secret);
+          if (signature !== expectedSignature) throw new Error('Invalid signature');
+          return JSON.parse(atob(encodedPayload.replace(/-/g, '+').replace(/_/g, '/')));
+        } catch (err) {
+          console.error('JWT decode error:', err.message);
+          return null;
+        }
+      }
 
-document.getElementById('signupBtn').addEventListener('click', () => {
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim().toLowerCase();
-  const password = document.getElementById('password').value;
-  const confirmPassword = document.getElementById('confirmPassword').value;
-  const agree = document.getElementById('agreeCheckbox').checked;
+      function simpleHash(text) {
+        let hash = 0;
+        for (let i = 0; i < text.length; i++) {
+          hash = ((hash << 5) - hash) + text.charCodeAt(i);
+          hash |= 0;
+        }
+        return hash.toString();
+      }
 
-  if (!name || !email || !password || !confirmPassword) {
-    showModal('Please fill in all fields.');
-    return;
-  }
-  if (!agree) {
-    showModal('You must agree to the Terms of Service and Privacy Policy.');
-    return;
-  }
-  if (password !== confirmPassword) {
-    showModal('Passwords do not match.');
-    return;
-  }
-  const dataStore = initDataStore();
-  if (dataStore.users.find(u => u.email === email)) {
-    showModal('User already exists.');
-    return;
-  }
-  const newUser = {
-    email,
-    password: simpleHash(password),
-    name,
-    phone: '',
-    address: '',
-    isAdmin: false
-  };
-  dataStore.users.push(newUser);
-  saveDataStore(dataStore);
-  showModal('Account created successfully! Redirecting to login...');
-  setTimeout(() => {
-    window.location.href = 'login.html';
-  }, 2000);
-});
+      function showModal(message) {
+        const modal = document.getElementById('modal');
+        document.getElementById('modal-message').textContent = message;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.getElementById('modal-close').focus();
+      }
 
-// Ensure modal is hidden on page load
-window.addEventListener('load', () => {
-  hideModal();
-});
-</script>
+      function hideModal() {
+        const modal = document.getElementById('modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+
+      function showError(message) {
+        const errorDiv = document.getElementById('errorMessage');
+        errorDiv.textContent = message;
+        errorDiv.classList.remove('hidden');
+      }
+
+      function hideError() {
+        const errorDiv = document.getElementById('errorMessage');
+        errorDiv.classList.add('hidden');
+        errorDiv.textContent = '';
+      }
+
+      document.getElementById('modal-close').addEventListener('click', hideModal);
+
+      document.getElementById('signupForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        hideError();
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim().toLowerCase();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const agree = document.getElementById('agreeCheckbox').checked;
+
+        if (!name || !email || !password || !confirmPassword) {
+          showError('Please fill in all fields.');
+          return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showError('Please enter a valid email address.');
+          return;
+        }
+        if (password.length < 6) {
+          showError('Password must be at least 6 characters.');
+          return;
+        }
+        if (password !== confirmPassword) {
+          showError('Passwords do not match.');
+          return;
+        }
+        if (!agree) {
+          showError('You must agree to the Terms of Service and Privacy Policy.');
+          return;
+        }
+
+        let dataStore = JSON.parse(localStorage.getItem('nexa_data')) || { users: [], contracts: [], notifications: [] };
+        if (dataStore.users.find(u => u.email === email)) {
+          showError('User already exists.');
+          return;
+        }
+
+        const newUser = {
+          email,
+          name,
+          password: simpleHash(password),
+          phone: '',
+          address: '',
+          isAdmin: false
+        };
+        dataStore.users.push(newUser);
+        localStorage.setItem('nexa_data', JSON.stringify(dataStore));
+        console.log('New user created:', newUser);
+
+        try {
+          const token = await encodeJwt({ email: newUser.email, name: newUser.name, iat: Math.floor(Date.now() / 1000) }, JWT_SECRET);
+          console.log('Generated authToken:', token);
+          localStorage.setItem('authToken', token);
+          console.log('authToken stored in localStorage');
+          showModal('Account created successfully! Redirecting to dashboard...');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 2000);
+        } catch (err) {
+          console.error('JWT encoding error:', err.message);
+          showError('Authentication error: Failed to generate token.');
+        }
+      });
+
+      window.addEventListener('load', hideModal);
+    })();
+  </script>
 </body>
 </html>
