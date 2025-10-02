@@ -1,199 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexa - Profit-Sharing Prop Trading</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Montserrat', sans-serif; }
-        .popup { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 50; }
-        .popup-content { background: white; padding: 30px; border-radius: 12px; max-width: 500px; margin: 15vh auto; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Get Funded with Nexa - Trade Your Way</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
+  body { font-family: 'Montserrat', sans-serif; margin: 0; background: #fee2e9; color: #831843; }
+  header { padding: 1rem 2rem; background: white; border-bottom: 2px solid #db2777; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-weight: 900; margin: 0; font-size: 2rem; }
+  header a { background: #db2777; color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; transition: background-color 0.2s; }
+  header a:hover { background: #be185d; }
+  main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+  section { margin-bottom: 4rem; }
+  section h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; text-align: center; }
+  section p { font-size: 1.125rem; line-height: 1.6; margin-bottom: 1.5rem; }
+  .hero { text-align: center; padding: 3rem 1rem; background: linear-gradient(to bottom, #fff, #fce7f3); border-radius: 1rem; box-shadow: 0 8px 16px rgba(219, 39, 119, 0.15); }
+  .hero h2 { font-size: 3rem; margin-bottom: 1rem; }
+  .hero p { font-size: 1.25rem; font-weight: 600; max-width: 800px; margin: 0 auto 2rem; }
+  .hero a { background: #db2777; color: white; padding: 1rem 2rem; border-radius: 9999px; text-decoration: none; font-weight: 700; font-size: 1.2rem; }
+  .hero a:hover { background: #be185d; }
+  .challenges-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+  .challenge-card { background: white; border: 1px solid #f9a8d4; border-radius: 1rem; padding: 2rem; text-align: center; box-shadow: 0 6px 12px rgba(219, 39, 119, 0.1); }
+  .challenge-card h3 { font-weight: 700; font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .challenge-card p { font-size: 1rem; margin-bottom: 1rem; }
+  .challenge-card a { background: #db2777; color: white; padding: 0.75rem 1.5rem; border-radius: 9999px; text-decoration: none; font-weight: 600; }
+  .challenge-card a:hover { background: #be185d; }
+  .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+  .benefit-card { background: #fff0f6; border: 1px solid #f9a8d4; border-radius: 1rem; padding: 1.5rem; text-align: center; }
+  .benefit-card h4 { font-weight: 700; font-size: 1.25rem; margin-bottom: 0.5rem; }
+  .benefit-card p { font-size: 1rem; }
+  .how-it-works ol { padding-left: 1.5rem; margin-bottom: 2rem; }
+  .how-it-works li { margin-bottom: 1rem; font-weight: 600; font-size: 1.125rem; }
+  .testimonials { background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 8px 16px rgba(219, 39, 119, 0.15); }
+  .testimonial { margin-bottom: 1.5rem; }
+  .testimonial p { font-style: italic; margin-bottom: 0.5rem; }
+  .testimonial cite { font-weight: 600; font-size: 1rem; }
+  .cta { text-align: center; background: #db2777; color: white; padding: 3rem; border-radius: 1rem; }
+  .cta h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+  .cta p { font-weight: 600; font-size: 1.25rem; margin-bottom: 2rem; }
+  .cta a { background: white; color: #db2777; padding: 1rem 2rem; border-radius: 9999px; text-decoration: none; font-weight: 700; font-size: 1.2rem; }
+  .cta a:hover { background: #f9a8d4; color: white; }
+  footer { text-align: center; padding: 2rem 0; font-weight: 600; color: #c026d3; font-size: 1rem; }
+  @media (max-width: 768px) {
+    header h1 { font-size: 1.5rem; }
+    .hero h2 { font-size: 2rem; }
+    .hero p { font-size: 1rem; }
+    .challenges-grid, .benefits-grid { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <header class="bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-4 flex justify-between items-center">
-            <h1 class="text-3xl font-bold text-pink-600">Nexa</h1>
-            <div class="flex space-x-4">
-                <button id="signup-btn" class="bg-pink-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-pink-600 transition-colors">Sign Up</button>
-                <button id="login-btn" class="border border-pink-500 text-pink-600 px-6 py-2 rounded-full font-semibold hover:bg-pink-50 transition-colors">Log In</button>
-            </div>
-        </div>
-    </header>
-    <main class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
-        <section class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4">Join Nexa: Trade, Profit, Succeed</h2>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Nexa is a prop trading firm offering a profit-sharing contract. Trade manually on any platform of your choice (e.g., MetaTrader, cTrader). No EA or bot trading allowed.</p>
-        </section>
-
-        <section class="bg-white p-8 rounded-xl shadow-md border border-pink-100 mb-12">
-            <h3 class="text-2xl font-semibold text-gray-800 mb-4">How It Works</h3>
-            <ol class="list-decimal list-inside text-gray-600 space-y-4">
-                <li><strong>Sign Up:</strong> Create an account to start your trading journey.</li>
-                <li><strong>Purchase a Challenge:</strong> Select a challenge to prove your trading skills.</li>
-                <li><strong>Sign Contract:</strong> Enter our profit-sharing agreement to trade with a funded account.</li>
-                <li><strong>Complete KYC:</strong> Verify your identity for AML/CTF compliance.</li>
-                <li><strong>Trade & Profit:</strong> Trade manually on your preferred platform and share profits with Nexa.</li>
-            </ol>
-        </section>
-
-        <section class="text-center mb-12">
-            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Ready to Start?</h3>
-            <a href="pricing.html" class="inline-block bg-pink-500 text-white px-8 py-3 rounded-full font-semibold hover:bg-pink-600 transition-colors">View Challenges</a>
-        </section>
-
-        <div id="signup-popup" class="popup">
-            <div class="popup-content">
-                <h3 class="text-2xl font-bold text-pink-600 mb-4">Sign Up for Nexa</h3>
-                <form id="signup-form" class="space-y-4">
-                    <input type="text" id="signup-name" placeholder="Full Name" required class="w-full p-2 border border-gray-300 rounded-lg text-sm">
-                    <input type="email" id="signup-email" placeholder="Email" required class="w-full p-2 border border-gray-300 rounded-lg text-sm">
-                    <input type="password" id="signup-password" placeholder="Password" required class="w-full p-2 border border-gray-300 rounded-lg text-sm">
-                    <button type="submit" class="w-full bg-pink-500 text-white p-2 rounded-lg font-semibold hover:bg-pink-600 transition-colors">Sign Up</button>
-                </form>
-                <button id="close-signup-popup" class="w-full mt-3 text-gray-500 hover:text-gray-700">Close</button>
-            </div>
-        </div>
-        <div id="login-popup" class="popup">
-            <div class="popup-content">
-                <h3 class="text-2xl font-bold text-pink-600 mb-4">Log In to Nexa</h3>
-                <form id="login-form" class="space-y-4">
-                    <input type="email" id="login-email" placeholder="Email" required class="w-full p-2 border border-gray-300 rounded-lg text-sm">
-                    <input type="password" id="login-password" placeholder="Password" required class="w-full p-2 border border-gray-300 rounded-lg text-sm">
-                    <button type="submit" class="w-full bg-pink-500 text-white p-2 rounded-lg font-semibold hover:bg-pink-600 transition-colors">Log In</button>
-                </form>
-                <button id="close-login-popup" class="w-full mt-3 text-gray-500 hover:text-gray-700">Close</button>
-            </div>
-        </div>
-    </main>
-    <footer class="bg-gray-800 text-white py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p>&copy; 2025 Nexa. All rights reserved.</p>
-        </div>
-    </footer>
-    <script>
-        const backendUrl = 'https://nexa-backend-3wxt.onrender.com';
-        const signupPopup = document.getElementById('signup-popup');
-        const loginPopup = document.getElementById('login-popup');
-
-        document.getElementById('signup-btn').addEventListener('click', () => {
-            signupPopup.style.display = 'flex';
-        });
-        document.getElementById('login-btn').addEventListener('click', () => {
-            loginPopup.style.display = 'flex';
-        });
-        document.getElementById('close-signup-popup').addEventListener('click', () => {
-            signupPopup.style.display = 'none';
-        });
-        document.getElementById('close-login-popup').addEventListener('click', () => {
-            loginPopup.style.display = 'none';
-        });
-
-        document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const signupBtn = e.target.querySelector('button');
-            signupBtn.textContent = 'Signing Up...';
-            signupBtn.disabled = true;
-
-            const name = document.getElementById('signup-name').value.trim();
-            const email = document.getElementById('signup-email').value.trim();
-            const password = document.getElementById('signup-password').value;
-
-            // Basic validation
-            if (!name || name.length < 2) {
-                alert('Please enter a valid full name.');
-                signupBtn.textContent = 'Sign Up';
-                signupBtn.disabled = false;
-                return;
-            }
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                alert('Please enter a valid email.');
-                signupBtn.textContent = 'Sign Up';
-                signupBtn.disabled = false;
-                return;
-            }
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters.');
-                signupBtn.textContent = 'Sign Up';
-                signupBtn.disabled = false;
-                return;
-            }
-
-            try {
-                const response = await fetch(`${backendUrl}/signup`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password })
-                });
-
-                const data = await response.json();
-                if (response.ok) {
-                    alert('Signup successful! Check your email for contract and KYC links.');
-                    signupPopup.style.display = 'none';
-                    document.getElementById('signup-form').reset();
-                    // Optionally redirect to login
-                    loginPopup.style.display = 'flex';
-                } else {
-                    alert(data.message || 'Signup failed.');
-                }
-            } catch (error) {
-                console.error('Signup error:', error);
-                alert('An error occurred during signup.');
-            } finally {
-                signupBtn.textContent = 'Sign Up';
-                signupBtn.disabled = false;
-            }
-        });
-
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const loginBtn = e.target.querySelector('button');
-            loginBtn.textContent = 'Logging In...';
-            loginBtn.disabled = true;
-
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value;
-
-            // Basic validation
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                alert('Please enter a valid email.');
-                loginBtn.textContent = 'Log In';
-                loginBtn.disabled = false;
-                return;
-            }
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters.');
-                loginBtn.textContent = 'Log In';
-                loginBtn.disabled = false;
-                return;
-            }
-
-            try {
-                const response = await fetch(`${backendUrl}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-                if (response.ok) {
-                    localStorage.setItem('user', JSON.stringify(data));
-                    localStorage.setItem('loggedIn', 'true');
-                    loginPopup.style.display = 'none';
-                    window.location.href = 'dashboard.html';
-                } else {
-                    alert(data.message || 'Login failed.');
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                alert('An error occurred during login.');
-            } finally {
-                loginBtn.textContent = 'Log In';
-                loginBtn.disabled = false;
-            }
-        });
-    </script>
+<body>
+<header>
+  <h1>Nexa - Get Funded, Trade Your Way</h1>
+  <a href="signup.html">Get Started</a>
+</header>
+<main>
+  <section class="hero">
+    <h2>Unlock Your Trading Potential with Nexa</h2>
+    <p>Join thousands of traders who have turned their skills into funded accounts. Trade your way, keep your profits, and achieve financial freedom.</p>
+    <a href="signup.html">Start Trading Now</a>
+  </section>
+  <section>
+    <h2>Choose Your Challenge</h2>
+    <p>Select a trading challenge that suits your skills and goals. Pass the evaluation and get funded to trade with real capital.</p>
+    <div class="challenges-grid">
+      <div class="challenge-card">
+        <h3>Micro Challenge</h3>
+        <p>$100 Account for $2</p>
+        <a href="pricing1.html">Choose Micro</a>
+      </div>
+      <div class="challenge-card">
+        <h3>Starter Challenge</h3>
+        <p>$250 Account for $3.5</p>
+        <a href="pricing1.html">Choose Starter</a>
+      </div>
+      <div class="challenge-card">
+        <h3>Standard Challenge</h3>
+        <p>$500 Account for $7</p>
+        <a href="pricing1.html">Choose Standard</a>
+      </div>
+      <div class="challenge-card">
+        <h3>Pro Challenge</h3>
+        <p>$1000 Account for $13</p>
+        <a href="pricing1.html">Choose Pro</a>
+      </div>
+    </div>
+  </section>
+  <section>
+    <h2>Why Choose Nexa?</h2>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <h4>Trade Your Way</h4>
+        <p>Use any trading platform and legitimate strategies, with no restrictions or copy trading requirements.</p>
+      </div>
+      <div class="benefit-card">
+        <h4>Fast Funding</h4>
+        <p>Pass your challenge and complete KYC to get funded in just a few business days.</p>
+      </div>
+      <div class="benefit-card">
+        <h4>Keep Most Profits</h4>
+        <p>Enjoy 70-80% profit splits on your funded accounts, maximizing your earnings.</p>
+      </div>
+      <div class="benefit-card">
+        <h4>Transparent Rules</h4>
+        <p>Clear profit targets and fair rules ensure a level playing field for all traders.</p>
+      </div>
+    </div>
+  </section>
+  <section class="how-it-works">
+    <h2>How It Works</h2>
+    <ol>
+      <li>Sign up and select a challenge (Micro, Starter, Standard, or Pro).</li>
+      <li>Trade a funded account to meet profit targets within the timeframe.</li>
+      <li>Submit KYC documents securely online to verify your identity.</li>
+      <li>Pass the evaluation and sign your contract with admin support.</li>
+      <li>Get funded and trade with full control, keeping a share of your profits.</li>
+    </ol>
+  </section>
+  <section class="testimonials">
+    <h2>What Traders Say</h2>
+    <div class="testimonial">
+      <p>"Nexa’s challenges gave me the chance to prove my skills and get funded quickly. The freedom to trade my way is unmatched!"</p>
+      <cite>- Alex M., Funded Trader</cite>
+    </div>
+    <div class="testimonial">
+      <p>"Starting with the Micro Challenge was perfect. Now I’m trading a $1000 account and keeping most of my profits!"</p>
+      <cite>- Sarah K., Pro Trader</cite>
+    </div>
+    <div class="testimonial">
+      <p>"The process was straightforward, and the support team was there every step of the way. Highly recommend Nexa!"</p>
+      <cite>- James T., Standard Trader</cite>
+    </div>
+  </section>
+  <section class="cta">
+    <h2>Ready to Trade Your Way?</h2>
+    <p>Join Nexa today, pass your challenge, and start trading with funded capital. Your journey to financial freedom begins now!</p>
+    <a href="signup.html">Get Started Today</a>
+  </section>
+</main>
+<footer>
+  &copy; <span id="year">2025</span> Nexa. All rights reserved.
+</footer>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
