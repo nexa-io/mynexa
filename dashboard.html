@@ -14,9 +14,7 @@
     --gray-light: #f3f4f6;
     --bg-gradient: linear-gradient(to bottom right, #fce7f3, #fff);
   }
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
   body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
@@ -40,19 +38,10 @@
     transition: width 0.3s ease, transform 0.3s ease;
     z-index: 1000;
   }
-  #sidebar.collapsed {
-    width: 70px;
-  }
-  #sidebar.hidden {
-    transform: translateX(-240px);
-  }
-  #sidebar.collapsed .logo h1,
-  #sidebar.collapsed nav a span {
-    display: none;
-  }
-  #sidebar svg rect {
-    rx: 2;
-  }
+  #sidebar.collapsed { width: 70px; }
+  #sidebar.hidden { transform: translateX(-240px); }
+  #sidebar.collapsed .logo h1, #sidebar.collapsed nav a span { display: none; }
+  #sidebar svg rect { rx: 2; }
   #sidebar h1 {
     color: var(--pink);
     font-weight: 700;
@@ -65,8 +54,7 @@
     flex-direction: column;
     gap: 0.75rem;
   }
-  nav a,
-  nav button {
+  nav a, nav button {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -80,15 +68,14 @@
     border-radius: 0.5rem;
     text-decoration: none;
     white-space: nowrap;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
   }
-  nav a:hover,
-  nav button:hover {
+  nav a:hover, nav button:hover {
     background-color: var(--pink-light);
     color: var(--pink);
+    transform: translateX(5px);
   }
-  #sidebar.collapsed nav a,
-  #sidebar.collapsed nav button {
+  #sidebar.collapsed nav a, #sidebar.collapsed nav button {
     justify-content: center;
     padding: 0.5rem 0;
   }
@@ -99,10 +86,7 @@
     flex-shrink: 0;
     transition: fill 0.2s;
   }
-  nav a:hover .nav-icon,
-  nav button:hover .nav-icon {
-    fill: var(--pink);
-  }
+  nav a:hover .nav-icon, nav button:hover .nav-icon { fill: var(--pink); }
   #toggleSidebar {
     position: fixed;
     top: 18px;
@@ -118,21 +102,13 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 8px rgb(219 39 119 / 0.3);
-    transition: left 0.3s ease;
-    z-index: 1100;
+    transition: left 0.3s ease, transform 0.2s ease;
   }
-  #sidebar.collapsed + #toggleSidebar {
-    left: 82px;
-  }
-  #sidebar.hidden + #toggleSidebar {
-    left: 10px;
-  }
-  #toggleSidebar svg {
-    transition: transform 0.3s ease;
-  }
-  #toggleSidebar[aria-pressed="true"] svg {
-    transform: rotate(180deg);
-  }
+  #toggleSidebar:hover { transform: scale(1.05); }
+  #sidebar.collapsed + #toggleSidebar { left: 82px; }
+  #sidebar.hidden + #toggleSidebar { left: 10px; }
+  #toggleSidebar svg { transition: transform 0.3s ease; }
+  #toggleSidebar[aria-pressed="true"] svg { transform: rotate(180deg); }
   main {
     margin-left: 240px;
     padding: 2.5rem 2rem 3rem;
@@ -163,7 +139,9 @@
     align-items: center;
     gap: 1.5rem;
     user-select: none;
+    transition: transform 0.3s ease;
   }
+  #welcomeBanner:hover { transform: translateY(-5px); }
   #welcomeBanner img {
     width: 54px;
     height: 54px;
@@ -181,7 +159,9 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    transition: transform 0.3s ease;
   }
+  .card:hover { transform: translateY(-5px); }
   .card h3 {
     font-weight: 800;
     font-size: 1.5rem;
@@ -197,35 +177,44 @@
     background: #fff0f6;
     box-shadow: inset 0 0 6px rgb(219 39 119 / 0.05);
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s ease;
   }
-  .contract:hover {
+  .contract:hover, .notification:hover {
     background-color: #fde6f0;
+    transform: translateY(-3px);
   }
   .contract p, .notification p {
     margin: 0.25rem 0;
     font-size: 1rem;
     line-height: 1.3;
   }
-  .contract p strong, .notification p strong {
-    color: var(--pink);
+  .contract p strong, .notification p strong { color: var(--pink); }
+  .loader {
+    border: 4px solid var(--pink-light);
+    border-top: 4px solid var(--pink);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin: 1rem auto;
   }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   #summary {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.75rem;
-    justify-content: space-between;
-    flex-wrap: wrap;
     margin-bottom: 3rem;
   }
   .summary-card {
     background: white;
-    flex: 1 1 220px;
     padding: 1.5rem;
     border-radius: 1.25rem;
     box-shadow: 0 6px 15px rgb(219 39 119 / 0.1);
     color: var(--gray-dark);
     text-align: center;
+    transition: transform 0.3s ease;
   }
+  .summary-card:hover { transform: translateY(-5px); }
   .summary-card h4 {
     font-weight: 700;
     font-size: 1.2rem;
@@ -244,9 +233,7 @@
     box-shadow: 0 6px 15px rgb(219 39 119 / 0.1);
     margin-bottom: 2.5rem;
   }
-  #recentActivity h3 {
-    margin-bottom: 1.25rem;
-  }
+  #recentActivity h3 { margin-bottom: 1.25rem; }
   #recentActivity ul {
     list-style: none;
     color: var(--gray-medium);
@@ -259,7 +246,9 @@
   #recentActivity ul li {
     border-bottom: 1px solid var(--pink-light);
     padding: 0.5rem 0;
+    transition: background-color 0.2s;
   }
+  #recentActivity ul li:hover { background-color: var(--pink-light); }
   #contractModal {
     position: fixed;
     top: 0; left: 0;
@@ -281,7 +270,9 @@
     color: var(--pink);
     max-height: 80vh;
     overflow-y: auto;
+    transition: transform 0.3s ease;
   }
+  #contractModal[style*="flex"] .modal-content { transform: scale(1); }
   #modal-close, #contractModal-close {
     margin-top: 1rem;
     background: var(--pink);
@@ -292,10 +283,11 @@
     cursor: pointer;
     font-weight: 700;
     font-size: 1rem;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
   }
   #modal-close:hover, #contractModal-close:hover {
     background: #be185d;
+    transform: scale(1.05);
   }
   #contract-buttons {
     margin-top: 1rem;
@@ -312,7 +304,7 @@
     background: var(--pink);
     color: white;
     border: none;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s ease;
   }
   #contract-buttons button:disabled {
     opacity: 0.5;
@@ -320,18 +312,15 @@
   }
   #contract-buttons button:hover:not(:disabled) {
     background: #be185d;
+    transform: scale(1.05);
   }
   @media (max-width: 768px) {
     #sidebar {
       width: 70px;
       padding: 1rem 0.5rem;
     }
-    #sidebar.collapsed {
-      width: 70px;
-    }
-    #sidebar.hidden {
-      transform: translateX(-240px);
-    }
+    #sidebar.collapsed { width: 70px; }
+    #sidebar.hidden { transform: translateX(-240px); }
     main {
       margin-left: 70px;
       max-width: calc(100vw - 70px);
@@ -345,19 +334,8 @@
       left: 82px !important;
       top: 14px;
     }
-    #sidebar.hidden + #toggleSidebar {
-      left: 10px !important;
-    }
-    #summary {
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .summary-card {
-      width: 100%;
-    }
-    #contract-buttons button {
-      flex: 1 1 100%;
-    }
+    #sidebar.hidden + #toggleSidebar { left: 10px !important; }
+    #contract-buttons button { flex: 1 1 100%; }
   }
 </style>
 </head>
@@ -400,14 +378,12 @@
     <path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 </button>
-
 <main>
   <div id="welcomeBanner" role="region" aria-label="Welcome banner">
     <img src="https://ui-avatars.com/api/?name=User&background=DB2777&color=fff&rounded=true" alt="User Profile Picture" />
     <span id="welcomeText">Welcome, User</span>
     <button id="profileBtn" style="margin-left:auto; padding:0.3rem 0.8rem; font-weight:600; border:none;background-color:var(--pink);color:#fff;border-radius:9999px;cursor:pointer;">Profile</button>
   </div>
-
   <section id="summary" aria-label="Dashboard summary statistics">
     <div class="summary-card">
       <h4>Total Contracts</h4>
@@ -426,17 +402,14 @@
       <div class="summary-value" id="unreadNotifications">0</div>
     </div>
   </section>
-
   <section class="card" aria-labelledby="contractsHeading">
     <h3 id="contractsHeading">Your Contracts (Click to View Details)</h3>
-    <div id="contracts" role="list" aria-live="polite"></div>
+    <div id="contracts" role="list" aria-live="polite"><div class="loader"></div></div>
   </section>
-
   <section class="card" aria-labelledby="notificationsHeading">
     <h3 id="notificationsHeading">Notifications</h3>
-    <div id="notifications" role="list" aria-live="polite">Loading notifications...</div>
+    <div id="notifications" role="list" aria-live="polite"><div class="loader"></div></div>
   </section>
-
   <section id="recentActivity" class="card" aria-labelledby="recentActivityHeading">
     <h3 id="recentActivityHeading">Recent Activity</h3>
     <ul id="activityList" role="list" aria-live="polite" tabindex="0">
@@ -444,13 +417,11 @@
     </ul>
   </section>
 </main>
-
 <div id="contractModal" role="dialog" aria-modal="true" aria-labelledby="contractModalTitle" hidden>
   <div class="modal-content" tabindex="0">
     <h2 id="contractModalTitle">Contract Details</h2>
     <div id="contractDetails"></div>
     <div id="contractTimer" style="font-weight:bold; color:var(--pink); margin-top:0.5rem;"></div>
-
     <div id="contract-buttons">
       <button id="signContractBtn" disabled>Sign Contract</button>
       <button id="verifySigningBtn" disabled>Verify Signing</button>
@@ -458,28 +429,22 @@
       <button id="moveNextPhaseBtn" disabled>Move to Next Phase</button>
       <button id="requestPayoutBtn" disabled>Request Payout</button>
     </div>
-
     <button id="contractModal-close" style="margin-top:1.5rem;">Close</button>
   </div>
 </div>
-
 <div id="modal" role="alertdialog" aria-modal="true" aria-labelledby="modal-message" aria-describedby="modal-desc" hidden>
   <div class="modal-content">
     <p id="modal-message" role="heading" aria-level="3"></p>
     <button id="modal-close" aria-label="Close modal">OK</button>
   </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/jwt-simple@0.5.6/jwt-simple.min.js"></script>
 <script>
 (() => {
-  // State and constants
   let dataStore;
   let currentUser;
   let activeContract = null;
-
   const JWT_SECRET = 'nexa_secure_2025';
-
   const PAYSTACK_TIER_MAP = {
     "https://paystack.shop/pay/Tier1-1-Step": {tier: 1, accountSize: 100, step: 1},
     "https://paystack.shop/pay/Tier1-2-Step": {tier: 1, accountSize: 100, step: 2},
@@ -494,15 +459,19 @@
   function decodeJWT(token) {
     try {
       const payload = token.split('.')[1];
-      return JSON.parse(atob(payload));
-    } catch {
+      console.log('Raw payload:', payload);
+      const decoded = JSON.parse(atob(payload));
+      console.log('Decoded payload:', decoded);
+      return decoded;
+    } catch (e) {
+      console.error('Error decoding JWT:', e.message);
       return null;
     }
   }
 
   function simpleHash(text) {
     let hash = 0;
-    for(let i=0; i < text.length; i++) {
+    for (let i = 0; i < text.length; i++) {
       hash = ((hash << 5) - hash) + text.charCodeAt(i);
       hash |= 0;
     }
@@ -513,7 +482,6 @@
     localStorage.setItem('nexa_data', JSON.stringify(dataStore));
   }
 
-  // Modal functions
   function showModal(message) {
     const modal = document.getElementById('modal');
     const messageElem = document.getElementById('modal-message');
@@ -522,13 +490,13 @@
     modal.style.display = 'flex';
     modal.querySelector('button').focus();
   }
+
   function hideModal() {
     const modal = document.getElementById('modal');
     modal.hidden = true;
     modal.style.display = 'none';
   }
 
-  // Sidebar toggle
   function initSidebarToggle() {
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('toggleSidebar');
@@ -549,43 +517,65 @@
   }
 
   function loadUserData() {
+    console.log('Starting loadUserData');
     const token = localStorage.getItem('authToken');
+    console.log('authToken:', token);
     if (!token) {
-      showModal('Please login');
+      showModal('No authentication token found. Please login.');
       setTimeout(() => { window.location.href = 'login.html'; }, 2000);
       return false;
     }
+
     const userInfo = decodeJWT(token);
+    console.log('UserInfo from token:', userInfo);
     if (!userInfo || !userInfo.email) {
-      showModal('Invalid or expired token');
+      showModal('Invalid token: Missing or invalid payload.');
       setTimeout(() => { window.location.href = 'login.html'; }, 2000);
       return false;
     }
+
     dataStore = JSON.parse(localStorage.getItem('nexa_data')) || {users: [], contracts: [], notifications: []};
+    console.log('DataStore:', dataStore);
     currentUser = dataStore.users.find(u => u.email === userInfo.email);
+    console.log('CurrentUser:', currentUser);
     if (!currentUser) {
-      showModal('User no longer exists');
+      showModal('User not found in data store.');
       setTimeout(() => { window.location.href = 'login.html'; }, 2000);
       return false;
     }
+
+    if (typeof jwt === 'undefined') {
+      console.error('jwt-simple library not loaded');
+      showModal('Authentication error: JWT library not loaded.');
+      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+      return false;
+    }
+
     try {
       const decoded = jwt.decode(token, JWT_SECRET);
+      console.log('JWT decoded:', decoded);
       if (!decoded.email || decoded.email !== userInfo.email) {
-        showModal('Token verification failed');
+        showModal('Token verification failed: Email mismatch.');
         setTimeout(() => { window.location.href = 'login.html'; }, 2000);
         return false;
       }
     } catch (err) {
-      showModal('Invalid token signature');
+      console.error('JWT verification error:', err.message);
+      showModal(`Invalid token: ${err.message}`);
       setTimeout(() => { window.location.href = 'login.html'; }, 2000);
       return false;
     }
+
+    document.getElementById('welcomeText').textContent = `Welcome, ${currentUser.name || 'User'}`;
+    const avatarImg = document.querySelector('#welcomeBanner img');
+    avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name || 'User')}&background=DB2777&color=fff&rounded=true`;
+    avatarImg.alt = `${currentUser.name || 'User'} Profile Picture`;
     return true;
   }
 
-  // Check for redirect from paystack payment URL to add challenges
   function checkRedirectForPayment() {
     const redirectURL = sessionStorage.getItem('redirected_from_paystack_url');
+    console.log('Redirect URL:', redirectURL);
     if (!redirectURL) return;
 
     const tierData = PAYSTACK_TIER_MAP[redirectURL];
@@ -614,12 +604,12 @@
 
   function captureRedirectURL() {
     const referer = document.referrer;
+    console.log('Referer:', referer);
     if (referer && Object.keys(PAYSTACK_TIER_MAP).some(url => referer.startsWith(url))) {
       sessionStorage.setItem('redirected_from_paystack_url', referer);
     }
   }
 
-  // Show contract detail modal (no countdown)
   function openContractModal(contract) {
     console.log('Opening contract modal for:', contract);
     activeContract = contract;
@@ -645,8 +635,7 @@
       <p><strong>Payout Date:</strong> ${contract.payoutDate || 'N/A'}</p>
       <p><strong>Phase Status:</strong> ${contract.phaseStatus || 'unfunded'}</p>
     `;
-
-    timerDiv.textContent = ''; // no countdown timer
+    timerDiv.textContent = '';
 
     const signBtn = document.getElementById('signContractBtn');
     const verifyBtn = document.getElementById('verifySigningBtn');
@@ -656,7 +645,6 @@
 
     let phase = contract.phaseStatus || 'unfunded';
     let funded = phase === 'funded';
-
     const buttonsEnabled = funded || phase === 'phase2' || phase === 'phase1';
     signBtn.disabled = !buttonsEnabled || contract.contractStatus === "Disabled";
     verifyBtn.disabled = !buttonsEnabled || contract.contractStatus === "Disabled";
@@ -702,6 +690,7 @@
     modal.hidden = true;
     modal.style.display = 'none';
   }
+
   document.getElementById('contractModal-close').addEventListener('click', closeContractModal);
 
   function moveToNextPhase(contract) {
@@ -726,64 +715,68 @@
 
   function loadContracts() {
     const contractsDiv = document.getElementById('contracts');
-    contractsDiv.innerHTML = '<p>Loading contracts...</p>';
-
+    contractsDiv.innerHTML = '<div class="loader"></div>';
     console.log('Current user:', currentUser);
     console.log('Data store contracts:', dataStore.contracts);
 
-    const userContracts = dataStore.contracts.filter(c => c.userEmail === currentUser.email);
-    console.log('User contracts:', userContracts);
+    setTimeout(() => {
+      const userContracts = dataStore.contracts.filter(c => c.userEmail === currentUser.email);
+      console.log('User contracts:', userContracts);
 
-    if (userContracts.length === 0) {
-      contractsDiv.innerHTML = '<p>No contracts found. Purchase a challenge from <a href="pricing1.html" style="color: var(--pink); text-decoration: underline;">Pricing</a> to get started.</p>';
-      return;
-    }
+      if (userContracts.length === 0) {
+        contractsDiv.innerHTML = '<p class="text-gray-600">No contracts found. Purchase a challenge from <a href="pricing1.html" class="text-pink-500 hover:underline">Pricing</a> to get started.</p>';
+        return;
+      }
 
-    contractsDiv.innerHTML = '';
-    userContracts.forEach(contract => {
-      const div = document.createElement('div');
-      div.className = "contract";
-      div.tabIndex = 0;
-      div.role = "button";
-      div.setAttribute('aria-pressed', "false");
-      div.innerHTML = `
-        <p><strong>ID:</strong> ${contract.id}</p>
-        <p><strong>Account Size:</strong> $${contract.accountSize}</p>
-        <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
-        <p><strong>Status:</strong> ${contract.contractStatus}</p>
-        <p><strong>Phase Status:</strong> ${contract.phaseStatus || 'unfunded'}</p>
-      `;
-      div.addEventListener('click', () => {
-        console.log('Clicked contract:', contract);
-        openContractModal(contract);
-      });
-      div.addEventListener('keypress', e => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          console.log('Keypress on contract:', contract);
+      contractsDiv.innerHTML = '';
+      userContracts.forEach(contract => {
+        const div = document.createElement('div');
+        div.className = "contract";
+        div.tabIndex = 0;
+        div.role = "button";
+        div.setAttribute('aria-pressed', "false");
+        div.innerHTML = `
+          <p><strong>ID:</strong> ${contract.id}</p>
+          <p><strong>Account Size:</strong> $${contract.accountSize}</p>
+          <p><strong>Challenge Type:</strong> ${contract.challengeType}</p>
+          <p><strong>Status:</strong> ${contract.contractStatus}</p>
+          <p><strong>Phase Status:</strong> ${contract.phaseStatus || 'unfunded'}</p>
+        `;
+        div.addEventListener('click', () => {
+          console.log('Clicked contract:', contract);
           openContractModal(contract);
-        }
+        });
+        div.addEventListener('keypress', e => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            console.log('Keypress on contract:', contract);
+            openContractModal(contract);
+          }
+        });
+        contractsDiv.appendChild(div);
       });
-      contractsDiv.appendChild(div);
-    });
+    }, 500);
   }
 
   function loadNotifications() {
     const notificationsDiv = document.getElementById('notifications');
-    notificationsDiv.innerHTML = '';
+    notificationsDiv.innerHTML = '<div class="loader"></div>';
 
-    const userNotifications = dataStore.notifications.filter(n => n.userEmail === currentUser.email);
-    if (userNotifications.length === 0) {
-      notificationsDiv.innerHTML = '<p>No notifications.</p>';
-      return;
-    }
-    userNotifications.forEach(notif => {
-      const div = document.createElement('div');
-      div.className = "notification";
-      const date = new Date(notif.createdAt);
-      div.innerHTML = `<p>${notif.message}<br><small>${date.toLocaleString()}</small></p>`;
-      notificationsDiv.appendChild(div);
-    });
+    setTimeout(() => {
+      const userNotifications = dataStore.notifications.filter(n => n.userEmail === currentUser.email);
+      if (userNotifications.length === 0) {
+        notificationsDiv.innerHTML = '<p class="text-gray-600">No notifications.</p>';
+        return;
+      }
+      notificationsDiv.innerHTML = '';
+      userNotifications.forEach(notif => {
+        const div = document.createElement('div');
+        div.className = "notification";
+        const date = new Date(notif.createdAt);
+        div.innerHTML = `<p>${notif.message}<br><small>${date.toLocaleString()}</small></p>`;
+        notificationsDiv.appendChild(div);
+      });
+    }, 500);
   }
 
   function loadSummaryAndActivity() {
@@ -799,17 +792,14 @@
     activityList.innerHTML = '';
 
     let activities = [];
-
     userContracts.forEach(contract => {
-      if(contract.fundedDateISO){
+      if (contract.fundedDateISO) {
         activities.push({ date: new Date(contract.fundedDateISO), text: `Contract #${contract.id} funded` });
       }
     });
-
     userNotifications.forEach(notif => {
       activities.push({ date: new Date(notif.createdAt), text: `Notification: ${notif.message}` });
     });
-
     activities.sort((a, b) => b.date - a.date);
 
     if (activities.length === 0) {
@@ -841,7 +831,7 @@
     profileModal.style.zIndex = '1400';
 
     profileModal.innerHTML = `
-      <div style="background:white;max-width:400px;width:90%;padding:1.5rem;border-radius:1rem;text-align:left;color:var(--pink);" tabindex="0">
+      <div style="background:white;max-width:400px;width:90%;padding:1.5rem;border-radius:1rem;text-align:left;color:var(--pink);transform:scale(0.95);transition:transform 0.3s ease;" tabindex="0">
         <h2 id="profileModalTitle">Update Profile</h2>
         <label for="profileName">Name:</label><br/>
         <input type="text" id="profileName" value="${currentUser.name || ''}" style="width:100%;padding:0.5rem;margin-bottom:1rem;border-radius:0.5rem;border:1px solid var(--pink-light);"/>
@@ -851,9 +841,8 @@
         <button id="cancelProfileBtn" style="background:#ddd;color:var(--pink);padding:0.5rem 1rem;border:none;border-radius:9999px;cursor:pointer;">Cancel</button>
       </div>
     `;
-
     document.body.appendChild(profileModal);
-
+    setTimeout(() => profileModal.querySelector('div').style.transform = 'scale(1)', 0);
     profileModal.querySelector('div').focus();
 
     profileModal.querySelector('#cancelProfileBtn').addEventListener('click', () => {
@@ -878,21 +867,27 @@
   }
 
   function init() {
-    if(!loadUserData()) return;
+    console.log('Initializing dashboard');
+    if (!loadUserData()) {
+      console.log('loadUserData failed, stopping initialization');
+      return;
+    }
     captureRedirectURL();
     checkRedirectForPayment();
     initSidebarToggle();
-
     document.getElementById('profileBtn').addEventListener('click', openProfileModal);
-
     document.getElementById('modal-close').addEventListener('click', hideModal);
-
+    document.getElementById('logout').addEventListener('click', () => {
+      localStorage.removeItem('authToken');
+      window.location.href = 'login.html';
+    });
     loadContracts();
     loadNotifications();
     loadSummaryAndActivity();
   }
 
   window.addEventListener('load', () => {
+    console.log('Window loaded');
     document.getElementById('modal').hidden = true;
     document.getElementById('modal').style.display = 'none';
     document.getElementById('contractModal').hidden = true;
