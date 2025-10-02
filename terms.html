@@ -1,44 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms and Conditions - Nexa</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Times New Roman', Times, serif; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms and Conditions - Nexa</title>
+  <link href="/css/tailwind.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink: #db2777;
+      --pink-light: #f9a8d4;
+      --gray-dark: #1f2937;
+      --gray-medium: #4b5563;
+      --gray-light: #f3f4f6;
+      --bg-gradient: linear-gradient(to bottom right, #fce7f3, #fff);
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+      color: var(--gray-dark);
+      transition: padding-left 0.3s ease;
+    }
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 240px;
+      background: white;
+      box-shadow: 2px 0 8px rgb(219 39 119 / 0.15);
+      padding: 1.5rem 1rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      transition: width 0.3s ease, transform 0.3s ease;
+      z-index: 1000;
+    }
+    #sidebar.collapsed { width: 70px; }
+    #sidebar.hidden { transform: translateX(-240px); }
+    #sidebar.collapsed .logo h1, #sidebar.collapsed nav a span { display: none; }
+    #sidebar svg rect { rx: 2; }
+    #sidebar h1 {
+      color: var(--pink);
+      font-weight: 700;
+      font-size: 1.7rem;
+      user-select: none;
+    }
+    nav {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    nav a, nav button {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0.5rem;
+      font-weight: 600;
+      color: var(--gray-medium);
+      border: none;
+      background: none;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+    nav a:hover, nav button:hover {
+      background-color: var(--pink-light);
+      color: var(--pink);
+      transform: translateX(5px);
+    }
+    #sidebar.collapsed nav a, #sidebar.collapsed nav button {
+      justify-content: center;
+      padding: 0.5rem 0;
+    }
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--gray-medium);
+      flex-shrink: 0;
+      transition: fill 0.2s;
+    }
+    nav a:hover .nav-icon, nav button:hover .nav-icon { fill: var(--pink); }
+    #toggleSidebar {
+      position: fixed;
+      top: 18px;
+      left: 250px;
+      background: var(--pink);
+      border: none;
+      color: white;
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgb(219 39 119 / 0.3);
+      transition: left 0.3s ease, transform 0.2s ease;
+    }
+    #toggleSidebar:hover { transform: scale(1.05); }
+    #sidebar.collapsed + #toggleSidebar { left: 82px; }
+    #sidebar.hidden + #toggleSidebar { left: 10px; }
+    #toggleSidebar svg { transition: transform 0.3s ease; }
+    #toggleSidebar[aria-pressed="true"] svg { transform: rotate(180deg); }
+    main {
+      margin-left: 240px;
+      padding: 2.5rem 2rem 3rem;
+      transition: margin-left 0.3s ease;
+      flex-grow: 1;
+      min-height: 100vh;
+      max-width: calc(100vw - 240px);
+      box-sizing: border-box;
+    }
+    #sidebar.collapsed ~ main {
+      margin-left: 70px;
+      max-width: calc(100vw - 70px);
+    }
+    #sidebar.hidden ~ main {
+      margin-left: 0;
+      max-width: 100vw;
+    }
+    .content-card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 8px 16px rgb(219 39 119 / 0.15);
+      color: var(--gray-dark);
+      transition: transform 0.3s ease;
+    }
+    .content-card:hover { transform: translateY(-5px); }
+    .content-card h2 {
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--pink);
+      border-bottom: 2px solid var(--pink-light);
+      padding-bottom: 0.25rem;
+      margin-bottom: 1rem;
+    }
+    .content-card h3 {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--gray-dark);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .content-card p, .content-card li {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--gray-medium);
+    }
+    .content-card ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 768px) {
+      #sidebar {
+        width: 70px;
+        padding: 1rem 0.5rem;
+      }
+      #sidebar.collapsed { width: 70px; }
+      #sidebar.hidden { transform: translateX(-240px); }
+      main {
+        margin-left: 70px;
+        max-width: calc(100vw - 70px);
+        padding: 1.5rem;
+      }
+      #sidebar.hidden ~ main {
+        margin-left: 0;
+        max-width: 100vw;
+      }
+      #toggleSidebar {
+        left: 82px !important;
+        top: 14px;
+      }
+      #sidebar.hidden + #toggleSidebar { left: 10px !important; }
+    }
+  </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <header class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <h1 class="text-3xl font-bold text-blue-600">Nexa</h1>
-            <a href="index.html" class="text-gray-600 hover:text-blue-600">Home</a>
-        </div>
-    </header>
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 class="text-2xl font-bold text-gray-800">Terms and Conditions</h2>
-        <div class="mt-6 bg-white p-6 rounded shadow space-y-4">
-            <p><strong>1. Acceptance</strong>: Using mynexa.pages.dev binds you to these Terms.</p>
-            <p><strong>2. Services</strong>: Nexa offers 1-Step (10% profit, 6% drawdown) and 2-Step (8% profit/phase, 10% drawdown) challenges for funded accounts with 80/20 (demo) or 160/20 (live) profit splits.</p>
-            <p><strong>3. User Obligations</strong>: Provide accurate data, sign Trading Agreement (<a href="https://docuseal.com/d/w4aYAR5LfBb41G" target="_blank" class="text-blue-500">link</a>), complete KYC (<a href="https://forms.gle/esMxwUYE3fMVG1qn6" target="_blank" class="text-blue-500">link</a>), avoid banned strategies (martingale, news scalping, etc.).</p>
-            <p><strong>4. No-Funds Clause</strong>: Nexa is not liable for payout failures due to liquidity or external factors.</p>
-            <p><strong>5. Liability</strong>: Capped at challenge fee ($2–$18); no consequential damages.</p>
-            <p><strong>6. Jurisdiction</strong>: Governed by Nigerian law, Lagos arbitration (Arbitration and Mediation Act, 2023).</p>
-            <p><strong>7. Indemnification</strong>: Users indemnify Nexa for claims from misuse.</p>
-            <p><strong>8. Termination</strong>: Nexa may suspend accounts for violations, with EFCC referral for fraud.</p>
-            <p><strong>9. Amendments</strong>: Terms may change, notified via email.</p>
-        </div>
-    </main>
-    <footer class="bg-gray-800 text-white py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between">
-            <p>&copy; 2025 Nexa. All rights reserved.</p>
-            <div class="flex space-x-4">
-                <a href="terms.html" class="hover:text-blue-300">Terms</a>
-                <a href="privacy.html" class="hover:text-blue-300">Privacy</a>
-                <a href="contact.html" class="hover:text-blue-300">Contact</a>
-            </div>
-        </div>
-    </footer>
+<body>
+  <aside id="sidebar" aria-label="Sidebar Navigation">
+    <div class="logo" aria-label="Nexa Logo">
+      <svg width="32" height="32" viewBox="0 0 50 50" fill="none" aria-hidden="true" focusable="false">
+        <rect x="10" y="10" width="10" height="10" fill="#ec4899" rx="2"></rect>
+        <rect x="30" y="10" width="10" height="10" fill="#f9a8d4" rx="2"></rect>
+        <rect x="10" y="30" width="10" height="10" fill="#f9a8d4" rx="2"></rect>
+        <rect x="30" y="30" width="10" height="10" fill="#ec4899" rx="2"></rect>
+      </svg>
+      <h1>NEXA</h1>
+    </div>
+    <nav>
+      <a href="dashboard.html">
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8v-10h-8v10zm0-18v6h8V3h-8z"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="pricing1.html">
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.66 0-8 1.34-8 4v2h16v-2c0-2.66-5.34-4-8-4z"/></svg>
+        <span>Pricing</span>
+      </a>
+      <a href="contact.html">
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M21 8V7l-3 2-2-2-6 6-4-4-1 1v7h18v-7z"/></svg>
+        <span>Contact Support</span>
+      </a>
+      <a href="faq.html">
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm.87 17.38-.14-.13-2.56-2.7a1 1 0 0 1-.28-.77V11.7a1 1 0 0 1 1-1h1a1 1 0 0 1 0 2h-.5v1.64l1.5 1.58a.75.75 0 1 1-1.33 1zM12 7a1.5 1.5 0 1 1-1.5 1.5A1.5 1.5 0 0 1 12 7z"/></svg>
+        <span>FAQ</span>
+      </a>
+      <button id="logout" aria-label="Logout">
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M14 7v2H7v6h7v2l5-5-5-5zM19 19h-2v-2h2V7h-2V5h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2z"/></svg>
+        <span>Logout</span>
+      </button>
+    </nav>
+  </aside>
+  <button id="toggleSidebar" aria-label="Toggle sidebar menu" aria-pressed="false" title="Toggle Menu">
+    <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+      <path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <main>
+    <div class="content-card">
+      <h2>Terms and Conditions</h2>
+      <p class="mb-4">Last Updated: October 2, 2025</p>
+      <p class="mb-4">Welcome to Nexa ("we," "us," or "our"). These Terms and Conditions ("Terms") govern your access to and use of our website, services, and platform (collectively, the "Service") provided by Nexa, a company incorporated under the laws of Seychelles and operating in Nigeria. By accessing or using the Service, you agree to be bound by these Terms. If you do not agree, please do not use the Service.</p>
+
+      <h3>1. Acceptance of Terms</h3>
+      <p>By creating an account, accessing, or using the Service, you confirm that you are at least 18 years old, have the legal capacity to enter into agreements, and agree to comply with these Terms. These Terms apply to all users, including individuals, entities, or organizations, whether in Nigeria, Seychelles, or elsewhere.</p>
+
+      <h3>2. Account Registration and Security</h3>
+      <p>You must provide accurate and complete information during registration, including a valid email address and password. You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account. Notify us immediately of any unauthorized access or use of your account.</p>
+      <ul>
+        <li>You agree not to share your account credentials with others.</li>
+        <li>You are responsible for ensuring your password is secure (minimum 6 characters).</li>
+        <li>We reserve the right to suspend or terminate accounts with inaccurate or fraudulent information.</li>
+      </ul>
+
+      <h3>3. Services Provided</h3>
+      <p>Nexa provides a platform for users to purchase trading challenges, manage contracts, submit KYC documentation, and request payouts. The Service includes:</p>
+      <ul>
+        <li>Access to trading challenges (e.g., Tier 1–4, 1-Step or 2-Step).</li>
+        <li>Contract management tools for tracking challenge progress.</li>
+        <li>KYC verification processes via third-party services.</li>
+        <li>Payment processing through Paystack or other providers.</li>
+      </ul>
+      <p>We reserve the right to modify, suspend, or discontinue any part of the Service at any time without prior notice, in accordance with Nigerian and Seychelles laws.</p>
+
+      <h3>4. User Responsibilities</h3>
+      <p>As a user, you agree to:</p>
+      <ul>
+        <li>Comply with all applicable laws, including Nigeria’s Cybercrimes Act 2015 and Seychelles’ Data Protection Act.</li>
+        <li>Not engage in fraudulent activities, such as manipulating challenge outcomes or submitting false KYC documents.</li>
+        <li>Not attempt to bypass, hack, or interfere with the Service’s security measures.</li>
+        <li>Provide accurate and up-to-date information for KYC and payment processes.</li>
+      </ul>
+      <p>Failure to comply may result in account suspension, termination, or legal action under Nigerian or Seychelles law.</p>
+
+      <h3>5. Trading Challenges and Contracts</h3>
+      <p>Nexa offers trading challenges with specific rules and requirements:</p>
+      <ul>
+        <li>Challenges are purchased via the Pricing page and processed through third-party payment providers.</li>
+        <li>Each challenge has defined phases (e.g., Phase 1, Phase 2, Funded) and criteria for progression.</li>
+        <li>Contracts may have expiry dates or conditions for termination, as outlined during purchase.</li>
+        <li>Users must complete KYC verification to progress to funded status or request payouts.</li>
+      </ul>
+      <p>We are not responsible for losses incurred during trading challenges, as outcomes depend on user performance. All trading activities must comply with Nigeria’s Securities and Exchange Commission (SEC) regulations and Seychelles’ Financial Services Authority (FSA) guidelines.</p>
+
+      <h3>6. Payments and Refunds</h3>
+      <p>Payments for challenges are processed through third-party providers (e.g., Paystack). You agree to:</p>
+      <ul>
+        <li>Pay all applicable fees as listed on the Pricing page.</li>
+        <li>Ensure sufficient funds are available for payment processing.</li>
+        <li>Understand that all payments are non-refundable unless otherwise stated.</li>
+      </ul>
+      <p>Refunds may be considered in exceptional circumstances, at our sole discretion, and are subject to a review process compliant with Nigerian and Seychelles consumer protection laws.</p>
+
+      <h3>7. KYC and Verification</h3>
+      <p>To comply with anti-money laundering (AML) and know-your-customer (KYC) regulations in Nigeria (NDPR) and Seychelles (Anti-Money Laundering Act), users must submit valid identification documents. You agree to:</p>
+      <ul>
+        <li>Provide accurate KYC information through our designated third-party provider.</li>
+        <li>Allow us to store and process your KYC data as outlined in our Privacy Policy.</li>
+        <li>Understand that failure to complete KYC may result in restricted access to funded accounts or payouts.</li>
+      </ul>
+
+      <h3>8. Intellectual Property</h3>
+      <p>All content, trademarks, and intellectual property on the Service (e.g., logos, designs, code) are owned by Nexa or its licensors. You may not copy, reproduce, or distribute any content without prior written consent, except for personal, non-commercial use, in accordance with Nigerian and Seychelles intellectual property laws.</p>
+
+      <h3>9. Limitation of Liability</h3>
+      <p>To the fullest extent permitted by law, Nexa shall not be liable for:</p>
+      <ul>
+        <li>Any direct, indirect, incidental, or consequential damages arising from your use of the Service.</li>
+        <li>Losses resulting from trading activities, technical issues, or third-party service interruptions.</li>
+        <li>Unauthorized access to your account due to your failure to secure credentials.</li>
+      </ul>
+      <p>The Service is provided “as is” without warranties of any kind, express or implied, subject to Nigerian and Seychelles consumer protection laws.</p>
+
+      <h3>10. Termination</h3>
+      <p>We may suspend or terminate your account for:</p>
+      <ul>
+        <li>Violation of these Terms.</li>
+        <li>Fraudulent or illegal activities under Nigerian or Seychelles law.</li>
+        <li>Failure to complete KYC or payment obligations.</li>
+      </ul>
+      <p>Upon termination, you will lose access to the Service, and any active contracts may be canceled without refund, as permitted by law.</p>
+
+      <h3>11. Governing Law</h3>
+      <p>These Terms are governed by the laws of Seychelles, where Nexa is incorporated, and, where applicable, the laws of Nigeria for users residing in Nigeria. Any disputes shall be resolved in the courts of Seychelles or through arbitration in Seychelles, unless Nigerian law mandates resolution in Nigerian courts (e.g., Lagos) for local users.</p>
+
+      <h3>12. Changes to Terms</h3>
+      <p>We may update these Terms at any time. Changes will be posted on this page with an updated “Last Updated” date. Continued use of the Service constitutes acceptance of the revised Terms, as permitted by Nigerian and Seychelles laws.</p>
+
+      <h3>13. Contact Us</h3>
+      <p>If you have questions about these Terms, please contact us at:</p>
+      <ul>
+        <li>Email: support@nexa.com</li>
+        <li>Website: <a href="contact.html" class="text-pink-500 hover:underline">Contact Support</a></li>
+      </ul>
+      <p class="mt-4">By using Nexa, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.</p>
+    </div>
+  </main>
+  <script>
+    (() => {
+      function initSidebarToggle() {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggleSidebar');
+        toggleBtn.addEventListener('click', () => {
+          const isCollapsed = sidebar.classList.contains('collapsed');
+          const isHidden = sidebar.classList.contains('hidden');
+          if (isHidden) {
+            sidebar.classList.remove('hidden');
+            toggleBtn.setAttribute('aria-pressed', isCollapsed ? 'true' : 'false');
+          } else if (isCollapsed) {
+            sidebar.classList.remove('collapsed');
+            toggleBtn.setAttribute('aria-pressed', 'false');
+          } else {
+            sidebar.classList.add('hidden');
+            toggleBtn.setAttribute('aria-pressed', 'true');
+          }
+        });
+      }
+
+      document.getElementById('logout').addEventListener('click', () => {
+        localStorage.removeItem('authToken');
+        window.location.href = 'login.html';
+      });
+
+      window.addEventListener('load', () => {
+        initSidebarToggle();
+      });
+    })();
+  </script>
 </body>
-</html>
+    </html>
