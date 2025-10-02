@@ -108,61 +108,56 @@
 </div>
 
 <script>
-function simpleHash(text) {
-  let hash = 0;
-  for(let i=0; i < text.length; i++) {
-    hash = ((hash << 5) - hash) + text.charCodeAt(i);
-    hash |= 0;
+  function simpleHash(text) {
+    let hash = 0;
+    for(let i=0; i < text.length; i++) {
+      hash = ((hash << 5) - hash) + text.charCodeAt(i);
+      hash |= 0;
+    }
+    return hash.toString();
   }
-  return hash.toString();
-}
-function encodeJWT(payload) {
-  return btoa(JSON.stringify(payload));
-}
-function showModal(message) {
-  const modal = document.getElementById('modal');
-  const messageElem = document.getElementById('modal-message');
-  messageElem.textContent = message;
-  modal.hidden = false;
-  modal.style.display = 'flex';
-}
-function hideModal() {
-  const modal = document.getElementById('modal');
-  modal.hidden = true;
-  modal.style.display = 'none';
-}
-document.getElementById('modal-close').addEventListener('click', hideModal);
-
-document.getElementById('loginBtn').addEventListener('click', () => {
-  const email = document.getElementById('email').value.trim().toLowerCase();
-  const password = document.getElementById('password').value;
-
-  // Hardcoded admin credentials (email and password)
-  const adminEmail = 'infocontactnexa@gmail.com';
-  const adminPasswordHash = simpleHash('Strika001$');
-
-  if (!email || !password) {
-    showModal('Please enter email and password.');
-    return;
+  function encodeJWT(payload) {
+    return btoa(JSON.stringify(payload));
   }
-
-  if (email !== adminEmail) {
-    showModal('Admin not found.');
-    return;
+  function showModal(message) {
+    const modal = document.getElementById('modal');
+    const messageElem = document.getElementById('modal-message');
+    messageElem.textContent = message;
+    modal.hidden = false;
+    modal.style.display = 'flex';
   }
-  if (simpleHash(password) !== adminPasswordHash) {
-    showModal('Incorrect password.');
-    return;
+  function hideModal() {
+    const modal = document.getElementById('modal');
+    modal.hidden = true;
+    modal.style.display = 'none';
   }
-  const token = encodeJWT({email: adminEmail, isAdmin: true});
-  localStorage.setItem('authToken', token);
-  window.location.href = 'admin.html';
-});
-
-// Prevent empty modal on load
-window.addEventListener('load', () => {
-  hideModal();
-});
+  document.getElementById('modal-close').addEventListener('click', hideModal);
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+    const adminEmail = 'infocontactnexa@gmail.com';
+    const adminPasswordHash = simpleHash('Strika001$');
+    if(!email || !password){
+      showModal('Please enter email and password.');
+      return;
+    }
+    if(email !== adminEmail){
+      showModal('Admin not found.');
+      return;
+    }
+    if(simpleHash(password) !== adminPasswordHash){
+      showModal('Incorrect password.');
+      return;
+    }
+    const token = encodeJWT({email: adminEmail, isAdmin:true});
+    localStorage.setItem('authToken', token);
+    window.location.href = 'admin.html';
+  });
+  window.addEventListener('load', () => {
+    const modal = document.getElementById('modal');
+    modal.hidden = true;
+    modal.style.display = 'none';
+  });
 </script>
 </body>
 </html>
