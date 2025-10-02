@@ -4,8 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Dashboard - Nexa</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
   :root {
     --pink: #db2777;
     --pink-light: #f9a8d4;
@@ -438,12 +439,8 @@
     <button id="modal-close" aria-label="Close modal">OK</button>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/jwt-simple@0.5.6/jwt-simple.min.js"></script>
 <script>
 (() => {
-  let dataStore;
-  let currentUser;
-  let activeContract = null;
   const JWT_SECRET = 'nexa_secure_2025';
   const PAYSTACK_TIER_MAP = {
     "https://paystack.shop/pay/Tier1-1-Step": {tier: 1, accountSize: 100, step: 1},
@@ -456,18 +453,44 @@
     "https://paystack.shop/pay/Tier4-2-Step": {tier: 4, accountSize: 1000, step: 2}
   };
 
-  function decodeJWT(token) {
+  // JWT-lite implementation
+  function base64url(str) {
+    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  async function hmacSha256(data, secret) {
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(secret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+    const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(data));
+    return base64url(String.fromCharCode(...new Uint8Array(signature)));
+  }
+  async function encodeJwt(payload, secret) {
+    const header = { alg: 'HS256', typ: 'JWT' };
+    const encodedHeader = base64url(JSON.stringify(header));
+    const encodedPayload = base64url(JSON.stringify(payload));
+    const signature = await hmacSha256(`${encodedHeader}.${encodedPayload}`, secret);
+    return `${encodedHeader}.${encodedPayload}.${signature}`;
+  }
+  async function decodeJwt(token, secret) {
     try {
-      const payload = token.split('.')[1];
-      console.log('Raw payload:', payload);
-      const decoded = JSON.parse(atob(payload));
-      console.log('Decoded payload:', decoded);
-      return decoded;
-    } catch (e) {
-      console.error('Error decoding JWT:', e.message);
+      const [encodedHeader, encodedPayload, signature] = token.split('.');
+      const expectedSignature = await hmacSha256(`${encodedHeader}.${encodedPayload}`, secret);
+      if (signature !== expectedSignature) throw new Error('Invalid signature');
+      return JSON.parse(atob(encodedPayload.replace(/-/g, '+').replace(/_/g, '/')));
+    } catch (err) {
+      console.error('JWT decode error:', err.message);
       return null;
     }
   }
+
+  let dataStore;
+  let currentUser;
+  let activeContract = null;
 
   function simpleHash(text) {
     let hash = 0;
@@ -516,7 +539,7 @@
     });
   }
 
-  function loadUserData() {
+  async function loadUserData() {
     console.log('Starting loadUserData');
     const token = localStorage.getItem('authToken');
     console.log('authToken:', token);
@@ -526,7 +549,7 @@
       return false;
     }
 
-    const userInfo = decodeJWT(token);
+    const userInfo = await decodeJwt(token, JWT_SECRET);
     console.log('UserInfo from token:', userInfo);
     if (!userInfo || !userInfo.email) {
       showModal('Invalid token: Missing or invalid payload.');
@@ -544,15 +567,8 @@
       return false;
     }
 
-    if (typeof jwt === 'undefined') {
-      console.error('jwt-simple library not loaded');
-      showModal('Authentication error: JWT library not loaded.');
-      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-      return false;
-    }
-
     try {
-      const decoded = jwt.decode(token, JWT_SECRET);
+      const decoded = await decodeJwt(token, JWT_SECRET);
       console.log('JWT decoded:', decoded);
       if (!decoded.email || decoded.email !== userInfo.email) {
         showModal('Token verification failed: Email mismatch.');
@@ -866,9 +882,9 @@
     });
   }
 
-  function init() {
+  async function init() {
     console.log('Initializing dashboard');
-    if (!loadUserData()) {
+    if (!await loadUserData()) {
       console.log('loadUserData failed, stopping initialization');
       return;
     }
