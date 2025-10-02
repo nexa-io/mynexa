@@ -1,70 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ - Nexa</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Times New Roman', Times, serif; }
-        .faq-item { cursor: pointer; }
-        .faq-answer { display: none; }
-        .faq-item:hover .faq-answer { display: block; }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contact & FAQ - Nexa</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+  body { font-family: 'Montserrat', sans-serif; margin: 0; background: #fee2e9; color: #831843; }
+  header { padding: 1rem 2rem; background: white; border-bottom: 2px solid #db2777; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-weight: 900; margin: 0; }
+  main { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+  section { margin-bottom: 3rem; }
+  section h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
+  section p { font-size: 1.125rem; line-height: 1.5; margin-bottom: 1.5rem; }
+  .faq-item { margin-bottom: 1.5rem; }
+  .faq-item h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .faq-item p { font-size: 1rem; margin-bottom: 0; }
+  .contact { background: #db2777; color: white; padding: 2rem; border-radius: 1rem; text-align: center; }
+  .contact h3 { font-weight: 800; font-size: 1.5rem; margin-bottom: 1rem; }
+  .contact p { font-weight: 600; font-size: 1.125rem; }
+  footer { text-align: center; padding: 1rem 0; font-weight: 600; color: #c026d3; }
+</style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <header class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <h1 class="text-3xl font-bold text-blue-600">Nexa</h1>
-            <a href="dashboard.html" class="text-gray-600 hover:text-blue-600">Back to Dashboard</a>
-        </div>
-    </header>
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 class="text-2xl font-bold text-gray-800">Frequently Asked Questions</h2>
-        <div class="mt-6 space-y-4">
-            <div class="faq-item bg-white p-4 rounded shadow">
-                <h3 class="text-lg font-semibold text-blue-600">What is Nexa?</h3>
-                <p class="faq-answer mt-2 text-gray-600">A prop trading firm in Nigeria offering 1-Step (10% profit, 6% drawdown) and 2-Step (8% profit/phase, 10% drawdown) challenges to access funded accounts with 80/20 (demo) or 160/20 (live) profit splits.</p>
-            </div>
-            <div class="faq-item bg-white p-4 rounded shadow">
-                <h3 class="text-lg font-semibold text-blue-600">How do I join?</h3>
-                <p class="faq-answer mt-2 text-gray-600">Sign up, accept T&C/Privacy Policy, sign the Trading Agreement (<a href="https://docuseal.com/d/w4aYAR5LfBb41G" target="_blank" class="text-blue-500">link</a>), and complete KYC (<a href="https://forms.gle/esMxwUYE3fMVG1qn6" target="_blank" class="text-blue-500">link</a>).</p>
-            </div>
-            <div class="faq-item bg-white p-4 rounded shadow">
-                <h3 class="text-lg font-semibold text-blue-600">What are the rules?</h3>
-                <p class="faq-answer mt-2 text-gray-600">No leverage limits; banned strategies: martingale, news scalping, high-frequency, grid, copy trading manipulation; one account per Trader; video submission (max 5 min) required.</p>
-            </div>
-            <div class="faq-item bg-white p-4 rounded shadow">
-                <h3 class="text-lg font-semibold text-blue-600">When can I request payouts?</h3>
-                <p class="faq-answer mt-2 text-gray-600">30 days after funded status, if KYC verified. Min $3, max 10% account size, every 14 days thereafter.</p>
-            </div>
-            <div class="faq-item bg-white p-4 rounded shadow">
-                <h3 class="text-lg font-semibold text-blue-600">What is KYC?</h3>
-                <p class="faq-answer mt-2 text-gray-600">Submit NIN slip and selfie via <a href="https://forms.gle/esMxwUYE3fMVG1qn6" target="_blank" class="text-blue-500">form</a>. Verified via NIMC QR scan.</p>
-            </div>
-            <div class="faq-item bg-white p-4 rounded shadow">
-                <h3 class="text-lg font-semibold text-blue-600">What if I breach rules?</h3>
-                <p class="faq-answer mt-2 text-gray-600">Account terminated, no refunds, possible EFCC referral for fraud.</p>
-            </div>
-            <div class="faq-item bg-white p-4 rounded shadow">
-                <h3 class="text-lg font-semibold text-blue-600">Is Nexa compliant?</h3>
-                <p class="faq-answer mt-2 text-gray-600">Yes, follows Nigerian AML/CTF laws with KYC and audit logs.</p>
-            </div>
-            <div class="faq-item bg-white p-4 rounded shadow">
-                <h3 class="text-lg font-semibold text-blue-600">How do I contact Nexa?</h3>
-                <p class="faq-answer mt-2 text-gray-600">Email <a href="mailto:infocontactnexa@gmail.com" class="text-blue-500">infocontactnexa@gmail.com</a>.</p>
-            </div>
-        </div>
-    </main>
-    <footer class="bg-gray-800 text-white py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between">
-            <p>&copy; 2025 Nexa. All rights reserved.</p>
-            <div class="flex space-x-4">
-                <a href="terms.html" class="hover:text-blue-300">Terms</a>
-                <a href="privacy.html" class="hover:text-blue-300">Privacy</a>
-                <a href="contact.html" class="hover:text-blue-300">Contact</a>
-            </div>
-        </div>
-    </footer>
+<body>
+<header>
+  <h1>Nexa - Contact & FAQ</h1>
+</header>
+<main>
+  <section>
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item">
+      <h3>What is Nexa?</h3>
+      <p>Nexa is a platform that helps traders get funded by completing trading challenges, allowing you to trade with control and keep a share of your profits.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How do I get started with Nexa?</h3>
+      <p>Sign up with your name, email, and password, then choose a challenge (Micro, Starter, Standard, or Pro) to begin trading.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What are Nexa challenges?</h3>
+      <p>Challenges are evaluations where you trade a funded account to meet profit targets within a set timeframe to qualify for funding.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How much do challenges cost?</h3>
+      <p>Challenge prices are: $2 for a $100 Micro account, $3.5 for a $250 Starter account, $7 for a $500 Standard account, and $13 for a $1000 Pro account.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What is the difference between one-step and two-step challenges?</h3>
+      <p>One-step challenges require meeting a single profit target, while two-step challenges have two phases with different targets for flexibility.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Can I choose my trading platform?</h3>
+      <p>Yes, you can use any trading platform you prefer, as long as your strategies comply with Nexa’s rules.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What is the KYC process?</h3>
+      <p>After passing a challenge, you submit identity documents securely online to verify your identity before receiving funding.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How long does it take to get funded?</h3>
+      <p>Once you meet profit targets and complete KYC, funding is typically processed within a few business days.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What happens if I pass a challenge?</h3>
+      <p>You’ll submit KYC, sign a contract, and receive a funded account to trade, sharing profits with Nexa.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What are the profit-sharing terms?</h3>
+      <p>Traders keep a substantial share of profits (typically 70-80%) from funded accounts, based on challenge terms.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Can I trade multiple accounts at once?</h3>
+      <p>No, Nexa allows you to trade only one account at a time to ensure focus and compliance with challenge rules.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What if I fail a challenge?</h3>
+      <p>If you don’t meet the profit targets, you can repurchase the same or a different challenge without penalties.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Is there a time limit for challenges?</h3>
+      <p>Yes, challenges have specific timeframes (e.g., 30 days for one-step, 60 days for two-step) to meet profit targets.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Do I need trading experience to join Nexa?</h3>
+      <p>No, traders of all levels can join, but some experience is recommended to succeed in challenges.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What trading strategies are allowed?</h3>
+      <p>Legitimate strategies like scalping or swing trading are allowed, but strategies meant to cheat or exploit the system are strictly prohibited.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How does Nexa ensure fair trading?</h3>
+      <p>Nexa enforces clear profit targets and rules, prohibiting cheating or exploitative strategies to maintain fairness.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What is the admin panel for?</h3>
+      <p>The admin panel allows our team to manage contracts, update KYC statuses, and send notifications to support traders.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Can I track my challenge progress?</h3>
+      <p>Yes, your dashboard displays your contract details, including account size, status, and KYC progress, updated in real-time.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How do I receive notifications?</h3>
+      <p>Notifications about your account, KYC, or contracts appear in your dashboard after logging in.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How can I contact Nexa for support?</h3>
+      <p>Email infocontactnexa@gmail.com for assistance with challenges, KYC, or any other questions.</p>
+    </div>
+  </section>
+  <section class="contact">
+    <h3>Contact Us</h3>
+    <p>Have more questions? Reach out to us at infocontactnexa@gmail.com for assistance.</p>
+  </section>
+</main>
+<footer>
+  &copy; <span id="year">2025</span> Nexa. All rights reserved.
+</footer>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
