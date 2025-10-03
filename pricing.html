@@ -5,11 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pricing - Nexa</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jwt-simple@0.5.6/jwt-simple.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>body { font-family: 'Montserrat', sans-serif; }</style>
 </head>
 <body class="bg-gray-50 min-h-screen">
+  <!-- Custom Alert Dialog -->
+  <div id="customAlert" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-pink-200 max-w-sm w-full">
+      <h3 class="text-xl font-bold text-pink-600 mb-4">Access Restricted</h3>
+      <p class="text-gray-600 mb-6">Please access this page from the dashboard.</p>
+      <button id="alertOkButton" class="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition-colors w-full">OK</button>
+    </div>
+  </div>
+
   <header class="bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
     <div class="max-w-7xl mx-auto px-6 lg:px-8 py-4 flex justify-between items-center">
       <h1 class="text-3xl font-bold text-pink-600 tracking-wide">NEXA</h1>
@@ -87,49 +95,22 @@
     </div>
   </footer>
   <script>
-    // Restrict access to logged-in users
+    // Restrict access based on referrer
     (() => {
-      const JWT_SECRET = 'nexa_secure_2025';
-
-      function decodeJWT(token) {
-        try {
-          const payload = token.split('.')[1];
-          return JSON.parse(atob(payload));
-        } catch {
-          return null;
-        }
-      }
-
       function restrictAccess() {
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-          alert('Please login to access pricing.');
-          setTimeout(() => { window.location.href = 'login.html'; }, 1000);
-          return false;
-        }
-        const userInfo = decodeJWT(token);
-        if (!userInfo || !userInfo.email) {
-          alert('Invalid or expired token.');
-          setTimeout(() => { window.location.href = 'login.html'; }, 1000);
-          return false;
-        }
-        const dataStore = JSON.parse(localStorage.getItem('nexa_data')) || { users: [], contracts: [], notifications: [] };
-        const currentUser = dataStore.users.find(u => u.email === userInfo.email);
-        if (!currentUser) {
-          alert('User no longer exists.');
-          setTimeout(() => { window.location.href = 'login.html'; }, 1000);
-          return false;
-        }
-        try {
-          const decoded = jwt.decode(token, JWT_SECRET);
-          if (!decoded.email || decoded.email !== userInfo.email) {
-            alert('Token verification failed.');
-            setTimeout(() => { window.location.href = 'login.html'; }, 1000);
-            return false;
-          }
-        } catch (err) {
-          alert('Invalid token signature.');
-          setTimeout(() => { window.location.href = 'login.html'; }, 1000);
+        const referrer = document.referrer;
+        const expectedReferrer = window.location.origin + '/dashboard.html';
+        
+        if (referrer !== expectedReferrer) {
+          // Show custom alert
+          const alertBox = document.getElementById('customAlert');
+          alertBox.classList.remove('hidden');
+          
+          // Handle OK button click to redirect
+          document.getElementById('alertOkButton').addEventListener('click', () => {
+            window.location.href = 'login.html';
+          });
+          
           return false;
         }
         return true;
@@ -141,4 +122,4 @@
     })();
   </script>
 </body>
-</html>
+  </html>
