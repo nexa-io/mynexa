@@ -23,7 +23,7 @@
       <h1 class="text-3xl font-bold text-pink-600 tracking-wide">NEXA</h1>
       <nav class="flex space-x-4">
         <a href="index.html" class="text-gray-600 hover:text-pink-600">Home</a>
-        <a href="dashboard.html" class="text-gray-600 hover:text-pink-600">Dashboard</a>
+        <a href="https://mynexa.pages.dev/dashboard" class="text-gray-600 hover:text-pink-600">Dashboard</a>
         <a href="signup.html" class="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600">Sign Up</a>
       </nav>
     </div>
@@ -99,7 +99,7 @@
     (() => {
       function restrictAccess() {
         const referrer = document.referrer;
-        const expectedReferrer = window.location.origin + '/dashboard.html';
+        const expectedReferrer = 'https://mynexa.pages.dev/dashboard';
         
         if (referrer !== expectedReferrer) {
           // Show custom alert
@@ -122,4 +122,4 @@
     })();
   </script>
 </body>
-  </html>
+              </html>
