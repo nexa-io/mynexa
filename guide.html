@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Decrypt - Super Simple Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #10b981, #059669, #047857);
+            --primary-color: #059669;
+            --dark-text: #1f2937;
+            --light-text: #6b7280;
+            --background: #f9fafb;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--dark-text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 18px;
+        }
+
+        .step-card {
+            background: var(--card-bg);
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-color);
+        }
+
+        .step-number {
+            background: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .example-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .code-block {
+            background: #1f2937;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .tip-box {
+            background: #f0fdf4;
+            border: 2px solid #10b981;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tip-box h3 {
+            color: #065f46;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .what-you-need {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .need-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .need-icon {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .quick-tips {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .quick-tips h3 {
+            color: #b45309;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .time-estimate {
+            text-align: center;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-key"></i> How to Decrypt - Super Simple!</h1>
+            <p>Your step-by-step guide to unlock your wallet</p>
+        </div>
+
+        <div class="tip-box">
+            <h3><i class="fas fa-lightbulb"></i> Quick Start</h3>
+            <p><strong>It's just like those "secret decoder" toys!</strong> Match letters using your password and you're done!</p>
+        </div>
+
+        <div class="what-you-need">
+            <div class="need-item">
+                <div class="need-icon"><i class="fas fa-key"></i></div>
+                <div><strong>Your 6-letter Password</strong></div>
+                <div style="font-size: 14px; color: var(--light-text);">Like "Strika"</div>
+            </div>
+            <div class="need-item">
+                <div class="need-icon"><i class="fas fa-envelope"></i></div>
+                <div><strong>Secret Code from Email</strong></div>
+                <div style="font-size: 14px; color: var(--light-text);">The encrypted text</div>
+            </div>
+            <div class="need-item">
+                <div class="need-icon"><i class="fas fa-pencil-alt"></i></div>
+                <div><strong>Paper & Pencil</strong></div>
+                <div style="font-size: 14px; color: var(--light-text);">For writing</div>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-title">Make Your Decoder</div>
+            <p>Write this on paper using your 6-letter password:</p>
+            <div class="example-box">
+                <p><strong>Example with password "Strika":</strong></p>
+                <div class="code-block">
+                    A = S &nbsp; B = t &nbsp; C = r &nbsp; D = i &nbsp; E = k &nbsp; F = a<br>
+                    G = b &nbsp; H = c &nbsp; I = d &nbsp; J = e &nbsp; K = f &nbsp; L = g<br>
+                    ...and continue through Z
+                </div>
+            </div>
+            <p><strong>Tip:</strong> Just match each letter to the next one in order!</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-title">Decode Letter by Letter</div>
+            <p>Look at each letter in the secret code and replace it using your decoder.</p>
+            
+            <div class="example-box">
+                <p><strong>Example Decoding:</strong></p>
+                <div class="code-block">
+                    Secret code: x k p 2 d<br><br>
+                    Using decoder:<br>
+                    x → Find "x" → it says "a" → Write "S"<br>
+                    k → Find "k" → it says "b" → Write "t"<br>
+                    p → Find "p" → it says "c" → Write "r"<br>
+                    2 → Stays as 2 (numbers don't change)<br>
+                    d → Find "d" → it says "e" → Write "k"<br><br>
+                    <strong>Result: "Str2k"</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-title">That's It!</div>
+            <p>Just keep replacing letters using your decoder:</p>
+            <ul style="margin: 15px 0 15px 20px;">
+                <li>Match letters using your decoder</li>
+                <li>Numbers stay the same</li>
+                <li>Spaces stay the same</li>
+                <li>Do this for all the secret code letters</li>
+            </ul>
+        </div>
+
+        <div class="time-estimate">
+            <i class="fas fa-clock"></i> Time Needed: About 10-15 minutes
+        </div>
+
+        <div class="quick-tips">
+            <h3><i class="fas fa-rocket"></i> Super Important Tips</h3>
+            <ul style="margin-left: 20px;">
+                <li><strong>Ignore symbols like = " ( )</strong> - they're just instructions</li>
+                <li><strong>Only decode actual letters</strong> (A-Z, a-z) from the secret code</li>
+                <li><strong>Keep numbers and spaces as they are</strong> - no changes needed</li>
+                <li><strong>It's like a game</strong> - match letters and watch your private keys appear!</li>
+            </ul>
+        </div>
+
+        <div class="tip-box">
+            <h3><i class="fas fa-star"></i> You're Done!</h3>
+            <p>Once you've decoded all the letters, you'll see your private keys and seed phrase. Write them down securely and store them in a safe place!</p>
+            <p style="margin-top: 10px;"><strong>Remember:</strong> This is like those fun secret decoder games from childhood - just match the letters! 🎯</p>
+        </div>
+    </div>
+
+    <script>
+        // Simple animation for step cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const stepCards = document.querySelectorAll('.step-card');
+            
+            stepCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>
