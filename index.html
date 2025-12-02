@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeNow! Trading Competition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e40af 0%, #0ea5e9 100%);
+            padding: 30px 0;
+            text-align: center;
+            border-bottom: 5px solid #fbbf24;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            color: #fbbf24;
+        }
+        
+        .logo h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #fbbf24, #fde68a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .competition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .competition-card {
+            background: linear-gradient(145deg, #1e293b, #334155);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid #0ea5e9;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .competition-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .competition-card.premium {
+            border-left-color: #fbbf24;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #475569;
+        }
+        
+        .card-header h3 {
+            font-size: 1.4rem;
+            color: #f8fafc;
+        }
+        
+        .entry-fee {
+            background: linear-gradient(to right, #0ea5e9, #1d4ed8);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .prize {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fbbf24;
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .prize-desc {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+        
+        .competition-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(30, 41, 59, 0.7);
+            border-radius: 8px;
+        }
+        
+        .info-item {
+            text-align: center;
+        }
+        
+        .info-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            display: block;
+        }
+        
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #f8fafc;
+        }
+        
+        .timer {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #22c55e;
+            text-align: center;
+            margin: 15px 0;
+            font-family: monospace;
+            background-color: rgba(34, 197, 94, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .register-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #22c55e, #16a34a);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .register-btn:hover {
+            background: linear-gradient(to right, #16a34a, #15803d);
+            transform: scale(1.02);
+        }
+        
+        .register-btn.disabled {
+            background: linear-gradient(to right, #64748b, #475569);
+            cursor: not-allowed;
+        }
+        
+        .completed-list {
+            background-color: #1e293b;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 40px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .completed-list h2 {
+            color: #fbbf24;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #334155;
+        }
+        
+        .completed-competitions {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .completed-item {
+            background-color: #334155;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .completed-id {
+            font-weight: bold;
+            color: #0ea5e9;
+        }
+        
+        .completed-prize {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(145deg, #1e293b, #334155);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: #f8fafc;
+        }
+        
+        .modal h2 {
+            color: #fbbf24;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: #f8fafc;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #0ea5e9;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #0ea5e9, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(to right, #1d4ed8, #1e40af);
+        }
+        
+        .confirmation {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        .confirmation i {
+            font-size: 3rem;
+            color: #22c55e;
+            margin-bottom: 15px;
+        }
+        
+        .registration-id {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin: 15px 0;
+            background-color: rgba(251, 191, 36, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        
+        .admin-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(to right, #8b5cf6, #7c3aed);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .admin-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            color: #94a3b8;
+            border-top: 1px solid #334155;
+        }
+        
+        @media (max-width: 768px) {
+            .competition-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo h1 {
+                font-size: 2.2rem;
+            }
+            
+            .admin-link {
+                bottom: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>TradeNow!</h1>
+            </div>
+            <p class="tagline">Test your trading skills in our simulated competitions and win real prop firm accounts and cash prizes!</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="competition-grid" id="competitionGrid">
+            <!-- Competition cards will be generated by JavaScript -->
+        </div>
+        
+        <div class="completed-list">
+            <h2><i class="fas fa-trophy"></i> Recently Completed Competitions</h2>
+            <div class="completed-competitions" id="completedCompetitions">
+                <!-- Completed competitions will appear here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Registration Modal -->
+    <div class="modal" id="registrationModal">
+        <div class="modal-content">
+            <div class="close-modal" id="closeModal">&times;</div>
+            <div id="modalForm">
+                <h2>Register for Competition</h2>
+                <div class="form-group">
+                    <label for="userName">Full Name</label>
+                    <input type="text" id="userName" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email Address</label>
+                    <input type="email" id="userEmail" placeholder="Enter your email address">
+                </div>
+                <div class="form-group">
+                    <label for="selectedCompetition">Selected Competition</label>
+                    <input type="text" id="selectedCompetition" readonly>
+                </div>
+                <button class="submit-btn" id="submitRegistration">Register Now</button>
+            </div>
+            <div class="confirmation" id="confirmationMessage">
+                <i class="fas fa-check-circle"></i>
+                <h3>Registration Successful!</h3>
+                <p>Your registration has been received for the competition.</p>
+                <p>Your registration ID is:</p>
+                <div class="registration-id" id="registrationIdDisplay">TR-XXXX-XXXX</div>
+                <p>You will be contacted soon with further instructions.</p>
+                <p>Thank you for participating in TradeNow!</p>
+            </div>
+        </div>
+    </div>
+    
+    
+    <footer>
+        <div class="container">
+            <p>TradeNow! Trading Competition &copy; 2025 | All competitions start on December 8, 2025</p>
+        </div>
+    </footer>
+    
+    <script src="shared.js"></script>
+    <script>
+        // Initialize the user page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize competitions from shared.js
+            initCompetitions();
+            
+            // Initialize the page
+            initUserPage();
+        });
+        
+        function initUserPage() {
+            renderCompetitions();
+            renderCompletedCompetitions();
+            
+            // Get DOM elements
+            const registrationModal = document.getElementById('registrationModal');
+            const closeModal = document.getElementById('closeModal');
+            const submitRegistration = document.getElementById('submitRegistration');
+            const modalForm = document.getElementById('modalForm');
+            const confirmationMessage = document.getElementById('confirmationMessage');
+            
+            // Event listeners
+            closeModal.addEventListener('click', () => {
+                registrationModal.style.display = 'none';
+            });
+            
+            submitRegistration.addEventListener('click', registerUser);
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === registrationModal) {
+                    registrationModal.style.display = 'none';
+                }
+            });
+            
+            // Start the simulation
+            startSimulation();
+        }
+        
+        // Render competition cards
+        function renderCompetitions() {
+            const competitionGrid = document.getElementById('competitionGrid');
+            competitionGrid.innerHTML = '';
+            
+            getCompetitions().forEach(competition => {
+                const isFull = competition.currentCompetitors >= competition.maxCompetitors;
+                const cardClass = competition.entryFee >= 50 ? 'competition-card premium' : 'competition-card';
+                
+                const card = document.createElement('div');
+                card.className = cardClass;
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h3>Entry Fee: $${competition.entryFee}</h3>
+                        <div class="entry-fee">$${competition.entryFee} USD</div>
+                    </div>
+                    
+                    <div class="prize">${competition.prize}</div>
+                    <p class="prize-desc">Winner receives ${competition.prize}</p>
+                    
+                    <div class="competition-info">
+                        <div class="info-item">
+                            <span class="info-label">Competition ID</span>
+                            <span class="info-value competition-id">${competition.competitionId}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Participants</span>
+                            <span class="info-value participants-count">${competition.currentCompetitors}/${competition.maxCompetitors}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="timer">${competition.timer}</div>
+                    
+                    <button class="register-btn ${isFull ? 'disabled' : ''}" data-id="${competition.id}" ${isFull ? 'disabled' : ''}>
+                        ${isFull ? 'Competition Full' : 'Register Now'}
+                    </button>
+                    
+                    <div class="info-item" style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
+                        <span class="info-label">Starts On</span>
+                        <span class="info-value">${competition.startDate}</span>
+                    </div>
+                `;
+                
+                competitionGrid.appendChild(card);
+                
+                // Add event listener to register button
+                if (!isFull) {
+                    const registerBtn = card.querySelector('.register-btn');
+                    registerBtn.addEventListener('click', () => openRegistrationModal(competition));
+                }
+            });
+        }
+        
+        // Open registration modal
+        function openRegistrationModal(competition) {
+            selectedCompetition = competition;
+            document.getElementById('selectedCompetition').value = `$${competition.entryFee} Competition - ${competition.prize}`;
+            modalForm.style.display = 'block';
+            confirmationMessage.style.display = 'none';
+            document.getElementById('registrationModal').style.display = 'flex';
+        }
+        
+        // Register a user
+        function registerUser() {
+            const userName = document.getElementById('userName').value.trim();
+            const userEmail = document.getElementById('userEmail').value.trim();
+            
+            if (!userName || !userEmail) {
+                alert('Please enter your name and email address');
+                return;
+            }
+            
+            if (!isValidEmail(userEmail)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // Call the shared registerUser function
+            const result = registerUserForCompetition(userName, userEmail, selectedCompetition);
+            
+            if (result.success) {
+                // Show confirmation
+                document.getElementById('registrationIdDisplay').textContent = result.registrationId;
+                document.getElementById('modalForm').style.display = 'none';
+                document.getElementById('confirmationMessage').style.display = 'block';
+                
+                // Reset form
+                document.getElementById('userName').value = '';
+                document.getElementById('userEmail').value = '';
+                
+                // Re-render competitions
+                renderCompetitions();
+                renderCompletedCompetitions();
+                
+                // Close modal after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('registrationModal').style.display = 'none';
+                }, 5000);
+            } else {
+                alert(result.message || 'Registration failed. Please try again.');
+            }
+        }
+        
+        // Render completed competitions
+        function renderCompletedCompetitions() {
+            const completedCompetitionsDiv = document.getElementById('completedCompetitions');
+            const completedCompetitions = getCompletedCompetitions();
+            
+            completedCompetitionsDiv.innerHTML = '';
+            
+            // Show only the last 6 completed competitions
+            const recentCompleted = completedCompetitions.slice(-6);
+            
+            recentCompleted.forEach(comp => {
+                const item = document.createElement('div');
+                item.className = 'completed-item';
+                item.innerHTML = `
+                    <div><span class="completed-id">${comp.id}</span></div>
+                    <div>Entry: $${comp.entryFee} | Prize: <span class="completed-prize">${comp.prize}</span></div>
+                    <div>Completed: ${comp.completedDate}</div>
+                `;
+                completedCompetitionsDiv.appendChild(item);
+            });
+            
+            if (recentCompleted.length === 0) {
+                completedCompetitionsDiv.innerHTML = '<p style="text-align: center; color: #94a3b8;">No competitions completed yet. Be the first to fill a competition!</p>';
+            }
+        }
+        
+        // Email validation
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+    </script>
+</body>
+</html>
