@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradePro - Elite Trading Competition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.8/countUp.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            --warning-gradient: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+        }
+        
+        * {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background: #020617;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        
+        /* Navbar animation */
+        .navbar-hidden {
+            transform: translateY(-100%);
+        }
+        
+        .navbar-visible {
+            transform: translateY(0);
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f687b3 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: gradient 3s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Glass effect */
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+            transition: all 0.3s ease;
+        }
+        
+        /* Floating animation */
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        /* Grid pattern */
+        .grid-pattern {
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 4rem 4rem;
+        }
+        
+        /* Pulse animation */
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.8); }
+        }
+        
+        /* Shimmer effect */
+        .shimmer {
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Competition card hover */
+        .competition-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .competition-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .competition-card:hover::before {
+            left: 100%;
+        }
+        
+        /* Countdown timer */
+        .countdown-digit {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 10px;
+            padding: 12px;
+            min-width: 60px;
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Ripple effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .ripple:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% { transform: scale(0, 0); opacity: 0.5; }
+            100% { transform: scale(40, 40); opacity: 0; }
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Participant pulse */
+        .participant-pulse {
+            animation: participant-pulse 2s infinite;
+        }
+        
+        @keyframes participant-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Mobile menu animation */
+        .mobile-menu-enter {
+            transform: translateX(100%);
+        }
+        
+        .mobile-menu-enter-active {
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu-exit {
+            transform: translateX(0);
+        }
+        
+        .mobile-menu-exit-active {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        /* Registration receipt styles */
+        .receipt-paper {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            color: #1e293b;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .receipt-paper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #764ba2, #667eea);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation Bar -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 navbar-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                    <span class="text-white text-2xl font-bold tracking-tight">TradePro</span>
+                </div>
+                
+                <div class="hidden lg:flex items-center gap-8">
+                    <a href="#competitions" class="text-slate-300 hover:text-white transition-colors font-medium">Competitions</a>
+                    <a href="#features" class="text-slate-300 hover:text-white transition-colors font-medium">Features</a>
+                    <a href="#prizes" class="text-slate-300 hover:text-white transition-colors font-medium">Prizes</a>
+                    <a href="#leaderboard" class="text-slate-300 hover:text-white transition-colors font-medium">Leaderboard</a>
+                    <a href="#how-it-works" class="text-slate-300 hover:text-white transition-colors font-medium">How It Works</a>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button id="mobile-menu-btn" class="lg:hidden text-slate-300 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                    <button class="hidden lg:inline-flex items-center gap-2 text-slate-300 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg transition-all font-medium">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                        </svg>
+                        Sign In
+                    </button>
+                    <button class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2.5 rounded-lg transition-all font-medium shadow-lg shadow-blue-500/25">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="lg:hidden fixed inset-y-0 right-0 w-64 bg-slate-900/95 backdrop-blur-xl transform translate-x-full transition-transform duration-300">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between p-6 border-b border-white/10">
+                    <span class="text-white text-xl font-bold">TradePro</span>
+                    <button id="mobile-close-btn" class="text-slate-300 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-1 p-6 space-y-6">
+                    <a href="#competitions" class="block text-slate-300 hover:text-white transition-colors font-medium">Competitions</a>
+                    <a href="#features" class="block text-slate-300 hover:text-white transition-colors font-medium">Features</a>
+                    <a href="#prizes" class="block text-slate-300 hover:text-white transition-colors font-medium">Prizes</a>
+                    <a href="#leaderboard" class="block text-slate-300 hover:text-white transition-colors font-medium">Leaderboard</a>
+                    <a href="#how-it-works" class="block text-slate-300 hover:text-white transition-colors font-medium">How It Works</a>
+                    <div class="pt-6 border-t border-white/10">
+                        <button class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-medium">
+                            Get Started
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center overflow-hidden pt-20">
+        <!-- Animated background -->
+        <div class="absolute inset-0">
+            <div class="absolute top-1/4 -left-20 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-1/4 -right-20 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute inset-0 grid-pattern"></div>
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="text-center max-w-4xl mx-auto">
+                <!-- Badge -->
+                <div id="hero-badge" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 backdrop-blur-sm mb-8 opacity-0">
+                    <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-medium text-sm">
+                        Competition Starts: December 8, 2025
+                    </span>
+                </div>
+                
+                <!-- Main Heading -->
+                <h1 id="hero-heading" class="text-5xl sm:text-6xl lg:text-7xl text-white mb-6 tracking-tight font-bold opacity-0">
+                    <span class="block">Elite Trading</span>
+                    <span class="gradient-text">Competition</span>
+                </h1>
+                
+                <!-- Subheading -->
+                <p id="hero-subtext" class="text-slate-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed opacity-0">
+                    Compete with the best traders worldwide. Showcase your skills and win massive prizes in our premier trading competition. No experience required.
+                </p>
+                
+                <!-- CTA Buttons -->
+                <div id="hero-buttons" class="flex flex-col sm:flex-row gap-4 justify-center items-center opacity-0">
+                    <button id="register-btn" class="ripple bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg px-8 py-4 rounded-lg shadow-lg shadow-blue-500/50 transition-all font-medium flex items-center gap-2">
+                        Register Now
+                        <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                    <a href="#competitions" class="border border-white/20 text-white hover:bg-white/10 text-lg px-8 py-4 rounded-lg backdrop-blur-sm transition-all font-medium">
+                        View Competitions
+                    </a>
+                </div>
+                
+                <!-- Stats -->
+                <div id="hero-stats" class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 opacity-0">
+                    <div class="text-center">
+                        <div class="text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-bold mb-2 countup" data-target="15420">
+                            0
+                        </div>
+                        <div class="text-slate-400 text-sm">Active Traders</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-bold mb-2 countup" data-target="50000">
+                            $0
+                        </div>
+                        <div class="text-slate-400 text-sm">Prize Pool</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-bold mb-2 countup" data-target="2840000">
+                            0
+                        </div>
+                        <div class="text-slate-400 text-sm">Total Trades</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-bold mb-2 countup" data-target="12">
+                            0%
+                        </div>
+                        <div class="text-slate-400 text-sm">Avg. Return</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Floating Elements -->
+            <div id="floating-card-1" class="absolute left-4 top-1/4 glass p-6 rounded-2xl max-w-xs hidden xl:block opacity-0">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                        <span class="text-white text-xl">↑</span>
+                    </div>
+                    <div>
+                        <div class="text-slate-400 text-sm">Live Updates</div>
+                        <div class="text-white text-xl font-bold">Real-time</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="floating-card-2" class="absolute right-4 bottom-1/4 glass p-6 rounded-2xl max-w-xs hidden xl:block opacity-0">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <span class="text-white text-xl font-bold">$</span>
+                    </div>
+                    <div>
+                        <div class="text-slate-400 text-sm">Secure Prizes</div>
+                        <div class="text-white text-xl font-bold">Guaranteed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-0" id="scroll-indicator">
+            <div class="animate-bounce">
+                <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competitions Section -->
+    <section id="competitions" class="relative py-32">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950"></div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl text-white mb-6 font-bold opacity-0" data-animate="fade-up">
+                    Active <span class="gradient-text">Competitions</span>
+                </h2>
+                <p class="text-slate-400 text-xl max-w-3xl mx-auto mb-10 opacity-0" data-animate="fade-up" data-delay="0.1">
+                    Choose your challenge. Each competition offers different entry levels with corresponding prize pools.
+                </p>
+            </div>
+            
+            <!-- Competition Grid -->
+            <div id="competition-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <!-- Competition cards will be generated here by JavaScript -->
+            </div>
+            
+            <!-- Competition Countdown -->
+            <div class="max-w-2xl mx-auto mt-16 glass p-8 rounded-3xl opacity-0" data-animate="fade-up">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl text-white font-bold mb-2">Next Competition Starts In</h3>
+                    <p class="text-slate-400">December 8, 2025 at 00:00 UTC</p>
+                </div>
+                <div class="flex justify-center gap-4">
+                    <div class="text-center">
+                        <div id="countdown-days" class="countdown-digit text-3xl font-bold text-white">00</div>
+                        <div class="text-slate-400 text-sm mt-2">Days</div>
+                    </div>
+                    <div class="text-center">
+                        <div id="countdown-hours" class="countdown-digit text-3xl font-bold text-white">00</div>
+                        <div class="text-slate-400 text-sm mt-2">Hours</div>
+                    </div>
+                    <div class="text-center">
+                        <div id="countdown-minutes" class="countdown-digit text-3xl font-bold text-white">00</div>
+                        <div class="text-slate-400 text-sm mt-2">Minutes</div>
+                    </div>
+                    <div class="text-center">
+                        <div id="countdown-seconds" class="countdown-digit text-3xl font-bold text-white">00</div>
+                        <div class="text-slate-400 text-sm mt-2">Seconds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="relative py-32 bg-slate-900/50">
+        <div class="absolute inset-0">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl sm:text-5xl text-white mb-6 font-bold opacity-0" data-animate="fade-up">
+                    Why <span class="gradient-text">TradePro</span> Stands Out
+                </h2>
+                <p class="text-slate-400 text-xl max-w-3xl mx-auto opacity-0" data-animate="fade-up" data-delay="0.1">
+                    Professional-grade platform with features designed for competitive trading excellence
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Features will be animated by GSAP -->
+                <div class="glass p-8 rounded-2xl opacity-0" data-animate="fade-up" data-delay="0.1">
+                    <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">Secure & Fair Trading</h3>
+                    <p class="text-slate-400 leading-relaxed">Advanced security protocols and fair trading environment with real-time monitoring.</p>
+                </div>
+                
+                <div class="glass p-8 rounded-2xl opacity-0" data-animate="fade-up" data-delay="0.2">
+                    <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">Real-Time Execution</h3>
+                    <p class="text-slate-400 leading-relaxed">Ultra-fast trade execution with zero latency. Compete on equal footing with all participants.</p>
+                </div>
+                
+                <div class="glass p-8 rounded-2xl opacity-0" data-animate="fade-up" data-delay="0.3">
+                    <div class="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">Advanced Analytics</h3>
+                    <p class="text-slate-400 leading-relaxed">Comprehensive performance metrics and real-time leaderboard tracking.</p>
+                </div>
+                
+                <div class="glass p-8 rounded-2xl opacity-0" data-animate="fade-up" data-delay="0.4">
+                    <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-pink-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">Global Community</h3>
+                    <p class="text-slate-400 leading-relaxed">Join thousands of traders from 120+ countries in the ultimate trading challenge.</p>
+                </div>
+                
+                <div class="glass p-8 rounded-2xl opacity-0" data-animate="fade-up" data-delay="0.5">
+                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">Secure Platform</h3>
+                    <p class="text-slate-400 leading-relaxed">Bank-level security with encrypted transactions and secure data handling.</p>
+                </div>
+                
+                <div class="glass p-8 rounded-2xl opacity-0" data-animate="fade-up" data-delay="0.6">
+                    <div class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">Prize Guarantee</h3>
+                    <p class="text-slate-400 leading-relaxed">All prizes are 100% guaranteed and paid out promptly to competition winners.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prizes Section -->
+    <section id="prizes" class="relative py-32">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950"></div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl text-white mb-6 font-bold opacity-0" data-animate="fade-up">
+                    Massive <span class="gradient-text">Prize Pools</span>
+                </h2>
+                <p class="text-slate-400 text-xl max-w-3xl mx-auto opacity-0" data-animate="fade-up" data-delay="0.1">
+                    Compete for your share of $50,000 in prize money across all competitions
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- 1st Place -->
+                <div class="relative md:-mt-4 opacity-0" data-animate="fade-up" data-delay="0.1">
+                    <div class="absolute inset-0 bg-gradient-to-br from-yellow-500 via-orange-500 to-red-600 rounded-3xl blur-xl opacity-20"></div>
+                    <div class="relative glass p-8 rounded-3xl text-center hover:scale-105 transition-transform duration-300">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-yellow-500 via-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-2xl">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                            </svg>
+                        </div>
+                        <div class="text-slate-400 mb-2">Grand Prize</div>
+                        <div class="text-5xl mb-4 text-transparent bg-clip-text bg-gradient-to-br from-yellow-500 via-orange-500 to-red-600 font-bold">
+                            $10,000
+                        </div>
+                        <div class="text-slate-400 text-sm mb-6">Plus VIP Status & Features</div>
+                    </div>
+                </div>
+
+                <!-- 2nd Place -->
+                <div class="relative opacity-0" data-animate="fade-up" data-delay="0.2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-400 via-slate-500 to-slate-600 rounded-3xl blur-xl opacity-20"></div>
+                    <div class="relative glass p-8 rounded-3xl text-center hover:scale-105 transition-transform duration-300">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-slate-400 via-slate-500 to-slate-600 rounded-2xl flex items-center justify-center shadow-2xl">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                            </svg>
+                        </div>
+                        <div class="text-slate-400 mb-2">2nd Place</div>
+                        <div class="text-5xl mb-4 text-transparent bg-clip-text bg-gradient-to-br from-slate-400 via-slate-500 to-slate-600 font-bold">
+                            $5,000
+                        </div>
+                        <div class="text-slate-400 text-sm">Premium Access</div>
+                    </div>
+                </div>
+
+                <!-- 3rd Place -->
+                <div class="relative opacity-0" data-animate="fade-up" data-delay="0.3">
+                    <div class="absolute inset-0 bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 rounded-3xl blur-xl opacity-20"></div>
+                    <div class="relative glass p-8 rounded-3xl text-center hover:scale-105 transition-transform duration-300">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 rounded-2xl flex items-center justify-center shadow-2xl">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                        </div>
+                        <div class="text-slate-400 mb-2">3rd Place</div>
+                        <div class="text-5xl mb-4 text-transparent bg-clip-text bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 font-bold">
+                            $3,000
+                        </div>
+                        <div class="text-slate-400 text-sm">Pro Membership</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leaderboard Section -->
+    <section id="leaderboard" class="relative py-32 bg-slate-900/50">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl text-white mb-6 font-bold opacity-0" data-animate="fade-up">
+                    Live <span class="gradient-text">Leaderboard</span>
+                </h2>
+                <p class="text-slate-400 text-xl max-w-3xl mx-auto opacity-0" data-animate="fade-up" data-delay="0.1">
+                    Track real-time rankings once the competition begins
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto glass rounded-3xl overflow-hidden opacity-0" data-animate="fade-up">
+                <div class="p-8">
+                    <div class="text-center py-16">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl text-white font-bold mb-4">Leaderboard Coming Soon</h3>
+                        <p class="text-slate-400 max-w-md mx-auto">
+                            The live leaderboard will be available once the competition starts on December 8, 2025.
+                            Check back then to see real-time rankings and track your progress against other traders.
+                        </p>
+                        <div class="mt-8">
+                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 rounded-full">
+                                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 text-sm">
+                                    Starting: December 8, 2025
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="relative py-32">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950"></div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl sm:text-5xl text-white mb-6 font-bold opacity-0" data-animate="fade-up">
+                    How It <span class="gradient-text">Works</span>
+                </h2>
+                <p class="text-slate-400 text-xl max-w-3xl mx-auto opacity-0" data-animate="fade-up" data-delay="0.1">
+                    Get started in just 4 simple steps
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+                <!-- Step 1 -->
+                <div class="text-center opacity-0" data-animate="fade-up" data-delay="0.1">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold">
+                        1
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">Register</h3>
+                    <p class="text-slate-400">Choose your competition and complete registration with your details.</p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="text-center opacity-0" data-animate="fade-up" data-delay="0.2">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold">
+                        2
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">Verify & Pay</h3>
+                    <p class="text-slate-400">Verify your email and complete payment to secure your spot.</p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="text-center opacity-0" data-animate="fade-up" data-delay="0.3">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-pink-500 to-red-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold">
+                        3
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">Trade</h3>
+                    <p class="text-slate-400">Start trading when competition begins. Use our advanced tools.</p>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="text-center opacity-0" data-animate="fade-up" data-delay="0.4">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold">
+                        4
+                    </div>
+                    <h3 class="text-white text-xl font-semibold mb-4">Win</h3>
+                    <p class="text-slate-400">Climb the leaderboard and win prizes based on your performance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="relative py-32 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600"></div>
+        <div class="absolute inset-0 grid-pattern"></div>
+        
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl text-white mb-6 font-bold">
+                Ready to
+                <br />
+                <span class="gradient-text">Dominate</span> the Markets?
+            </h2>
+            
+            <p class="text-white/90 text-lg sm:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+                Join thousands of elite traders competing for glory and massive prizes.
+                Limited spots available in each competition.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button id="final-register-btn" class="ripple bg-white text-purple-600 hover:bg-slate-100 text-lg px-10 py-4 rounded-lg shadow-2xl font-semibold transition-all flex items-center justify-center gap-2">
+                    Register Now
+                    <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </button>
+                <a href="#competitions" class="border-2 border-white text-white hover:bg-white/10 text-lg px-10 py-4 rounded-lg backdrop-blur-sm transition-all font-medium">
+                    View All Competitions
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative border-t border-white/10 bg-slate-950 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                    <span class="text-white text-xl font-bold">TradePro</span>
+                </div>
+                
+                <p class="text-slate-400 text-sm">
+                    &copy; 2025 TradePro. All rights reserved. Elite Trading Competition Platform.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Registration Modal -->
+    <div id="registration-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 hidden">
+        <div class="relative max-w-md w-full">
+            <div class="glass rounded-3xl overflow-hidden">
+                <!-- Modal Header -->
+                <div class="p-6 border-b border-white/10">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-white">Register for Competition</h3>
+                        <button id="close-modal" class="text-slate-400 hover:text-white">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Modal Form -->
+                <div id="modal-form" class="p-6">
+                    <div class="mb-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div id="modal-competition-icon" class="w-10 h-10 rounded-lg flex items-center justify-center">
+                                <!-- Icon will be set by JavaScript -->
+                            </div>
+                            <div>
+                                <div id="modal-competition-name" class="text-white font-medium"></div>
+                                <div id="modal-competition-prize" class="text-slate-400 text-sm"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-slate-400 text-sm mb-2">Full Name</label>
+                                <input type="text" id="registration-name" placeholder="Enter your full name" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 text-sm mb-2">Email Address</label>
+                                <input type="email" id="registration-email" placeholder="Enter your email" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 text-sm mb-2">Phone Number</label>
+                                <input type="tel" id="registration-phone" placeholder="Enter your phone number" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="submit-registration" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-medium transition-all">
+                        Complete Registration
+                    </button>
+                </div>
+                
+                <!-- Confirmation -->
+                <div id="confirmation" class="p-8 text-center hidden">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">Registration Successful!</h3>
+                    <p class="text-slate-400 mb-6">Your registration ID is:</p>
+                    <div id="registration-id-display" class="text-2xl font-bold text-white bg-white/10 py-3 px-6 rounded-lg mb-6 font-mono">
+                        TR-XXXX-XXXX
+                    </div>
+                    <p class="text-slate-400 mb-8">
+                        You will receive an email shortly with payment instructions and competition details.
+                        Save your registration ID for future reference.
+                    </p>
+                    <div class="space-y-3">
+                        <button id="download-receipt" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-medium">
+                            Download Registration Receipt
+                        </button>
+                        <button id="close-confirmation" class="w-full border border-white/20 text-white py-3 rounded-lg font-medium">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize GSAP
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Competition Data
+        const competitions = [
+            {
+                id: 1,
+                entryFee: 1,
+                maxCompetitors: 5,
+                prize: "$5,000 Prop Account",
+                currentCompetitors: Math.floor(Math.random() * 3) + 2,
+                competitionId: "TRADE-USD1-" + Math.floor(1000 + Math.random() * 9000),
+                color: "from-blue-500 to-cyan-600",
+                icon: "🚀",
+                description: "Perfect for beginners"
+            },
+            {
+                id: 2,
+                entryFee: 5,
+                maxCompetitors: 5,
+                prize: "$30 Cash",
+                currentCompetitors: Math.floor(Math.random() * 3) + 1,
+                competitionId: "TRADE-USD5-" + Math.floor(1000 + Math.random() * 9000),
+                color: "from-green-500 to-emerald-600",
+                icon: "⚡",
+                description: "Quick challenge"
+            },
+            {
+                id: 3,
+                entryFee: 10,
+                maxCompetitors: 10,
+                prize: "$70 Cash",
+                currentCompetitors: Math.floor(Math.random() * 6) + 1,
+                competitionId: "TRADE-USD10-" + Math.floor(1000 + Math.random() * 9000),
+                color: "from-yellow-500 to-orange-600",
+                icon: "🔥",
+                description: "Popular choice"
+            },
+            {
+                id: 4,
+                entryFee: 50,
+                maxCompetitors: 10,
+                prize: "$400 Cash",
+                currentCompetitors: Math.floor(Math.random() * 7) + 1,
+                competitionId: "TRADE-USD50-" + Math.floor(1000 + Math.random() * 9000),
+                color: "from-purple-500 to-pink-600",
+                icon: "💎",
+                description: "Premium challenge"
+            },
+            {
+                id: 5,
+                entryFee: 100,
+                maxCompetitors: 5,
+                prize: "$600 Cash",
+                currentCompetitors: Math.floor(Math.random() * 3) + 1,
+                competitionId: "TRADE-USD100-" + Math.floor(1000 + Math.random() * 9000),
+                color: "from-red-500 to-rose-600",
+                icon: "👑",
+                description: "Elite competition"
+            }
+        ];
+
+        // State
+        let selectedCompetition = null;
+        let registrations = JSON.parse(localStorage.getItem('tradepro_registrations')) || [];
+
+        // DOM Elements
+        const competitionGrid = document.getElementById('competition-grid');
+        const registrationModal = document.getElementById('registration-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const submitRegistrationBtn = document.getElementById('submit-registration');
+        const modalForm = document.getElementById('modal-form');
+        const confirmation = document.getElementById('confirmation');
+        const downloadReceiptBtn = document.getElementById('download-receipt');
+        const closeConfirmationBtn = document.getElementById('close-confirmation');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initAnimations();
+            renderCompetitions();
+            setupEventListeners();
+            startCountdown();
+            startCompetitionSimulation();
+        });
+
+        // Initialize Animations
+        function initAnimations() {
+            // Navbar animation
+            gsap.to("#navbar", {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: "power2.out",
+                delay: 0.2
+            });
+            document.getElementById('navbar').classList.add('navbar-visible');
+
+            // Hero animations
+            gsap.to("#hero-badge", {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.out",
+                delay: 0.4
+            });
+
+            gsap.to("#hero-heading", {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: "power2.out",
+                delay: 0.6
+            });
+
+            gsap.to("#hero-subtext", {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: "power2.out",
+                delay: 0.8
+            });
+
+            gsap.to("#hero-buttons", {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: "power2.out",
+                delay: 1.0
+            });
+
+            gsap.to("#hero-stats", {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: "power2.out",
+                delay: 1.2
+            });
+
+            gsap.to("#scroll-indicator", {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: "power2.out",
+                delay: 1.4
+            });
+
+            // Floating cards
+            gsap.to("#floating-card-1", {
+                x: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: "power2.out",
+                delay: 1.6
+            });
+
+            gsap.to("#floating-card-2", {
+                x: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: "power2.out",
+                delay: 1.8
+            });
+
+            // Add floating animation
+            gsap.to("#floating-card-1", {
+                y: "-=20",
+                duration: 3,
+                repeat: -1,
+                yoyo: true,
+                ease: "power1.inOut"
+            });
+
+            gsap.to("#floating-card-2", {
+                y: "-=20",
+                duration: 3.5,
+                repeat: -1,
+                yoyo: true,
+                ease: "power1.inOut",
+                delay: 0.5
+            });
+
+            // Scroll animations
+            document.querySelectorAll('[data-animate]').forEach((el, index) => {
+                const delay = el.dataset.delay ? parseFloat(el.dataset.delay) : 0;
+                gsap.from(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                        toggleActions: "play none none none"
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.8,
+                    delay: delay,
+                    ease: "power2.out"
+                });
+            });
+
+            // Animated counters
+            document.querySelectorAll('.countup').forEach(el => {
+                const target = parseInt(el.dataset.target);
+                const isCurrency = el.textContent.includes('$');
+                const isPercentage = el.textContent.includes('%');
+                
+                ScrollTrigger.create({
+                    trigger: el,
+                    start: "top 80%",
+                    onEnter: () => {
+                        const countUp = new CountUp(el, target, {
+                            duration: 2,
+                            separator: ',',
+                            prefix: isCurrency ? '$' : '',
+                            suffix: isPercentage ? '%' : ''
+                        });
+                        if (!countUp.error) {
+                            countUp.start();
+                        } else {
+                            console.error(countUp.error);
+                        }
+                    },
+                    once: true
+                });
+            });
+
+            // Competition cards hover effects
+            document.querySelectorAll('.competition-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, {
+                        scale: 1.05,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        scale: 1,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+            });
+        }
+
+        // Render competitions
+        function renderCompetitions() {
+            competitionGrid.innerHTML = '';
+            
+            competitions.forEach(comp => {
+                const progressPercent = (comp.currentCompetitors / comp.maxCompetitors) * 100;
+                const isFull = comp.currentCompetitors >= comp.maxCompetitors;
+                
+                const card = document.createElement('div');
+                card.className = `competition-card glass rounded-2xl p-6 opacity-0`;
+                card.dataset.animate = 'fade-up';
+                card.dataset.delay = 0.1 * (comp.id - 1);
+                
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-gradient-to-br ${comp.color} rounded-xl flex items-center justify-center text-2xl">
+                                ${comp.icon}
+                            </div>
+                            <div>
+                                <div class="text-white font-bold">$${comp.entryFee} Entry</div>
+                                <div class="text-slate-400 text-sm">${comp.description}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-slate-400 text-sm">Competition ID</div>
+                            <div class="text-white font-mono text-sm">${comp.competitionId}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-br ${comp.color} mb-2">
+                            ${comp.prize}
+                        </div>
+                        <div class="text-slate-400">Winner receives ${comp.prize}</div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="flex justify-between text-sm text-slate-400 mb-2">
+                            <span>Participants</span>
+                            <span class="participant-pulse">${comp.currentCompetitors}/${comp.maxCompetitors}</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="text-center">
+                            <div class="text-slate-400 text-sm">Entry Fee</div>
+                            <div class="text-white font-bold">$${comp.entryFee}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-slate-400 text-sm">Max Participants</div>
+                            <div class="text-white font-bold">${comp.maxCompetitors}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-slate-400 text-sm">Starts</div>
+                            <div class="text-white font-bold">Dec 8</div>
+                        </div>
+                    </div>
+                    
+                    <button class="register-btn w-full bg-gradient-to-r ${comp.color} ${isFull ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'} text-white py-3 rounded-lg font-medium transition-all" 
+                            data-id="${comp.id}" ${isFull ? 'disabled' : ''}>
+                        ${isFull ? 'Competition Full' : 'Register Now'}
+                    </button>
+                `;
+                
+                competitionGrid.appendChild(card);
+                
+                // Add animation for this card
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 80%",
+                        toggleActions: "play none none none"
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.8,
+                    delay: 0.1 * (comp.id - 1),
+                    ease: "power2.out"
+                });
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Mobile menu
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.remove('translate-x-full');
+            });
+            
+            document.getElementById('mobile-close-btn').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('translate-x-full');
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#mobile-menu') && !e.target.closest('#mobile-menu-btn') && 
+                    !document.getElementById('mobile-menu').classList.contains('translate-x-full')) {
+                    document.getElementById('mobile-menu').classList.add('translate-x-full');
+                }
+            });
+            
+            // Registration buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('register-btn') || e.target.closest('.register-btn')) {
+                    const btn = e.target.classList.contains('register-btn') ? e.target : e.target.closest('.register-btn');
+                    const compId = parseInt(btn.dataset.id);
+                    selectedCompetition = competitions.find(c => c.id === compId);
+                    
+                    if (selectedCompetition) {
+                        openRegistrationModal();
+                    }
+                }
+                
+                // Other register buttons
+                if (e.target.id === 'register-btn' || e.target.id === 'final-register-btn') {
+                    // Open competitions section
+                    document.getElementById('competitions').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+            
+            // Modal
+            closeModalBtn.addEventListener('click', closeRegistrationModal);
+            closeConfirmationBtn.addEventListener('click', closeRegistrationModal);
+            
+            // Submit registration
+            submitRegistrationBtn.addEventListener('click', submitRegistration);
+            
+            // Download receipt
+            downloadReceiptBtn.addEventListener('click', downloadReceipt);
+            
+            // Close modal on outside click
+            registrationModal.addEventListener('click', (e) => {
+                if (e.target === registrationModal) {
+                    closeRegistrationModal();
+                }
+            });
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const offset = 80; // Navbar height
+                        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - offset;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Ripple effect for buttons
+            document.querySelectorAll('.ripple').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const x = e.clientX - e.target.getBoundingClientRect().left;
+                    const y = e.clientY - e.target.getBoundingClientRect().top;
+                    
+                    const ripple = document.createElement('span');
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple-effect');
+                    
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 1000);
+                });
+            });
+        }
+
+        // Countdown timer
+        function startCountdown() {
+            const targetDate = new Date('December 8, 2025 00:00:00').getTime();
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+                
+                if (distance < 0) {
+                    document.getElementById('countdown-days').textContent = '00';
+                    document.getElementById('countdown-hours').textContent = '00';
+                    document.getElementById('countdown-minutes').textContent = '00';
+                    document.getElementById('countdown-seconds').textContent = '00';
+                    return;
+                }
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById('countdown-days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('countdown-seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // Competition simulation
+        function startCompetitionSimulation() {
+            // Update participant counts randomly
+            setInterval(() => {
+                competitions.forEach(comp => {
+                    if (comp.currentCompetitors < comp.maxCompetitors) {
+                        // 20% chance to add a participant
+                        if (Math.random() < 0.2) {
+                            comp.currentCompetitors++;
+                            
+                            // Update UI
+                            const card = document.querySelector(`.register-btn[data-id="${comp.id}"]`)?.closest('.competition-card');
+                            if (card) {
+                                const progressFill = card.querySelector('.progress-fill');
+                                const participantCount = card.querySelector('.participant-pulse');
+                                const progressPercent = (comp.currentCompetitors / comp.maxCompetitors) * 100;
+                                
+                                if (progressFill) {
+                                    progressFill.style.width = `${progressPercent}%`;
+                                }
+                                
+                                if (participantCount) {
+                                    // Add pulse animation
+                                    participantCount.classList.add('participant-pulse');
+                                    participantCount.textContent = `${comp.currentCompetitors}/${comp.maxCompetitors}`;
+                                    
+                                    // Remove pulse after animation
+                                    setTimeout(() => {
+                                        participantCount.classList.remove('participant-pulse');
+                                    }, 2000);
+                                }
+                                
+                                // Check if competition is now full
+                                if (comp.currentCompetitors >= comp.maxCompetitors) {
+                                    const registerBtn = card.querySelector('.register-btn');
+                                    if (registerBtn) {
+                                        registerBtn.textContent = 'Competition Full';
+                                        registerBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                                        registerBtn.disabled = true;
+                                        
+                                        // Generate new competition ID after 30 seconds
+                                        setTimeout(() => {
+                                            comp.competitionId = `TRADE-USD${comp.entryFee}-` + Math.floor(1000 + Math.random() * 9000);
+                                            comp.currentCompetitors = 0;
+                                            renderCompetitions();
+                                        }, 30000);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }, 5000); // Update every 5 seconds
+            
+            // Change competition IDs randomly
+            setInterval(() => {
+                competitions.forEach(comp => {
+                    // 10% chance to change ID
+                    if (Math.random() < 0.1) {
+                        comp.competitionId = `TRADE-USD${comp.entryFee}-` + Math.floor(1000 + Math.random() * 9000);
+                        renderCompetitions();
+                    }
+                });
+            }, 30000); // Every 30 seconds
+        }
+
+        // Open registration modal
+        function openRegistrationModal() {
+            if (!selectedCompetition) return;
+            
+            // Update modal content
+            document.getElementById('modal-competition-icon').className = `w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${selectedCompetition.color} text-2xl`;
+            document.getElementById('modal-competition-icon').textContent = selectedCompetition.icon;
+            document.getElementById('modal-competition-name').textContent = `$${selectedCompetition.entryFee} Competition`;
+            document.getElementById('modal-competition-prize').textContent = `Prize: ${selectedCompetition.prize}`;
+            
+            // Reset form
+            document.getElementById('registration-name').value = '';
+            document.getElementById('registration-email').value = '';
+            document.getElementById('registration-phone').value = '';
+            
+            // Show modal
+            modalForm.classList.remove('hidden');
+            confirmation.classList.add('hidden');
+            registrationModal.classList.remove('hidden');
+            
+            // Animate modal in
+            gsap.from(registrationModal, {
+                opacity: 0,
+                scale: 0.9,
+                duration: 0.3,
+                ease: "power2.out"
+            });
+        }
+
+        // Close registration modal
+        function closeRegistrationModal() {
+            gsap.to(registrationModal, {
+                opacity: 0,
+                scale: 0.9,
+                duration: 0.3,
+                ease: "power2.in",
+                onComplete: () => {
+                    registrationModal.classList.add('hidden');
+                }
+            });
+        }
+
+        // Submit registration
+        function submitRegistration() {
+            const name = document.getElementById('registration-name').value.trim();
+            const email = document.getElementById('registration-email').value.trim();
+            const phone = document.getElementById('registration-phone').value.trim();
+            
+            // Validation
+            if (!name || !email || !phone) {
+                showError('Please fill in all fields');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showError('Please enter a valid email address');
+                return;
+            }
+            
+            // Generate registration ID
+            const registrationId = `TR-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+            
+            // Create registration object
+            const registration = {
+                id: registrationId,
+                name: name,
+                email: email,
+                phone: phone,
+                competitionId: selectedCompetition.competitionId,
+                competitionFee: selectedCompetition.entryFee,
+                competitionPrize: selectedCompetition.prize,
+                date: new Date().toISOString(),
+                status: 'pending'
+            };
+            
+            // Add to registrations
+            registrations.push(registration);
+            localStorage.setItem('tradepro_registrations', JSON.stringify(registrations));
+            
+            // Increment competitor count
+            selectedCompetition.currentCompetitors++;
+            
+            // Show confirmation
+            document.getElementById('registration-id-display').textContent = registrationId;
+            modalForm.classList.add('hidden');
+            confirmation.classList.remove('hidden');
+            
+            // Update competition display
+            renderCompetitions();
+        }
+
+        // Download receipt
+        function downloadReceipt() {
+            const registrationId = document.getElementById('registration-id-display').textContent;
+            const registration = registrations.find(r => r.id === registrationId);
+            
+            if (!registration) {
+                showError('Registration not found');
+                return;
+            }
+            
+            // Create receipt HTML
+            const receiptHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>TradePro Registration Receipt</title>
+                    <style>
+                        body { font-family: 'Space Grotesk', sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; color: #1e293b; }
+                        .header { text-align: center; margin-bottom: 40px; }
+                        .logo { font-size: 24px; font-weight: bold; color: #667eea; margin-bottom: 20px; }
+                        .title { font-size: 28px; font-weight: bold; margin-bottom: 10px; }
+                        .receipt { background: #f8fafc; border-radius: 20px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+                        .divider { height: 1px; background: #e2e8f0; margin: 30px 0; }
+                        .row { display: flex; justify-content: space-between; margin-bottom: 15px; }
+                        .label { color: #64748b; }
+                        .value { font-weight: bold; }
+                        .important { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 10px; text-align: center; margin-top: 30px; }
+                        .footer { text-align: center; margin-top: 40px; color: #94a3b8; font-size: 14px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="logo">TradePro</div>
+                        <div class="title">Registration Confirmation</div>
+                        <div style="color: #64748b;">Elite Trading Competition</div>
+                    </div>
+                    
+                    <div class="receipt">
+                        <div class="row">
+                            <div class="label">Registration ID</div>
+                            <div class="value" style="font-family: monospace;">${registration.id}</div>
+                        </div>
+                        <div class="row">
+                            <div class="label">Date & Time</div>
+                            <div class="value">${new Date(registration.date).toLocaleString()}</div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="label">Name</div>
+                            <div class="value">${registration.name}</div>
+                        </div>
+                        <div class="row">
+                            <div class="label">Email</div>
+                            <div class="value">${registration.email}</div>
+                        </div>
+                        <div class="row">
+                            <div class="label">Phone</div>
+                            <div class="value">${registration.phone}</div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="label">Competition</div>
+                            <div class="value">$${registration.competitionFee} Entry</div>
+                        </div>
+                        <div class="row">
+                            <div class="label">Competition ID</div>
+                            <div class="value" style="font-family: monospace;">${registration.competitionId}</div>
+                        </div>
+                        <div class="row">
+                            <div class="label">Prize</div>
+                            <div class="value">${registration.competitionPrize}</div>
+                        </div>
+                        <div class="row">
+                            <div class="label">Status</div>
+                            <div class="value" style="color: #f59e0b;">Pending Payment</div>
+                        </div>
+                        
+                        <div class="important">
+                            <div style="font-weight: bold; margin-bottom: 10px;">Next Steps</div>
+                            <div style="font-size: 14px;">
+                                You will receive an email within 24 hours with payment instructions.<br>
+                                Please complete payment to secure your spot in the competition.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="footer">
+                        &copy; 2025 TradePro. All rights reserved.<br>
+                        For any questions, contact: support@tradepro.com
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            // Create download
+            const blob = new Blob([receiptHTML], { type: 'text/html' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `TradePro-Registration-${registration.id}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            // Show success message
+            alert('Receipt downloaded successfully! Check your downloads folder.');
+        }
+
+        // Helper functions
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function showError(message) {
+            alert(message);
+        }
+
+        // Parallax effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax');
+            
+            parallaxElements.forEach(el => {
+                const speed = el.dataset.speed || 0.5;
+                const yPos = -(scrolled * speed);
+                el.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+
+        // Add parallax to background elements
+        document.querySelectorAll('.absolute.inset-0 > div').forEach((el, index) => {
+            el.classList.add('parallax');
+            el.dataset.speed = 0.2 + (index * 0.1);
+        });
+    </script>
+</body>
+</html>
