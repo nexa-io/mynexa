@@ -3,442 +3,581 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decrypt Wallet Tool - NexaPay</title>
+    <title>Decrypt Wallet - NexaPay</title>
+    <!-- Force light theme -->
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#ffffff">
     
     <!-- External Dependencies -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     
-    <!-- Your CSS Files -->
-    <link rel="stylesheet" href="/create-wallet.css">
-    <link rel="stylesheet" href="/decrypt-tool.css">
-    
-    <!-- Force light theme -->
-    <meta name="color-scheme" content="light">
-    <meta name="theme-color" content="#ffffff">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="decrypt-tool.css">
     
     <style>
-        /* Minimal inline styles for specific components */
-        .decryption-step {
-            background: white;
-            border: 2px solid var(--color-neutral-200);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .decryption-step:hover {
-            border-color: var(--color-primary);
-            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.1);
-        }
-        
+        /* Decryption-specific styles */
         .file-upload-area {
             border: 3px dashed var(--color-neutral-300);
             border-radius: 12px;
-            padding: 60px 20px;
+            padding: 40px 20px;
             text-align: center;
+            background: var(--color-neutral-50);
             cursor: pointer;
             transition: all 0.3s ease;
-            background: var(--color-neutral-50);
         }
         
         .file-upload-area:hover {
             border-color: var(--color-primary);
-            background: rgba(124, 58, 237, 0.05);
+            background: var(--color-neutral-100);
         }
         
         .file-upload-area.dragover {
-            border-color: var(--color-success);
-            background: rgba(16, 185, 129, 0.05);
+            border-color: var(--color-primary);
+            background: var(--color-primary-light);
         }
         
-        .decrypted-result {
-            background: var(--color-neutral-50);
-            border: 2px solid var(--color-success);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 20px 0;
-        }
-        
-        .sensitive-data {
-            font-family: 'Courier New', monospace;
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid var(--color-neutral-200);
-            word-break: break-all;
+        .encrypted-data-preview {
             max-height: 200px;
             overflow-y: auto;
+            background: var(--color-neutral-100);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
             margin: 15px 0;
+            word-break: break-all;
         }
         
-        .copy-success {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--color-success);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            display: none;
+        .decryption-status {
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            animation: slideInUp 0.3s ease-out;
+            justify-content: center;
+            gap: 15px;
         }
         
-        @keyframes slideInUp {
+        .decrypted-results {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        .private-key-warning {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border: 2px solid var(--color-danger);
+            border-left: 6px solid var(--color-danger);
+        }
+        
+        .secret-display {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .secret-display .secret-text {
+            filter: blur(8px);
+            transition: filter 0.3s ease;
+            user-select: none;
+        }
+        
+        .secret-display:hover .secret-text {
+            filter: blur(0);
+        }
+        
+        .secret-display .reveal-hint {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--color-primary);
+            font-weight: 600;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        
+        @keyframes fadeInUp {
             from {
-                transform: translateY(100%);
                 opacity: 0;
+                transform: translateY(20px);
             }
             to {
-                transform: translateY(0);
                 opacity: 1;
+                transform: translateY(0);
             }
-        }
-        
-        .warning-banner {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 2px solid var(--color-warning);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-        
-        .security-note {
-            background: var(--color-neutral-50);
-            border-left: 4px solid var(--color-primary);
-            padding: 15px;
-            margin: 15px 0;
-            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <!-- Copy Success Notification -->
-    <div class="copy-success" id="copySuccess">
-        <i class="fas fa-check-circle"></i>
-        <span>Copied to clipboard! Will clear in 30 seconds.</span>
+    <!-- Session Timer -->
+    <div class="session-timer" id="sessionTimer" style="display: none;">
+        <i class="fas fa-clock"></i>
+        <span id="timerText">10:00</span>
+    </div>
+
+    <!-- Security Badge -->
+    <div class="security-badge">
+        <i class="fas fa-user-secret"></i> 100% LOCAL DECRYPTION
     </div>
 
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1><i class="fas fa-unlock"></i> Wallet Decryption Tool</h1>
-            <p>Decrypt your NexaPay wallet using your 7-word sentence and encrypted backup file</p>
+            <h1><i class="fas fa-unlock-alt"></i> Wallet Decryption Tool</h1>
+            <p>Decrypt your NexaPay wallet backup locally in your browser</p>
         </div>
 
-        <!-- Security Warning -->
-        <div class="warning-banner">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <i class="fas fa-shield-alt" style="color: #b45309;"></i>
-                <h3 style="color: #92400e; margin: 0;">Security First</h3>
-            </div>
-            <p style="color: #92400e; margin: 0;">
-                <strong>100% Local:</strong> All decryption happens in your browser. No data is sent to any server.
-                <br>
-                <strong>Close when done:</strong> Clear browser cache after use for maximum security.
-            </p>
+        <!-- Warning Box -->
+        <div class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> SECURITY WARNING</h3>
+            <p><strong>100% Local:</strong> Decryption happens entirely in your browser. No data is sent anywhere.</p>
+            <p><strong>Clear Memory:</strong> All decrypted data is automatically cleared after 10 minutes.</p>
+            <p><strong>Offline Recommended:</strong> For maximum security, disconnect from the internet before decrypting.</p>
         </div>
 
-        <!-- Step 1: Upload Backup File -->
-        <div id="step1" class="decryption-step">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                <div class="step active">1</div>
-                <h2 style="margin: 0;">Upload Your Backup File</h2>
+        <!-- Step 1: Upload or Paste Encrypted Data -->
+        <div id="step1-content">
+            <div class="info-box">
+                <h3><i class="fas fa-upload"></i> Step 1: Provide Encrypted Data</h3>
+                <p>Upload your encrypted backup file OR paste the encrypted JSON data below.</p>
+                <p><strong>Supported formats:</strong> Complete backup file, encrypted seed phrase, or encrypted private key.</p>
             </div>
-            
-            <p style="color: var(--color-neutral-600); margin-bottom: 20px;">
-                Upload the JSON backup file you downloaded during wallet creation.
-            </p>
-            
+
+            <!-- File Upload Area -->
             <div class="file-upload-area" id="fileUploadArea">
-                <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: var(--color-primary); margin-bottom: 15px;"></i>
-                <h3 style="margin-bottom: 10px;">Drag & Drop Your Backup File</h3>
-                <p style="color: var(--color-neutral-600); margin-bottom: 20px;">
-                    Or click to browse for the .json file
-                </p>
-                <input type="file" id="backupFile" accept=".json" style="display: none;">
-                <button class="btn btn-primary" onclick="document.getElementById('backupFile').click()">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: var(--color-primary); margin-bottom: 20px;"></i>
+                <h3>Drop your encrypted backup file here</h3>
+                <p class="text-neutral-600">Or click to browse (JSON format only)</p>
+                <input type="file" id="fileInput" accept=".json,application/json" style="display: none;">
+                <button class="btn btn-secondary mt-4" onclick="document.getElementById('fileInput').click()">
                     <i class="fas fa-folder-open"></i> Browse Files
                 </button>
-                <p style="font-size: 12px; color: var(--color-neutral-500); margin-top: 15px;">
-                    Accepted: JSON files only (usually named: nexapay-wallet-*.json)
-                </p>
             </div>
-            
-            <div id="fileInfo" style="display: none; margin-top: 20px; padding: 15px; background: var(--color-neutral-100); border-radius: 8px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <strong id="fileName"></strong>
-                        <div style="font-size: 12px; color: var(--color-neutral-600); margin-top: 5px;" id="fileDetails"></div>
-                    </div>
-                    <button class="btn btn-secondary" onclick="removeFile()" style="width: auto; padding: 8px 16px;">
-                        <i class="fas fa-times"></i> Remove
-                    </button>
-                </div>
-            </div>
-            
-            <div class="security-note">
-                <i class="fas fa-info-circle" style="color: var(--color-primary); margin-right: 8px;"></i>
-                Your backup file contains only encrypted data. We cannot read it without your 7-word sentence.
-            </div>
-            
-            <button id="step1Btn" class="btn btn-primary" onclick="advanceToStep2()" disabled style="margin-top: 20px;">
-                <i class="fas fa-arrow-right"></i> Continue to Decryption
-            </button>
-        </div>
 
-        <!-- Step 2: Enter Sentence -->
-        <div id="step2" class="decryption-step" style="display: none;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                <div class="step">2</div>
-                <h2 style="margin: 0;">Enter Your 7-Word Sentence</h2>
+            <div class="text-center my-6">
+                <span class="text-neutral-500">— OR —</span>
             </div>
-            
-            <div class="warning-box">
-                <h3><i class="fas fa-exclamation-triangle"></i> Critical Information</h3>
-                <p>This is the sentence you created during wallet setup. It must match <strong>exactly</strong>.</p>
-                <p><strong>Case sensitive:</strong> Capital letters, spaces, and punctuation must be identical.</p>
-            </div>
-            
+
+            <!-- Manual Input -->
             <div class="form-group">
-                <label for="decryptionSentence">
-                    <i class="fas fa-key"></i> Type your 7-word sentence:
+                <label for="encryptedData">
+                    <i class="fas fa-paste"></i> Paste encrypted JSON data:
                 </label>
                 <textarea 
                     class="sentence-input" 
-                    id="decryptionSentence" 
-                    placeholder="Example: My favorite coffee shop opens at seven every morning..."
-                    rows="3"
+                    id="encryptedData" 
+                    placeholder='Paste your encrypted JSON data here (e.g., {"version": "nexapay-v1", "ciphertext": "...", "iv": "...", "salt": "..."})'
+                    rows="6"
                     autocomplete="off"
                     autocorrect="off"
                     autocapitalize="off"
                     spellcheck="false"
                 ></textarea>
-                <div style="text-align: right; margin-top: 8px;">
-                    <span id="sentenceStatus" style="color: var(--color-neutral-500); font-size: 14px;">Waiting for input...</span>
+                <div class="text-right">
+                    <span class="text-sm text-neutral-500" id="dataTypeIndicator">No data detected</span>
                 </div>
             </div>
-            
-            <div class="security-note">
-                <i class="fas fa-lock" style="color: var(--color-primary); margin-right: 8px;"></i>
-                Your sentence is never stored or transmitted. It's used only for local decryption.
+
+            <!-- Data Type Selection -->
+            <div class="form-group">
+                <label><i class="fas fa-tag"></i> Data type (if auto-detection fails):</label>
+                <div class="flex gap-4 mt-2">
+                    <label class="flex items-center">
+                        <input type="radio" name="dataType" value="backup" checked class="mr-2">
+                        <span>Complete Backup</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="dataType" value="seed" class="mr-2">
+                        <span>Encrypted Seed Only</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="dataType" value="private" class="mr-2">
+                        <span>Encrypted Private Key Only</span>
+                    </label>
+                </div>
             </div>
-            
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button class="btn btn-secondary" onclick="goBackToStep1()" style="flex: 1;">
-                    <i class="fas fa-arrow-left"></i> Back
-                </button>
-                <button id="step2Btn" class="btn btn-primary" onclick="startDecryption()" disabled style="flex: 2;">
-                    <i class="fas fa-unlock"></i> Decrypt Wallet
-                </button>
-            </div>
+
+            <button onclick="validateEncryptedData()" class="btn btn-primary" id="step1Btn">
+                <i class="fas fa-check"></i> Validate & Continue
+            </button>
         </div>
 
-        <!-- Step 3: Decryption Progress -->
-        <div id="step3" class="decryption-step" style="display: none;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                <div class="step">3</div>
-                <h2 style="margin: 0;">Decryption in Progress</h2>
+        <!-- Step 2: Enter Decryption Sentence -->
+        <div id="step2-content" class="hidden">
+            <div class="info-box">
+                <h3><i class="fas fa-key"></i> Step 2: Enter Your 7-Word Sentence</h3>
+                <p>Enter the exact sentence you used to encrypt this wallet. It must match exactly (spaces, punctuation, capitalization).</p>
             </div>
-            
-            <div style="text-align: center; padding: 30px;">
-                <div id="decryptionSpinner" style="margin-bottom: 20px;">
-                    <i class="fas fa-spinner fa-spin" style="font-size: 48px; color: var(--color-primary);"></i>
-                </div>
-                <h3 id="decryptionStatus">Initializing decryption...</h3>
-                <p id="decryptionMessage" style="color: var(--color-neutral-600); margin-top: 10px;">
-                    This may take a moment. Please do not close this page.
-                </p>
-                
-                <div class="progress-container" style="margin: 30px auto; max-width: 400px;">
-                    <div class="progress-bar" id="decryptionProgress"></div>
-                </div>
-                
-                <div id="decryptionError" style="display: none; margin-top: 20px;">
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <span id="errorMessage"></span>
-                    </div>
-                    <button class="btn btn-secondary" onclick="goBackToStep2()" style="margin-top: 15px;">
-                        <i class="fas fa-redo"></i> Try Again
-                    </button>
-                </div>
-            </div>
-        </div>
 
-        <!-- Step 4: Decrypted Results -->
-        <div id="step4" class="decryption-step" style="display: none;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                <div class="step completed">4</div>
-                <h2 style="margin: 0;">Wallet Decrypted Successfully!</h2>
-            </div>
-            
             <div class="warning-box">
-                <h3><i class="fas fa-exclamation-triangle"></i> Handle with Care!</h3>
-                <p>This page now contains your <strong>unencrypted</strong> wallet data. Close this page when done.</p>
-                <p><strong>Never share:</strong> Do not share your seed phrase or private key with anyone.</p>
+                <h3><i class="fas fa-shield-alt"></i> Decryption Status</h3>
+                <div id="encryptionInfo">
+                    <p><strong>Type:</strong> <span id="detectedType">Detecting...</span></p>
+                    <p><strong>Algorithm:</strong> <span id="detectedAlgorithm">AES-256-GCM</span></p>
+                    <p><strong>Date:</strong> <span id="detectedDate">Unknown</span></p>
+                </div>
             </div>
-            
-            <!-- Wallet Address -->
-            <div class="wallet-address-box">
-                <span class="label">Your Wallet Address:</span>
-                <div id="decryptedAddress">0x...</div>
+
+            <div class="form-group">
+                <label for="decryptionSentence">
+                    <i class="fas fa-keyboard"></i> Your decryption sentence:
+                </label>
+                <textarea 
+                    class="sentence-input" 
+                    id="decryptionSentence" 
+                    placeholder="Enter your 7-word sentence exactly as you created it..."
+                    rows="2"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                ></textarea>
+                <div class="word-count">
+                    Words: <span id="sentenceWordCount">0</span>
+                </div>
             </div>
+
+            <!-- Attempt Counter -->
+            <div class="info-box" id="attemptWarning" style="display: none;">
+                <h3><i class="fas fa-exclamation-circle"></i> Too Many Attempts</h3>
+                <p>Too many failed decryption attempts. Please wait <span id="waitTime">60</span> seconds.</p>
+            </div>
+
+            <button onclick="attemptDecryption()" class="btn btn-primary" id="decryptBtn">
+                <i class="fas fa-unlock-alt"></i> Decrypt Wallet
+            </button>
             
-            <!-- Seed Phrase -->
-            <div class="decrypted-result">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
-                    <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-seedling" style="color: var(--color-success);"></i>
-                        Seed Phrase (12 words)
-                    </h3>
-                    <button class="btn-copy" onclick="copyToClipboard('seedPhrase')" style="width: auto; padding: 8px 16px;">
-                        <i class="fas fa-copy"></i> Copy
+            <button onclick="goBackToStep1()" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+
+        <!-- Step 3: Decryption Results -->
+        <div id="step3-content" class="hidden">
+            <div class="header" style="background: linear-gradient(135deg, var(--color-success), var(--color-secondary-dark));">
+                <h1><i class="fas fa-check-circle"></i> Decryption Successful!</h1>
+                <p>Your wallet has been decrypted locally. Handle this information with extreme care.</p>
+            </div>
+
+            <div class="warning-box private-key-warning">
+                <h3><i class="fas fa-skull-crossbones"></i> EXTREME DANGER</h3>
+                <p><strong>Anyone with this information can steal ALL your funds.</strong></p>
+                <p>Do NOT share, screenshot, or leave this page open. Copy what you need and immediately close this tab.</p>
+            </div>
+
+            <!-- Decryption Status -->
+            <div class="encryption-status" id="decryptionResult">
+                <div class="decryption-status">
+                    <i class="fas fa-check-circle" style="font-size: 48px; color: var(--color-success);"></i>
+                    <h3>Wallet Successfully Decrypted</h3>
+                </div>
+            </div>
+
+            <!-- Decrypted Results -->
+            <div class="decrypted-results">
+                <!-- Wallet Address -->
+                <div class="encrypted-data-card">
+                    <div class="encrypted-data-header">
+                        <div class="encrypted-data-title">
+                            <i class="fas fa-wallet" style="color: var(--color-primary);"></i>
+                            <span>Wallet Address</span>
+                        </div>
+                        <div class="status-badge" style="background: var(--color-primary);">
+                            <i class="fas fa-copy"></i> Copy
+                        </div>
+                    </div>
+                    <div class="encrypted-data-content" id="decryptedAddress">
+                        0x...
+                    </div>
+                    <p class="text-sm text-neutral-600 mt-2">
+                        <i class="fas fa-info-circle"></i> This address works on all EVM chains: Ethereum, Polygon, BSC, Arbitrum, Optimism, Base, etc.
+                    </p>
+                </div>
+
+                <!-- Seed Phrase -->
+                <div class="encrypted-data-card secret-display">
+                    <div class="encrypted-data-header">
+                        <div class="encrypted-data-title">
+                            <i class="fas fa-seedling" style="color: var(--color-success);"></i>
+                            <span>Seed Phrase (12 words)</span>
+                        </div>
+                        <div class="status-badge seed-badge">
+                            <i class="fas fa-eye"></i> Hover to Reveal
+                        </div>
+                    </div>
+                    <div class="encrypted-data-content secret-text" id="decryptedSeed">
+                        word1 word2 word3 word4 word5 word6 word7 word8 word9 word10 word11 word12
+                    </div>
+                    <div class="reveal-hint">Hover to reveal seed phrase</div>
+                    <div class="action-buttons">
+                        <button class="btn-copy" onclick="copyToClipboard('decryptedSeed', true)">
+                            <i class="fas fa-copy"></i> Copy Seed Phrase
+                        </button>
+                        <button class="btn-download" onclick="downloadSeedPhrase()">
+                            <i class="fas fa-download"></i> Download as Text
+                        </button>
+                    </div>
+                    <p class="text-sm text-neutral-600 mt-2">
+                        <i class="fas fa-exclamation-triangle"></i> <strong>CRITICAL:</strong> Never share this 12-word phrase. Store it offline on paper.
+                    </p>
+                </div>
+
+                <!-- Private Key -->
+                <div class="encrypted-data-card secret-display">
+                    <div class="encrypted-data-header">
+                        <div class="encrypted-data-title">
+                            <i class="fas fa-key" style="color: var(--color-warning);"></i>
+                            <span>Private Key</span>
+                        </div>
+                        <div class="status-badge private-key-badge">
+                            <i class="fas fa-eye"></i> Hover to Reveal
+                        </div>
+                    </div>
+                    <div class="encrypted-data-content secret-text" id="decryptedPrivateKey">
+                        0x...
+                    </div>
+                    <div class="reveal-hint">Hover to reveal private key</div>
+                    <div class="action-buttons">
+                        <button class="btn-copy" onclick="copyToClipboard('decryptedPrivateKey', true)">
+                            <i class="fas fa-copy"></i> Copy Private Key
+                        </button>
+                        <button class="btn-download" onclick="downloadPrivateKey()">
+                            <i class="fas fa-download"></i> Download as Text
+                        </button>
+                    </div>
+                    <p class="text-sm text-danger mt-2">
+                        <i class="fas fa-skull-crossbones"></i> <strong>EXTREME DANGER:</strong> This private key gives full control. Anyone with it can steal ALL funds.
+                    </p>
+                </div>
+
+                <!-- Supported Chains -->
+                <div class="info-box">
+                    <h3><i class="fas fa-link"></i> Supported Blockchains</h3>
+                    <div class="chains-grid" id="supportedChains">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col gap-4 mt-6">
+                    <button class="btn btn-success" onclick="saveToBrowser()">
+                        <i class="fas fa-save"></i> Save to Browser Storage (Temporary)
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearAndRestart()">
+                        <i class="fas fa-redo"></i> Clear & Start Over
+                    </button>
+                    <button class="btn btn-danger" onclick="secureWipeAndClose()">
+                        <i class="fas fa-trash-alt"></i> Wipe Memory & Close Tab
                     </button>
                 </div>
-                <div class="sensitive-data" id="seedPhrase">
-                    <!-- Seed phrase will appear here -->
+
+                <div class="warning-box mt-6">
+                    <h3><i class="fas fa-shield-alt"></i> Final Security Notes</h3>
+                    <p><strong>1.</strong> This page will automatically clear all decrypted data in 10 minutes</p>
+                    <p><strong>2.</strong> Do NOT bookmark or save this page with decrypted data</p>
+                    <p><strong>3.</strong> For maximum security, clear your browser cache after use</p>
+                    <p><strong>4.</strong> Consider using this tool on an air-gapped computer</p>
                 </div>
-                <p style="color: var(--color-neutral-600); font-size: 14px;">
-                    <i class="fas fa-info-circle"></i> This is your BIP39 mnemonic. Write it down and store securely.
-                </p>
             </div>
-            
-            <!-- Private Key -->
-            <div class="decrypted-result">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
-                    <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-key" style="color: var(--color-primary);"></i>
-                        Private Key
-                    </h3>
-                    <button class="btn-copy" onclick="copyToClipboard('privateKey')" style="width: auto; padding: 8px 16px;">
-                        <i class="fas fa-copy"></i> Copy
-                    </button>
-                </div>
-                <div class="sensitive-data" id="privateKey">
-                    <!-- Private key will appear here -->
-                </div>
-                <p style="color: var(--color-neutral-600); font-size: 14px;">
-                    <i class="fas fa-info-circle"></i> This is your Ethereum private key. Keep it secret.
-                </p>
+        </div>
+
+        <!-- Step 4: Error State -->
+        <div id="error-content" class="hidden">
+            <div class="header" style="background: linear-gradient(135deg, var(--color-danger), #dc2626);">
+                <h1><i class="fas fa-times-circle"></i> Decryption Failed</h1>
+                <p>Unable to decrypt with the provided information</p>
             </div>
-            
-            <!-- Supported Chains -->
-            <h3 style="margin: 30px 0 20px 0; text-align: center;">
-                <i class="fas fa-link"></i> Compatible Chains
-            </h3>
-            <div class="chains-grid" id="chainsGrid">
-                <!-- Chains will be loaded here -->
-            </div>
-            
-            <!-- Security Actions -->
-            <div class="security-note" style="margin-top: 30px;">
-                <h4><i class="fas fa-shield-alt"></i> Security Checklist</h4>
-                <ul style="margin: 10px 0 0 20px; color: var(--color-neutral-600);">
-                    <li>✅ Have you saved your seed phrase offline?</li>
-                    <li>✅ Have you written down your private key securely?</li>
-                    <li>✅ Are you ready to close this page to clear sensitive data?</li>
+
+            <div class="info-box">
+                <h3><i class="fas fa-bug"></i> Possible Issues:</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Wrong 7-word sentence</li>
+                    <li>Corrupted or modified encrypted data</li>
+                    <li>Wrong encryption type selected</li>
+                    <li>Browser compatibility issue</li>
                 </ul>
             </div>
-            
-            <div style="display: flex; gap: 10px; margin-top: 30px;">
-                <button class="btn btn-secondary" onclick="startOver()" style="flex: 1;">
-                    <i class="fas fa-redo"></i> Decrypt Another
+
+            <div class="encryption-status">
+                <i class="fas fa-times-circle" style="font-size: 48px; color: var(--color-danger);"></i>
+                <h3 id="errorMessage">Decryption failed</h3>
+                <p id="errorDetails" class="text-neutral-600"></p>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <button onclick="retryDecryption()" class="btn btn-primary">
+                    <i class="fas fa-redo"></i> Try Again
                 </button>
-                <button class="btn btn-danger" onclick="secureWipeAndClose()" style="flex: 1;">
-                    <i class="fas fa-trash"></i> Clear & Close
+                <button onclick="clearAndRestart()" class="btn btn-secondary">
+                    <i class="fas fa-home"></i> Start Over
                 </button>
             </div>
         </div>
 
-        <!-- Footer Info -->
-        <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--color-neutral-200);">
+        <!-- Security Footer -->
+        <div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 1px solid var(--color-neutral-200);">
+            <h4><i class="fas fa-shield-alt"></i> 100% Local Decryption</h4>
             <p style="color: var(--color-neutral-600); font-size: 14px;">
-                <i class="fas fa-lock"></i> All decryption happens locally in your browser.
-                <br>
-                <i class="fas fa-code"></i> Open source encryption using Web Crypto API.
-                <br>
-                <i class="fas fa-network-wired"></i> No internet required after initial load.
+                <strong>No data leaves your browser</strong> • AES-256-GCM decryption • PBKDF2 key derivation • Memory wiped after session
             </p>
         </div>
     </div>
 
     <!-- JavaScript -->
     <script>
-        // ========== GLOBAL STATE ==========
-        let backupFileData = null;
-        let decryptedData = {
-            seed: '',
-            privateKey: '',
-            address: '',
-            chains: []
+        // ========== SECURITY CONFIGURATION ==========
+        const SECURITY_CONFIG = {
+            PBKDF2_ITERATIONS: 600000,
+            SESSION_TIMEOUT: 10 * 60 * 1000, // 10 minutes
+            MAX_DECRYPTION_ATTEMPTS: 5,
+            ATTEMPT_WINDOW: 15 * 60 * 1000, // 15 minutes
+            CLIPBOARD_CLEAR_TIME: 15 * 1000, // 15 seconds for secrets
+            DEBUG: false
         };
+
+        // ========== GLOBAL STATE ==========
+        let encryptedData = null;
+        let dataType = 'backup'; // 'backup', 'seed', or 'private'
+        let decryptedWallet = null;
+        let sessionStartTime = Date.now();
+        let sessionTimer;
+        let failedAttempts = 0;
         let isDecrypting = false;
 
         // ========== INITIALIZATION ==========
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🔓 Decryption tool initialized');
+            console.log('🔓 Decryption Tool Initialized');
             
             // Check if ethers.js loaded
             if (typeof ethers === 'undefined') {
-                alert('❌ Encryption library failed to load. Please refresh the page.');
+                alert('❌ CRITICAL: Encryption library failed to load. Please refresh the page.');
                 return;
             }
             
-            // Setup file upload
-            setupFileUpload();
-            
-            // Setup sentence validation
-            setupSentenceValidation();
-            
-            // Load chains display
-            loadChains();
-            
-            // Setup security
-            setupSecurity();
+            // Initialize
+            initSecurity();
+            setupEventListeners();
+            startSessionTimer();
+            checkRateLimit();
+            loadSupportedChains();
         });
 
-        // ========== SECURITY SETUP ==========
-        function setupSecurity() {
+        // ========== SECURITY FUNCTIONS ==========
+        function initSecurity() {
+            // Disable right-click
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            
             // Clear clipboard on exit
             window.addEventListener('beforeunload', () => {
                 navigator.clipboard.writeText('').catch(() => {});
+                secureMemoryWipe();
             });
             
-            // Warn before closing with sensitive data
+            // Warn before closing with decrypted data
             window.addEventListener('beforeunload', (e) => {
-                if (decryptedData.seed || decryptedData.privateKey) {
+                if (decryptedWallet) {
                     e.preventDefault();
-                    e.returnValue = '⚠️ Sensitive data is displayed! Close anyway?';
+                    e.returnValue = '⚠️ Decrypted wallet data will be lost!';
                     return e.returnValue;
                 }
             });
             
-            // Auto-clear memory after 10 minutes
-            setTimeout(secureMemoryWipe, 10 * 60 * 1000);
+            // Auto-clear memory after session timeout
+            setTimeout(secureMemoryWipe, SECURITY_CONFIG.SESSION_TIMEOUT);
         }
 
-        // ========== FILE UPLOAD HANDLING ==========
-        function setupFileUpload() {
-            const fileInput = document.getElementById('backupFile');
-            const uploadArea = document.getElementById('fileUploadArea');
-            const step1Btn = document.getElementById('step1Btn');
+        function checkRateLimit() {
+            const attempts = JSON.parse(localStorage.getItem('decrypt_attempts') || '[]');
+            const now = Date.now();
+            const recentAttempts = attempts.filter(time => now - time < SECURITY_CONFIG.ATTEMPT_WINDOW);
+            failedAttempts = recentAttempts.length;
             
-            // Click on area triggers file input
-            uploadArea.addEventListener('click', (e) => {
-                if (e.target !== fileInput) {
-                    fileInput.click();
+            if (failedAttempts >= SECURITY_CONFIG.MAX_DECRYPTION_ATTEMPTS) {
+                const waitTime = Math.ceil((SECURITY_CONFIG.ATTEMPT_WINDOW - (now - recentAttempts[0])) / 1000);
+                document.getElementById('attemptWarning').style.display = 'block';
+                document.getElementById('waitTime').textContent = waitTime;
+                document.getElementById('decryptBtn').disabled = true;
+                
+                setTimeout(() => {
+                    document.getElementById('attemptWarning').style.display = 'none';
+                    document.getElementById('decryptBtn').disabled = false;
+                }, waitTime * 1000);
+                
+                return false;
+            }
+            return true;
+        }
+
+        function recordFailedAttempt() {
+            const attempts = JSON.parse(localStorage.getItem('decrypt_attempts') || '[]');
+            attempts.push(Date.now());
+            // Keep only last 10 attempts
+            if (attempts.length > 10) attempts.splice(0, attempts.length - 10);
+            localStorage.setItem('decrypt_attempts', JSON.stringify(attempts));
+        }
+
+        function secureMemoryWipe() {
+            if (decryptedWallet) {
+                if (decryptedWallet.seed) {
+                    decryptedWallet.seed = decryptedWallet.seed.split('').map(() => '0').join('');
                 }
-            });
+                if (decryptedWallet.privateKey) {
+                    decryptedWallet.privateKey = decryptedWallet.privateKey.split('').map(() => '0').join('');
+                }
+                if (decryptedWallet.address) {
+                    decryptedWallet.address = decryptedWallet.address.split('').map(() => '0').join('');
+                }
+            }
             
-            // File input change
-            fileInput.addEventListener('change', handleFileSelect);
+            decryptedWallet = null;
+            encryptedData = null;
+            
+            // Clear form fields
+            document.getElementById('encryptedData').value = '';
+            document.getElementById('decryptionSentence').value = '';
+            
+            // Force garbage collection hint
+            if (window.gc) window.gc();
+            
+            console.log('🧹 Memory securely wiped');
+        }
+
+        // ========== SESSION MANAGEMENT ==========
+        function startSessionTimer() {
+            const timerElement = document.getElementById('sessionTimer');
+            const timerText = document.getElementById('timerText');
+            
+            timerElement.style.display = 'flex';
+            
+            sessionTimer = setInterval(() => {
+                const elapsed = Date.now() - sessionStartTime;
+                const remaining = SECURITY_CONFIG.SESSION_TIMEOUT - elapsed;
+                
+                if (remaining <= 0) {
+                    clearInterval(sessionTimer);
+                    alert('Session expired. All data will be wiped.');
+                    secureMemoryWipe();
+                    window.location.reload();
+                    return;
+                }
+                
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                timerText.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (remaining < 2 * 60 * 1000) {
+                    timerElement.style.background = '#fee2e2';
+                    timerElement.style.color = '#dc2626';
+                }
+            }, 1000);
+        }
+
+        // ========== EVENT LISTENERS ==========
+        function setupEventListeners() {
+            // File upload
+            const fileInput = document.getElementById('fileInput');
+            const uploadArea = document.getElementById('fileUploadArea');
+            
+            fileInput.addEventListener('change', handleFileUpload);
             
             // Drag and drop
             uploadArea.addEventListener('dragover', (e) => {
@@ -454,247 +593,274 @@
                 e.preventDefault();
                 uploadArea.classList.remove('dragover');
                 
-                if (e.dataTransfer.files.length) {
-                    fileInput.files = e.dataTransfer.files;
-                    handleFileSelect({ target: fileInput });
+                if (e.dataTransfer.files.length > 0) {
+                    handleFileUpload({ target: { files: e.dataTransfer.files } });
                 }
+            });
+            
+            // Encrypted data input
+            document.getElementById('encryptedData').addEventListener('input', function() {
+                analyzeInputData(this.value);
+            });
+            
+            // Decryption sentence input
+            document.getElementById('decryptionSentence').addEventListener('input', function() {
+                const words = this.value.trim().split(/\s+/).filter(w => w.length > 0);
+                document.getElementById('sentenceWordCount').textContent = words.length;
+                
+                // Clean input (allow only letters, numbers, spaces, basic punctuation)
+                this.value = this.value.replace(/[^a-zA-Z0-9\s.,!?'"-]/g, '');
+            });
+            
+            // Data type selection
+            document.querySelectorAll('input[name="dataType"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    dataType = this.value;
+                });
             });
         }
 
-        function handleFileSelect(e) {
-            const file = e.target.files[0];
+        // ========== FILE HANDLING ==========
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
             if (!file) return;
             
-            // Check file type
-            if (!file.name.endsWith('.json')) {
-                alert('❌ Please select a JSON file (.json)');
-                return;
-            }
-            
-            // Check file size (max 10KB for backup files)
-            if (file.size > 10240) { // 10KB
-                alert('❌ File too large. Backup files should be less than 10KB.');
+            if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                alert('❌ Please upload a JSON file only');
                 return;
             }
             
             const reader = new FileReader();
-            
-            reader.onload = function(event) {
+            reader.onload = function(e) {
                 try {
-                    backupFileData = JSON.parse(event.target.result);
+                    const content = e.target.result;
+                    document.getElementById('encryptedData').value = content;
+                    analyzeInputData(content);
                     
-                    // Validate backup file structure
-                    if (!backupFileData.walletAddress || !backupFileData.encryptedSeed || !backupFileData.encryptedPrivateKey) {
-                        throw new Error('Invalid backup file format');
-                    }
-                    
-                    // Display file info
-                    document.getElementById('fileName').textContent = file.name;
-                    document.getElementById('fileDetails').textContent = 
-                        `Size: ${(file.size / 1024).toFixed(2)}KB | Address: ${backupFileData.walletAddress.substring(0, 8)}...`;
-                    document.getElementById('fileInfo').style.display = 'block';
-                    
-                    // Enable continue button
-                    document.getElementById('step1Btn').disabled = false;
-                    
-                    console.log('✅ Backup file loaded successfully');
-                    
+                    // Auto-validate if data looks good
+                    setTimeout(() => {
+                        if (encryptedData) {
+                            validateEncryptedData();
+                        }
+                    }, 500);
                 } catch (error) {
-                    alert('❌ Invalid backup file: ' + error.message);
-                    removeFile();
+                    alert('❌ Error reading file: ' + error.message);
                 }
             };
-            
-            reader.onerror = function() {
-                alert('❌ Error reading file');
-                removeFile();
-            };
-            
             reader.readAsText(file);
         }
 
-        function removeFile() {
-            document.getElementById('backupFile').value = '';
-            document.getElementById('fileInfo').style.display = 'none';
-            document.getElementById('step1Btn').disabled = true;
-            backupFileData = null;
-        }
-
-        // ========== SENTENCE VALIDATION ==========
-        function setupSentenceValidation() {
-            const sentenceInput = document.getElementById('decryptionSentence');
-            const statusElement = document.getElementById('sentenceStatus');
-            const step2Btn = document.getElementById('step2Btn');
-            
-            // Input validation (only letters, numbers, basic punctuation)
-            sentenceInput.addEventListener('input', function() {
-                // Clean input
-                this.value = this.value.replace(/[^a-zA-Z0-9\s.,!?'"-]/g, '');
-                
-                const sentence = this.value.trim();
-                const words = sentence.split(/\s+/).filter(w => w.length > 0);
-                const wordCount = words.length;
-                
-                // Update status
-                if (wordCount === 0) {
-                    statusElement.textContent = 'Waiting for input...';
-                    statusElement.style.color = 'var(--color-neutral-500)';
-                    step2Btn.disabled = true;
-                } else if (wordCount < 7) {
-                    statusElement.textContent = `${wordCount}/7 words (need ${7 - wordCount} more)`;
-                    statusElement.style.color = 'var(--color-warning)';
-                    step2Btn.disabled = true;
-                } else {
-                    statusElement.textContent = `${wordCount} words ✓ Ready to decrypt`;
-                    statusElement.style.color = 'var(--color-success)';
-                    step2Btn.disabled = false;
+        function analyzeInputData(input) {
+            try {
+                if (!input.trim()) {
+                    document.getElementById('dataTypeIndicator').textContent = 'No data detected';
+                    return;
                 }
-            });
+                
+                const parsed = JSON.parse(input);
+                encryptedData = parsed;
+                
+                // Detect data type
+                if (parsed.version && parsed.version.includes('nexapay')) {
+                    dataType = 'backup';
+                    document.getElementById('dataTypeIndicator').textContent = '✅ Complete backup detected';
+                    document.querySelector('input[value="backup"]').checked = true;
+                } else if (parsed.purpose === 'seed' || (parsed.ciphertext && parsed.algorithm)) {
+                    dataType = parsed.purpose || 'seed';
+                    document.getElementById('dataTypeIndicator').textContent = `✅ Encrypted ${dataType} detected`;
+                    document.querySelector(`input[value="${dataType}"]`).checked = true;
+                } else {
+                    document.getElementById('dataTypeIndicator').textContent = '⚠️ Unknown format - select manually';
+                }
+            } catch (error) {
+                document.getElementById('dataTypeIndicator').textContent = '❌ Invalid JSON';
+                encryptedData = null;
+            }
         }
 
         // ========== STEP NAVIGATION ==========
-        function advanceToStep2() {
-            if (!backupFileData) {
-                alert('Please upload a backup file first');
+        function validateEncryptedData() {
+            if (!encryptedData) {
+                try {
+                    const input = document.getElementById('encryptedData').value;
+                    if (!input.trim()) {
+                        alert('Please paste or upload encrypted data');
+                        return;
+                    }
+                    encryptedData = JSON.parse(input);
+                } catch (error) {
+                    alert('Invalid JSON data. Please check your input.');
+                    return;
+                }
+            }
+            
+            // Validate encrypted data structure
+            if (!encryptedData.ciphertext || !encryptedData.iv) {
+                alert('Invalid encrypted data format. Missing required fields.');
                 return;
             }
-            showStep(2);
+            
+            // Update decryption info
+            document.getElementById('detectedType').textContent = dataType.toUpperCase();
+            document.getElementById('detectedAlgorithm').textContent = encryptedData.algorithm || 'AES-256-GCM';
+            document.getElementById('detectedDate').textContent = encryptedData.timestamp ? new Date(encryptedData.timestamp).toLocaleString() : 'Unknown';
+            
+            // Move to step 2
+            document.getElementById('step1-content').classList.add('hidden');
+            document.getElementById('step2-content').classList.remove('hidden');
         }
 
         function goBackToStep1() {
-            showStep(1);
+            document.getElementById('step2-content').classList.add('hidden');
+            document.getElementById('step1-content').classList.remove('hidden');
         }
 
-        function showStep(step) {
-            // Hide all steps
-            for (let i = 1; i <= 4; i++) {
-                document.getElementById(`step${i}`).style.display = 'none';
-            }
-            
-            // Show selected step
-            document.getElementById(`step${step}`).style.display = 'block';
-            
-            // Update step indicators
-            updateStepIndicators(step);
-        }
-
-        function updateStepIndicators(currentStep) {
-            const steps = document.querySelectorAll('.decryption-step .step');
-            steps.forEach((step, index) => {
-                step.classList.remove('active', 'completed');
-                
-                const stepNumber = index + 1;
-                if (stepNumber < currentStep) {
-                    step.classList.add('completed');
-                } else if (stepNumber === currentStep) {
-                    step.classList.add('active');
-                }
-            });
-        }
-
-        // ========== DECRYPTION PROCESS ==========
-        async function startDecryption() {
+        // ========== DECRYPTION FUNCTIONS ==========
+        async function attemptDecryption() {
+            if (!checkRateLimit()) return;
             if (isDecrypting) return;
             
+            isDecrypting = true;
             const sentence = document.getElementById('decryptionSentence').value.trim();
             const words = sentence.split(/\s+/).filter(w => w.length > 0);
             
             if (words.length < 7) {
-                alert('Please enter a sentence with at least 7 words');
+                alert('Please enter your 7-word sentence');
+                isDecrypting = false;
                 return;
             }
             
-            if (!backupFileData) {
-                alert('No backup file loaded');
-                return;
-            }
-            
-            isDecrypting = true;
-            showStep(3);
-            
-            // Update UI
-            document.getElementById('decryptionStatus').textContent = 'Verifying backup file...';
-            document.getElementById('decryptionProgress').style.width = '20%';
+            const decryptBtn = document.getElementById('decryptBtn');
+            const originalText = decryptBtn.innerHTML;
+            decryptBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Decrypting...';
+            decryptBtn.disabled = true;
             
             try {
-                // Step 1: Decrypt seed phrase
-                document.getElementById('decryptionStatus').textContent = 'Decrypting seed phrase...';
-                document.getElementById('decryptionProgress').style.width = '40%';
+                let result;
                 
-                const decryptedSeed = await decryptData(
-                    backupFileData.encryptedSeed,
-                    sentence,
-                    backupFileData.clientNonce,
-                    'seed'
-                );
-                
-                // Verify seed phrase is valid
-                if (!decryptedSeed || decryptedSeed.split(' ').length !== 12) {
-                    throw new Error('Invalid seed phrase decrypted');
-                }
-                decryptedData.seed = decryptedSeed;
-                
-                // Step 2: Decrypt private key
-                document.getElementById('decryptionStatus').textContent = 'Decrypting private key...';
-                document.getElementById('decryptionProgress').style.width = '60%';
-                
-                const decryptedPrivateKey = await decryptData(
-                    backupFileData.encryptedPrivateKey,
-                    sentence,
-                    backupFileData.clientNonce,
-                    'private'
-                );
-                
-                // Verify private key is valid
-                if (!decryptedPrivateKey || !decryptedPrivateKey.startsWith('0x')) {
-                    throw new Error('Invalid private key decrypted');
-                }
-                decryptedData.privateKey = decryptedPrivateKey;
-                
-                // Step 3: Derive wallet address
-                document.getElementById('decryptionStatus').textContent = 'Verifying wallet...';
-                document.getElementById('decryptionProgress').style.width = '80%';
-                
-                const wallet = new ethers.Wallet(decryptedPrivateKey);
-                decryptedData.address = wallet.address;
-                
-                // Verify address matches backup
-                if (decryptedData.address.toLowerCase() !== backupFileData.walletAddress.toLowerCase()) {
-                    throw new Error('Decrypted address does not match backup file');
+                if (dataType === 'backup') {
+                    result = await decryptBackup(encryptedData, sentence);
+                } else {
+                    result = await decryptSingleItem(encryptedData, sentence, dataType);
                 }
                 
-                // Step 4: Complete
-                document.getElementById('decryptionStatus').textContent = 'Decryption complete!';
-                document.getElementById('decryptionProgress').style.width = '100%';
-                
-                setTimeout(() => {
-                    showResults();
-                }, 500);
-                
+                if (result.success) {
+                    // Success!
+                    decryptedWallet = result.wallet;
+                    showDecryptionResults(result.wallet);
+                } else {
+                    // Failed
+                    recordFailedAttempt();
+                    showDecryptionError(result.error);
+                }
             } catch (error) {
-                console.error('Decryption error:', error);
+                recordFailedAttempt();
                 showDecryptionError(error.message);
             } finally {
                 isDecrypting = false;
+                decryptBtn.innerHTML = originalText;
+                decryptBtn.disabled = false;
             }
         }
 
-        async function decryptData(encryptedData, password, salt, purpose) {
+        async function decryptBackup(backupData, password) {
             try {
-                // Parse encrypted data
-                const data = typeof encryptedData === 'string' ? JSON.parse(encryptedData) : encryptedData;
+                // Decrypt seed phrase
+                const seedResult = await decryptWithAESGCM(
+                    backupData.encryptedSeed,
+                    password,
+                    backupData.clientNonce,
+                    'seed'
+                );
                 
-                // Verify data structure
-                if (!data.ciphertext || !data.iv || !data.salt) {
-                    throw new Error('Invalid encrypted data format');
+                // Decrypt private key
+                const privateKeyResult = await decryptWithAESGCM(
+                    backupData.encryptedPrivateKey,
+                    password,
+                    backupData.clientNonce,
+                    'private'
+                );
+                
+                // Verify consistency
+                const walletFromSeed = ethers.Wallet.fromMnemonic(seedResult);
+                const walletFromPrivate = new ethers.Wallet(privateKeyResult);
+                
+                if (walletFromSeed.address !== walletFromPrivate.address) {
+                    throw new Error('Decryption consistency check failed');
                 }
                 
+                return {
+                    success: true,
+                    wallet: {
+                        seed: seedResult,
+                        privateKey: privateKeyResult,
+                        address: walletFromSeed.address
+                    }
+                };
+            } catch (error) {
+                return {
+                    success: false,
+                    error: 'Failed to decrypt backup: ' + error.message
+                };
+            }
+        }
+
+        async function decryptSingleItem(encryptedItem, password, purpose) {
+            try {
+                // Determine salt/nonce
+                const salt = encryptedItem.salt || 'default_salt';
+                
+                const decrypted = await decryptWithAESGCM(
+                    JSON.stringify(encryptedItem),
+                    password,
+                    salt,
+                    purpose
+                );
+                
+                let wallet;
+                if (purpose === 'seed') {
+                    wallet = ethers.Wallet.fromMnemonic(decrypted);
+                } else if (purpose === 'private') {
+                    wallet = new ethers.Wallet(decrypted);
+                } else {
+                    throw new Error('Unknown decryption purpose');
+                }
+                
+                return {
+                    success: true,
+                    wallet: {
+                        seed: purpose === 'seed' ? decrypted : '',
+                        privateKey: purpose === 'private' ? decrypted : wallet.privateKey,
+                        address: wallet.address
+                    }
+                };
+            } catch (error) {
+                return {
+                    success: false,
+                    error: 'Failed to decrypt: ' + error.message
+                };
+            }
+        }
+
+        async function decryptWithAESGCM(encryptedBase64, password, salt, purpose) {
+            try {
+                const encryptedData = typeof encryptedBase64 === 'string' ? 
+                    JSON.parse(encryptedBase64) : encryptedBase64;
+                
                 const encoder = new TextEncoder();
+                
+                // Verify checksum if present
+                if (encryptedData.checksum) {
+                    const calculatedChecksum = await sha256(encryptedData.data);
+                    if (calculatedChecksum !== encryptedData.checksum) {
+                        throw new Error('Data corruption detected');
+                    }
+                }
                 
                 // Derive key
                 const keyMaterial = await crypto.subtle.importKey(
                     'raw',
-                    encoder.encode(password + data.salt + purpose),
+                    encoder.encode(password + salt + purpose),
                     { name: 'PBKDF2' },
                     false,
                     ['deriveKey']
@@ -703,8 +869,8 @@
                 const key = await crypto.subtle.deriveKey(
                     {
                         name: 'PBKDF2',
-                        salt: encoder.encode(data.salt + purpose),
-                        iterations: data.iterations || 600000,
+                        salt: encoder.encode(salt + purpose),
+                        iterations: SECURITY_CONFIG.PBKDF2_ITERATIONS,
                         hash: 'SHA-256'
                     },
                     keyMaterial,
@@ -713,9 +879,9 @@
                     ['decrypt']
                 );
                 
-                // Prepare data for decryption
-                const iv = base64ToArray(data.iv);
-                const ciphertext = base64ToArray(data.ciphertext);
+                // Convert base64 to arrays
+                const iv = base64ToArray(encryptedData.iv);
+                const data = base64ToArray(encryptedData.data);
                 
                 // Decrypt
                 const decrypted = await crypto.subtle.decrypt(
@@ -725,14 +891,72 @@
                         tagLength: 128
                     },
                     key,
-                    ciphertext
+                    data
                 );
                 
                 return new TextDecoder().decode(decrypted);
-                
             } catch (error) {
                 throw new Error('Decryption failed: ' + error.message);
             }
+        }
+
+        // ========== RESULTS DISPLAY ==========
+        function showDecryptionResults(wallet) {
+            // Update UI
+            document.getElementById('step2-content').classList.add('hidden');
+            document.getElementById('step3-content').classList.remove('hidden');
+            
+            // Display results
+            document.getElementById('decryptedAddress').textContent = wallet.address;
+            document.getElementById('decryptedSeed').textContent = wallet.seed || 'Not decrypted (private key only)';
+            document.getElementById('decryptedPrivateKey').textContent = wallet.privateKey;
+            
+            // Auto-clear sensitive data after 30 seconds of inactivity
+            let inactivityTimer;
+            function resetInactivityTimer() {
+                clearTimeout(inactivityTimer);
+                inactivityTimer = setTimeout(() => {
+                    if (confirm('Session inactive. Clear decrypted data for security?')) {
+                        secureMemoryWipe();
+                        clearAndRestart();
+                    }
+                }, 30 * 1000); // 30 seconds
+            }
+            
+            // Reset timer on any interaction
+            ['mousemove', 'keydown', 'click'].forEach(event => {
+                document.addEventListener(event, resetInactivityTimer);
+            });
+            
+            resetInactivityTimer();
+        }
+
+        function showDecryptionError(error) {
+            document.getElementById('step2-content').classList.add('hidden');
+            document.getElementById('error-content').classList.remove('hidden');
+            
+            document.getElementById('errorMessage').textContent = 'Decryption Failed';
+            document.getElementById('errorDetails').textContent = error;
+            
+            // Update attempt counter
+            failedAttempts++;
+            const remaining = SECURITY_CONFIG.MAX_DECRYPTION_ATTEMPTS - failedAttempts;
+            if (remaining > 0) {
+                document.getElementById('errorDetails').textContent += `\n${remaining} attempts remaining`;
+            }
+        }
+
+        function retryDecryption() {
+            document.getElementById('error-content').classList.add('hidden');
+            document.getElementById('step2-content').classList.remove('hidden');
+        }
+
+        // ========== UTILITY FUNCTIONS ==========
+        async function sha256(data) {
+            const encoder = new TextEncoder();
+            const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(data));
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
         function base64ToArray(base64) {
@@ -744,55 +968,7 @@
             return bytes;
         }
 
-        function showDecryptionError(message) {
-            document.getElementById('decryptionSpinner').style.display = 'none';
-            document.getElementById('decryptionStatus').textContent = 'Decryption failed';
-            document.getElementById('errorMessage').textContent = message;
-            document.getElementById('decryptionError').style.display = 'block';
-        }
-
-        function showResults() {
-            // Display decrypted data
-            document.getElementById('decryptedAddress').textContent = decryptedData.address;
-            document.getElementById('seedPhrase').textContent = decryptedData.seed;
-            document.getElementById('privateKey').textContent = decryptedData.privateKey;
-            
-            // Show step 4
-            showStep(4);
-        }
-
-        // ========== COPY FUNCTIONS ==========
-        async function copyToClipboard(elementId) {
-            const element = document.getElementById(elementId);
-            if (!element) return;
-            
-            const text = element.textContent.trim();
-            if (!text) return;
-            
-            try {
-                await navigator.clipboard.writeText(text);
-                showCopySuccess();
-                
-                // Auto-clear clipboard after 30 seconds
-                setTimeout(() => {
-                    navigator.clipboard.writeText('').catch(() => {});
-                }, 30000);
-                
-            } catch (err) {
-                alert('Failed to copy: ' + err.message);
-            }
-        }
-
-        function showCopySuccess() {
-            const notification = document.getElementById('copySuccess');
-            notification.style.display = 'flex';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-
-        // ========== CHAINS DISPLAY ==========
-        function loadChains() {
+        function loadSupportedChains() {
             const chains = [
                 { name: 'Ethereum', symbol: 'ETH', icon: 'fab fa-ethereum' },
                 { name: 'Polygon', symbol: 'MATIC', icon: 'fas fa-bolt' },
@@ -804,53 +980,135 @@
                 { name: 'Fantom', symbol: 'FTM', icon: 'fas fa-ghost' }
             ];
             
-            const grid = document.getElementById('chainsGrid');
-            if (grid) {
-                grid.innerHTML = chains.map(chain => `
-                    <div class="chain-card">
-                        <div class="chain-icon">
-                            <i class="${chain.icon}"></i>
-                        </div>
-                        <div class="chain-name">${chain.name}</div>
-                        <div class="chain-symbol">${chain.symbol}</div>
+            const grid = document.getElementById('supportedChains');
+            grid.innerHTML = chains.map(chain => `
+                <div class="chain-card">
+                    <div class="chain-icon">
+                        <i class="${chain.icon}"></i>
                     </div>
-                `).join('');
+                    <div class="chain-name">${chain.name}</div>
+                    <div class="chain-symbol">${chain.symbol}</div>
+                </div>
+            `).join('');
+        }
+
+        // ========== COPY & DOWNLOAD FUNCTIONS ==========
+        async function copyToClipboard(elementId, isSecret = false) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent.trim();
+            
+            if (!text || text === '0x...') {
+                alert('Nothing to copy');
+                return;
+            }
+            
+            try {
+                await navigator.clipboard.writeText(text);
+                
+                if (isSecret) {
+                    alert('⚠️ CRITICAL: Copied to clipboard. Will auto-clear in 15 seconds.\n\nDO NOT paste anywhere unsafe!');
+                    
+                    setTimeout(() => {
+                        navigator.clipboard.writeText('').catch(() => {});
+                        alert('Clipboard cleared for security.');
+                    }, SECURITY_CONFIG.CLIPBOARD_CLEAR_TIME);
+                } else {
+                    alert('Copied to clipboard!');
+                }
+            } catch (err) {
+                alert('Failed to copy: ' + err.message);
             }
         }
 
-        // ========== CLEANUP FUNCTIONS ==========
-        function secureMemoryWipe() {
-            // Overwrite sensitive data
-            if (decryptedData.seed) {
-                decryptedData.seed = decryptedData.seed.split('').map(() => '0').join('');
-            }
-            if (decryptedData.privateKey) {
-                decryptedData.privateKey = decryptedData.privateKey.split('').map(() => '0').join('');
+        function downloadSeedPhrase() {
+            if (!decryptedWallet || !decryptedWallet.seed) {
+                alert('No seed phrase available');
+                return;
             }
             
-            // Clear variables
-            decryptedData = { seed: '', privateKey: '', address: '', chains: [] };
-            backupFileData = null;
+            const data = `NexaPay Wallet Seed Phrase\n====================\n\nIMPORTANT: Keep this secret and offline!\n\nSeed Phrase (12 words):\n${decryptedWallet.seed}\n\nWallet Address: ${decryptedWallet.address}\n\nGenerated: ${new Date().toISOString()}\n\n⚠️ WARNING: Anyone with these 12 words can steal ALL your funds!`;
+            const blob = new Blob([data], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `nexapay-seed-${decryptedWallet.address.substring(2, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function downloadPrivateKey() {
+            if (!decryptedWallet || !decryptedWallet.privateKey) {
+                alert('No private key available');
+                return;
+            }
             
-            // Clear input fields
-            document.getElementById('decryptionSentence').value = '';
-            removeFile();
+            const data = `NexaPay Wallet Private Key\n====================\n\nEXTREME DANGER: This gives FULL control of your wallet!\n\nPrivate Key:\n${decryptedWallet.privateKey}\n\nWallet Address: ${decryptedWallet.address}\n\nGenerated: ${new Date().toISOString()}\n\n🚨 CRITICAL WARNING: Anyone with this private key can steal ALL your funds immediately!`;
+            const blob = new Blob([data], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `nexapay-private-key-${decryptedWallet.address.substring(2, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // ========== ACTION FUNCTIONS ==========
+        function saveToBrowser() {
+            if (!decryptedWallet) {
+                alert('No wallet data to save');
+                return;
+            }
             
-            console.log('🧹 Memory securely wiped');
+            if (confirm('Save wallet to browser storage?\n\n⚠️ This is LESS secure than offline storage!\nBrowser storage can be compromised.')) {
+                try {
+                    const storageKey = `nexapay_wallet_${decryptedWallet.address}`;
+                    sessionStorage.setItem(storageKey, JSON.stringify({
+                        address: decryptedWallet.address,
+                        timestamp: new Date().toISOString()
+                    }));
+                    alert('Wallet reference saved (temporary).\nData will auto-clear when browser closes.');
+                } catch (error) {
+                    alert('Failed to save: ' + error.message);
+                }
+            }
+        }
+
+        function clearAndRestart() {
+            if (confirm('Clear all data and start over?')) {
+                secureMemoryWipe();
+                document.getElementById('step3-content').classList.add('hidden');
+                document.getElementById('error-content').classList.add('hidden');
+                document.getElementById('step1-content').classList.remove('hidden');
+                
+                // Reset file input
+                document.getElementById('fileInput').value = '';
+                document.getElementById('encryptedData').value = '';
+                document.getElementById('decryptionSentence').value = '';
+                encryptedData = null;
+            }
         }
 
         function secureWipeAndClose() {
-            secureMemoryWipe();
-            alert('Sensitive data cleared. You can safely close this tab.');
-            // Optionally redirect or close
-            // window.close(); // Note: can only close windows opened by JavaScript
-        }
-
-        function startOver() {
-            if (confirm('Clear all data and start over?')) {
+            if (confirm('Wipe all memory and close this tab?\n\nAll decrypted data will be permanently erased.')) {
                 secureMemoryWipe();
-                showStep(1);
-                updateStepIndicators(1);
+                
+                // Clear clipboard
+                navigator.clipboard.writeText('').catch(() => {});
+                
+                // Clear form data
+                document.getElementById('encryptedData').value = '';
+                document.getElementById('decryptionSentence').value = '';
+                
+                // Close tab after short delay
+                setTimeout(() => {
+                    window.close();
+                    // If window.close() doesn't work (some browsers block it), redirect
+                    window.location.href = 'about:blank';
+                }, 1000);
             }
         }
     </script>
