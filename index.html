@@ -1406,8 +1406,8 @@
                 </nav>
 
                 <div class="nav-buttons" id="navButtons">
-                    <a href="/login"><button class="btn btn-secondary">Sign Into Wallet</button></a>
-                    <button class="btn btn-primary" onclick="createWallet()">Create Wallet</button>
+                    <a href="dashboard.html"><button class="btn btn-secondary">Sign Into Wallet</button></a>
+                    <a href="create-wallet.html"><button class="btn btn-primary" onclick="createWallet()">Create Wallet</button></a>
                 </div>
 
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -1422,7 +1422,7 @@
             <a href="#security">Security</a>
             <a href="#what-we-dont">Transparency</a>
             <div class="mobile-menu-buttons">
-              <a href="signin.html"><button class="btn btn-secondary">Sign Into Wallet</button></a> 
+              <a href="dashboard.html"><button class="btn btn-secondary">Sign Into Wallet</button></a> 
                 <a href="create-wallet.html"><button class="btn btn-primary" onclick="createWallet()">Create Wallet</button></a>
             </div>
         </div>
@@ -1474,7 +1474,9 @@
                             <span>Create New Wallet</span>
                             <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
                         </button></a>
-                        <a href="signin.html"><button class="btn btn-secondary" onclick="restoreWallet()">Restore Existing Wallet</button></a>
+                        <a href="dashboard.html"><button class="btn btn-secondary" onclick="restoreWallet()">Restore Existing Wallet</button></a>
+                        <a href="decrypt-tool.html"><button class="btn btn-secondary" onclick="decryptEncryptedData()">Decrypt Wallet</button></a>
+
                     </div>
 
                 
@@ -1790,7 +1792,7 @@
                         <span>Create New Wallet</span>
                         <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
                     </button></a>
-                    <a href="signin.html"><button class="btn btn-outline-white" onclick="restoreWallet()">
+                    <a href="dashboard.html"><button class="btn btn-outline-white" onclick="restoreWallet()">
                         <i data-lucide="upload" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
                         <span>Restore Wallet</span>
                     </button></a>
