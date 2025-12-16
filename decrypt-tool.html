@@ -7,6 +7,17 @@
     <!-- Force light theme -->
     <meta name="color-scheme" content="light">
     <meta name="theme-color" content="#ffffff">
+
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="origin-trial" content="disable">
+    <script>
+        // Prevent MetaMask injection
+        if (typeof window.ethereum !== 'undefined') {
+            console.warn('MetaMask detected - ignoring for local decryption');
+            // Optionally disable ethereum if it causes issues
+            // delete window.ethereum;
+        }
+    </script>
     
     <!-- External Dependencies -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
