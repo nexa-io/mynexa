@@ -1041,8 +1041,8 @@
             const backupData = {
                 version: 'nexapay-wallet-backup-v1',
                 walletAddress: walletData.address,
-                encryptedSeed: JSON.parse(walletData.encryptedSeed),
-                encryptedPrivateKey: JSON.parse(walletData.encryptedPrivateKey),
+                encryptedSeed: walletData.encryptedSeed,
+                encryptedPrivateKey: walletData.encryptedPrivateKey,
                 timestamp: new Date().toISOString(),
                 chains: ['Ethereum', 'Polygon', 'BNB Smart Chain', 'Arbitrum', 'Optimism', 'Base', 'Avalanche', 'Fantom'],
                 notes: 'This is an encrypted wallet backup. Use your 7-word sentence to decrypt.'
