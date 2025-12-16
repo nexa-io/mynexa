@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaPay Wallet Explorer</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <!-- Google Fonts - Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">N</div>
+                <span class="logo-text">NexaPay</span>
+            </a>
+            <div class="tagline">Wallet Explorer</div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Legal</div>
+                <a href="about.html" class="nav-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>About</span>
+                </a>
+                <a href="privacy.html" class="nav-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Privacy</span>
+                </a>
+                <a href="terms.html" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Terms</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Support</div>
+                <a href="mailto:infocontactnexa@gmail.com" class="nav-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email Support</span>
+                </a>
+            </div>
+
+            <div class="wallet-display" id="walletDisplay">
+                <div class="connected-wallet">
+                    <i class="fas fa-wallet"></i>
+                    <span id="connectedWalletText">No wallet connected</span>
+                </div>
+                <button class="change-wallet-btn" id="changeWalletBtn">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div>
+                    <h1>Wallet Explorer</h1>
+                    <p class="header-subtitle">View public blockchain data for any Ethereum wallet</p>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="wallet-actions">
+                    <button class="connect-btn" id="connectBtn">
+                        <i class="fas fa-wallet"></i>
+                        <span>Connect Wallet</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Wallet Connection Modal -->
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>Connect Wallet</h3>
+                    <button class="modal-close" id="modalClose">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <div class="input-group">
+                        <label for="walletAddress">Enter Ethereum Wallet Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-wallet"></i>
+                            <input type="text" id="walletAddress" placeholder="0x..." maxlength="42">
+                            <button class="paste-btn" id="pasteBtn">
+                                <i class="fas fa-paste"></i>
+                            </button>
+                        </div>
+                        <div class="input-hint">Format: 0x followed by 40 hexadecimal characters</div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button class="btn-primary" id="connectWalletBtn">
+                            Connect & View Data
+                        </button>
+                        <button class="btn-secondary" id="useExampleBtn">
+                            Use Example Wallet
+                        </button>
+                    </div>
+
+                    <div class="disclaimer-box">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Only public blockchain data will be displayed. No private keys or sensitive information required.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Custom Token Modal -->
+        <div class="modal-overlay" id="addTokenModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>Add Custom Token</h3>
+                    <button class="modal-close" id="closeTokenModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <div class="input-group">
+                        <label for="tokenAddress">Token Contract Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-coins"></i>
+                            <input type="text" id="tokenAddress" placeholder="0x..." maxlength="42">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="tokenSymbol">Token Symbol (Optional)</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-tag"></i>
+                            <input type="text" id="tokenSymbol" placeholder="e.g., USDT" maxlength="10">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="tokenDecimals">Decimals (Optional)</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-hashtag"></i>
+                            <input type="number" id="tokenDecimals" placeholder="18" min="0" max="36" value="18">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="tokenNetwork">Network</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-network-wired"></i>
+                            <select id="tokenNetwork">
+                                <option value="ethereum">Ethereum</option>
+                                <option value="arbitrum">Arbitrum</option>
+                                <option value="base">Base</option>
+                                <option value="bsc">BSC</option>
+                                <option value="polygon">Polygon</option>
+                                <option value="optimism">Optimism</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button class="btn-primary" id="addTokenBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Token
+                        </button>
+                        <button class="btn-secondary" id="cancelTokenBtn">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Connected Wallet Info -->
+            <div class="wallet-info-bar" id="walletInfoBar">
+                <div class="wallet-address-display">
+                    <i class="fas fa-wallet"></i>
+                    <div>
+                        <div class="wallet-label">Connected Wallet</div>
+                        <div class="wallet-address" id="connectedAddress"></div>
+                    </div>
+                </div>
+                <div class="wallet-actions-bar">
+                    <button class="action-btn copy-btn" id="copyAddressBtn">
+                        <i class="fas fa-copy"></i>
+                        Copy Address
+                    </button>
+                    <button class="action-btn disconnect-btn" id="disconnectBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Disconnect
+                    </button>
+                    <button class="action-btn refresh-btn" id="refreshAllBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-state-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <h3>No Wallet Connected</h3>
+                <p>Connect a wallet to view public blockchain balances and token holdings</p>
+                <button class="btn-primary" id="connectFromEmpty">
+                    <i class="fas fa-wallet"></i>
+                    Connect Wallet
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-state" id="loadingState">
+                <div class="loading-spinner"></div>
+                <p>Fetching wallet data...</p>
+                <div class="loading-progress" id="loadingProgress">
+                    Initializing...
+                </div>
+            </div>
+
+            <!-- Dashboard Sections -->
+            <div class="dashboard-sections" id="dashboardSections">
+                <!-- Total Balance -->
+                <div class="section-card total-balance-card">
+                    <div class="section-header">
+                        <h3>Total Portfolio Value</h3>
+                        <div class="balance-visibility" id="balanceVisibility">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <div class="total-balance" id="totalBalance">$0.00</div>
+                    <div class="balance-breakdown">
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Native Tokens:</span>
+                            <span class="breakdown-value" id="nativeTotal">$0.00</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">ERC-20 Tokens:</span>
+                            <span class="breakdown-value" id="tokenTotal">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blockchain Balances -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3>Blockchain Native Balances</h3>
+                        <div class="section-subtitle">Native tokens across all chains</div>
+                    </div>
+                    <div class="blockchain-grid" id="blockchainGrid">
+                        <!-- Blockchain cards will be dynamically added here -->
+                    </div>
+                    <div class="no-data" id="noBlockchains">
+                        <i class="fas fa-server"></i>
+                        <p>No blockchain balances found</p>
+                    </div>
+                </div>
+
+                <!-- Token Holdings -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3>Token Holdings</h3>
+                        <div class="section-subtitle">
+                            ERC-20 tokens across all networks
+                            <button class="add-token-btn" id="addTokenBtnHeader">
+                                <i class="fas fa-plus"></i>
+                                Add Custom Token
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tokens-grid" id="tokensGrid">
+                        <!-- Token cards will be dynamically added here -->
+                    </div>
+                    <div class="no-data" id="noTokens">
+                        <i class="fas fa-coins"></i>
+                        <p>No token holdings found</p>
+                    </div>
+                </div>
+
+                <!-- Network Summary -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3>Network Summary</h3>
+                        <div class="section-subtitle">Activity across all supported networks</div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Active Networks</div>
+                                <div class="stat-value" id="activeNetworks">0</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Total Tokens</div>
+                                <div class="stat-value" id="totalTokens">0</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Last Updated</div>
+                                <div class="stat-value" id="lastUpdated">Never</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer with Disclaimer -->
+        <footer class="dashboard-footer">
+            <div class="footer-content">
+                <div class="footer-disclaimer">
+                    <p><strong>Disclaimer:</strong> NexaPay Wallet Explorer is an open-source blockchain data visualization tool. 
+                    All information displayed is publicly available on the blockchain. We do not store, control, or have 
+                    access to any user funds or private keys. Wallet addresses and transaction data are immutable and 
+                    publicly visible. Use at your own risk. Not financial advice. By using this tool, you acknowledge 
+                    that blockchain data is permanent and public.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="about.html">About</a>
+                    <a href="mailto:infocontactnexa@gmail.com">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Scripts -->
+    <script src="dashboard.js"></script>
+</body>
+</html>
