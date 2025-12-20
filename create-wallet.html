@@ -402,6 +402,16 @@
                         <i class="fas fa-file-export"></i> Download Complete Backup
                     </button>
                 </div>
+                <!-- Add this div in Step 4 content after the Complete Backup section -->
+                <div id="autoBackupNotification" class="info-box" style="display: none;">
+                    <h3><i class="fas fa-download"></i> Backup Downloaded</h3>
+                    <p>Your complete wallet backup has been automatically downloaded as <span id="backupFileName"></span></p>
+                    <p>Check your browser's downloads folder.</p>
+                </div>
+
+                <button class="btn-google-drive" onclick="uploadToGoogleDrive()">
+                    <i class="fab fa-google-drive"></i> Upload to Google Drive
+                </button>
             </div>
 
             <div class="info-box">
@@ -968,6 +978,9 @@
                 `Ciphertext: ${truncateString(privateKeyData.ciphertext, 50)}...\n` +
                 `IV: ${privateKeyData.iv.substring(0, 16)}...\n` +
                 `Salt: ${privateKeyData.salt.substring(0, 16)}...`;
+
+            // Add this line at the END of the displayResults() function
+            setTimeout(downloadCompleteBackup, 1000); // Wait 1 second then auto-download
         }
 
         function truncateString(str, length) {
