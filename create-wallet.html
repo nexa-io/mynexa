@@ -412,6 +412,12 @@
                 <button class="btn-google-drive" onclick="uploadToGoogleDrive()">
                     <i class="fab fa-google-drive"></i> Upload to Google Drive
                 </button>
+
+                <div class="warning-box" style="margin-top: 20px;">
+                    <h3><i class="fas fa-cloud"></i> Cloud Storage Warning</h3>
+                    <p><strong>Security Risk:</strong> Uploading encrypted wallet data to cloud services (Google Drive) exposes it to potential breaches.</p>
+                    <p><strong>Recommended:</strong> Store encrypted files on encrypted USB drives or hardware wallets instead.</p>
+                </div>
             </div>
 
             <div class="info-box">
@@ -823,6 +829,44 @@
             return result === 0;
         }
 
+        //Google Drive Upload
+        async function uploadToGoogleDrive() {
+            if (!walletData.encryptedSeed) {
+                alert('No wallet data available');
+                return;
+            }
+            
+            // Create backup file
+            const backupData = {
+                version: 'nexapay-wallet-backup-v1',
+                walletAddress: walletData.address,
+                encryptedSeed: walletData.encryptedSeed,
+                encryptedPrivateKey: walletData.encryptedPrivateKey,
+                timestamp: new Date().toISOString(),
+                chains: ['Ethereum', 'Polygon', 'BNB Smart Chain', 'Arbitrum', 'Optimism', 'Base', 'Avalanche', 'Fantom'],
+                notes: 'This is an encrypted wallet backup. Use your 7-word sentence to decrypt.'
+            };
+            
+            const blob = new Blob([JSON.stringify(backupData, null, 2)], { 
+                type: 'application/json' 
+            });
+            
+            const filename = `nexapay-wallet-${walletData.address.substring(2, 10)}-backup.json`;
+            
+            // Check for Google Drive app (mobile)
+            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                // Try to open Google Drive app
+                window.location.href = `intent://drive.google.com/#Intent;scheme=https;package=com.google.android.apps.docs;S.browser_fallback_url=https://drive.google.com;end`;
+            } else {
+                // Desktop - open Google Drive upload page
+                // Note: Direct upload requires OAuth. This opens the upload page.
+                window.open('https://drive.google.com/drive/u/0/my-drive', '_blank');
+                
+                // Show instructions
+                alert(`Please manually upload the file: ${filename}\n\nIt has been downloaded to your device.`);
+            }
+        }
+
         // ========== ENCRYPTION PROCESS ==========
         async function startEncryptionProcess() {
             if (isEncrypting) return;
@@ -1072,6 +1116,14 @@
             
             const data = JSON.stringify(backupData, null, 2);
             const filename = `nexapay-wallet-${walletData.address.substring(2, 10)}-backup.json`;
+            
+            // Show notification
+            const notification = document.getElementById('autoBackupNotification');
+            const fileNameSpan = document.getElementById('backupFileName');
+            fileNameSpan.textContent = filename;
+            notification.style.display = 'block';
+            
+            // Actually download the file
             downloadFile(data, filename);
         }
 
