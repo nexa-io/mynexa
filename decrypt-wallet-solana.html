@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: light;">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="create-wallet-solana.css">
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decrypt Solana Wallet - NexaPay</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Solana Libraries -->
+    <script src="https://unpkg.com/@solana/web3.js@1.78.0/lib/index.iife.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bip39@3.1.0/index.js"></script>
+    
+    <style>
+        :root {
+            --solana-purple: #9945FF;
+            --solana-green: #14F195;
+            --solana-blue: #00C2FF;
+            --solana-dark: #0F0F23;
+        }
+        
+        .header-solana {
+            background: linear-gradient(135deg, var(--solana-dark), #1A1A2E);
+            color: white !important;
+        }
+        
+        .btn-solana {
+            background: linear-gradient(135deg, var(--solana-purple), var(--solana-green));
+            color: white !important;
+        }
+        
+        .solana-badge {
+            background: linear-gradient(135deg, var(--solana-purple), var(--solana-green));
+            color: white;
+        }
+        
+        .file-upload-area {
+            border: 3px dashed var(--solana-purple);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            background: #f8f5ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .secret-display .secret-text {
+            filter: blur(8px);
+            transition: filter 0.3s ease;
+        }
+        
+        .secret-display:hover .secret-text {
+            filter: blur(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="session-timer" id="sessionTimer" style="display: none;">
+        <i class="fas fa-clock"></i>
+        <span id="timerText">10:00</span>
+    </div>
+
+    <div class="security-badge solana-badge">
+        <i class="fas fa-user-secret"></i> SOLANA DECRYPTION
+    </div>
+
+    <div class="container">
+        <!-- Step 1: Upload Encrypted Data -->
+        <div id="step1-content">
+            <div class="header header-solana">
+                <h1><i class="fas fa-unlock-alt"></i> Solana Wallet Decryption</h1>
+                <p>Decrypt your Solana wallet backup locally in your browser</p>
+            </div>
+
+            <div class="file-upload-area" id="fileUploadArea">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: var(--solana-purple);"></i>
+                <h3>Drop your encrypted Solana backup file here</h3>
+                <p>Or click to browse (JSON format only)</p>
+                <input type="file" id="fileInput" accept=".json" style="display: none;">
+                <button class="btn-secondary" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-folder-open"></i> Browse Files
+                </button>
+            </div>
+
+            <div class="text-center my-6">
+                <span class="text-neutral-500">— OR —</span>
+            </div>
+
+            <div class="form-group">
+                <label for="encryptedData">
+                    <i class="fas fa-paste"></i> Paste encrypted JSON data:
+                </label>
+                <textarea 
+                    class="sentence-input" 
+                    id="encryptedData" 
+                    placeholder='Paste your encrypted Solana JSON data here...'
+                    rows="6"
+                ></textarea>
+            </div>
+
+            <button onclick="validateEncryptedData()" class="btn btn-solana">
+                <i class="fas fa-check"></i> Validate & Continue
+            </button>
+        </div>
+
+        <!-- Step 2: Enter Decryption Sentence -->
+        <div id="step2-content" class="hidden">
+            <div class="header header-solana">
+                <h1><i class="fas fa-key"></i> Enter Your Decryption Sentence</h1>
+                <p>Enter the exact 7-word sentence you used to encrypt this wallet</p>
+            </div>
+
+            <div class="form-group">
+                <label for="decryptionSentence">
+                    <i class="fas fa-keyboard"></i> Your decryption sentence:
+                </label>
+                <textarea 
+                    class="sentence-input" 
+                    id="decryptionSentence" 
+                    placeholder="Enter your 7-word sentence exactly as you created it..."
+                    rows="2"
+                ></textarea>
+                <div class="word-count">
+                    Words: <span id="sentenceWordCount">0</span>
+                </div>
+            </div>
+
+            <button onclick="attemptDecryption()" class="btn btn-solana" id="decryptBtn">
+                <i class="fas fa-unlock-alt"></i> Decrypt Solana Wallet
+            </button>
+            
+            <button onclick="goBackToStep1()" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+
+        <!-- Step 3: Decryption Results -->
+        <div id="step3-content" class="hidden">
+            <div class="header header-solana">
+                <h1><i class="fas fa-check-circle"></i> Solana Wallet Decrypted!</h1>
+                <p>Your Solana wallet has been decrypted locally.</p>
+            </div>
+
+            <div class="warning-box">
+                <h3><i class="fas fa-skull-crossbones"></i> EXTREME DANGER</h3>
+                <p><strong>Anyone with this information can steal ALL your SOL and SPL tokens.</strong></p>
+                <p>Do NOT share, screenshot, or leave this page open.</p>
+            </div>
+
+            <!-- Wallet Address -->
+            <div class="encrypted-data-card">
+                <div class="encrypted-data-header">
+                    <div class="encrypted-data-title">
+                        <i class="fas fa-wallet" style="color: var(--solana-purple);"></i>
+                        <span>Solana Wallet Address</span>
+                    </div>
+                    <button class="btn-copy" onclick="copyToClipboard('decryptedAddress')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+                <div class="encrypted-data-content" id="decryptedAddress">
+                    Loading...
+                </div>
+            </div>
+
+            <!-- Seed Phrase -->
+            <div class="encrypted-data-card secret-display">
+                <div class="encrypted-data-header">
+                    <div class="encrypted-data-title">
+                        <i class="fas fa-seedling" style="color: var(--solana-green);"></i>
+                        <span>Seed Phrase (12 words)</span>
+                    </div>
+                    <div class="status-badge seed-badge">
+                        <i class="fas fa-eye"></i> Hover to Reveal
+                    </div>
+                </div>
+                <div class="encrypted-data-content secret-text" id="decryptedSeed">
+                    word1 word2 word3 word4 word5 word6 word7 word8 word9 word10 word11 word12
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-copy" onclick="copyToClipboard('decryptedSeed', true)">
+                        <i class="fas fa-copy"></i> Copy Seed Phrase
+                    </button>
+                </div>
+            </div>
+
+            <!-- Private Key -->
+            <div class="encrypted-data-card secret-display">
+                <div class="encrypted-data-header">
+                    <div class="encrypted-data-title">
+                        <i class="fas fa-key" style="color: var(--solana-blue);"></i>
+                        <span>Private Key (Hex)</span>
+                    </div>
+                    <div class="status-badge private-key-badge">
+                        <i class="fas fa-eye"></i> Hover to Reveal
+                    </div>
+                </div>
+                <div class="encrypted-data-content secret-text" id="decryptedPrivateKey">
+                    0x...
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-copy" onclick="copyToClipboard('decryptedPrivateKey', true)">
+                        <i class="fas fa-copy"></i> Copy Private Key
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4 mt-6">
+                <button class="btn btn-solana" onclick="clearAndRestart()">
+                    <i class="fas fa-redo"></i> Clear & Start Over
+                </button>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-content" class="hidden">
+            <div class="header" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                <h1><i class="fas fa-times-circle"></i> Decryption Failed</h1>
+            </div>
+
+            <div class="encryption-status">
+                <i class="fas fa-times-circle" style="font-size: 48px; color: #dc2626;"></i>
+                <h3 id="errorMessage">Decryption failed</h3>
+            </div>
+
+            <button onclick="clearAndRestart()" class="btn btn-solana">
+                <i class="fas fa-home"></i> Start Over
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const SECURITY_CONFIG = {
+            PBKDF2_ITERATIONS: 600000,
+            SESSION_TIMEOUT: 10 * 60 * 1000
+        };
+
+        let encryptedData = null;
+        let decryptedWallet = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔓 Solana Decryption Tool Initialized');
+            setupEventListeners();
+            startSessionTimer();
+        });
+
+        function setupEventListeners() {
+            const fileInput = document.getElementById('fileInput');
+            const uploadArea = document.getElementById('fileUploadArea');
+            
+            fileInput.addEventListener('change', handleFileUpload);
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#14F195';
+                uploadArea.style.background = '#f0f9ff';
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = '#9945FF';
+                uploadArea.style.background = '#f8f5ff';
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#9945FF';
+                uploadArea.style.background = '#f8f5ff';
+                
+                if (e.dataTransfer.files.length > 0) {
+                    handleFileUpload({ target: { files: e.dataTransfer.files } });
+                }
+            });
+            
+            document.getElementById('decryptionSentence').addEventListener('input', function() {
+                const words = this.value.trim().split(/\s+/).filter(w => w.length > 0);
+                document.getElementById('sentenceWordCount').textContent = words.length;
+            });
+        }
+
+        function startSessionTimer() {
+            const timerElement = document.getElementById('sessionTimer');
+            const timerText = document.getElementById('timerText');
+            
+            timerElement.style.display = 'flex';
+            
+            const sessionTimer = setInterval(() => {
+                const elapsed = Date.now() - sessionStartTime;
+                const remaining = SECURITY_CONFIG.SESSION_TIMEOUT - elapsed;
+                
+                if (remaining <= 0) {
+                    clearInterval(sessionTimer);
+                    secureMemoryWipe();
+                    window.location.reload();
+                    return;
+                }
+                
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                timerText.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const content = e.target.result;
+                    document.getElementById('encryptedData').value = content;
+                    encryptedData = JSON.parse(content);
+                } catch (error) {
+                    alert('Error reading file: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function validateEncryptedData() {
+            if (!encryptedData) {
+                try {
+                    const input = document.getElementById('encryptedData').value;
+                    if (!input.trim()) {
+                        alert('Please paste or upload encrypted data');
+                        return;
+                    }
+                    encryptedData = JSON.parse(input);
+                } catch (error) {
+                    alert('Invalid JSON data');
+                    return;
+                }
+            }
+
+            updateStep(2);
+        }
+
+        function goBackToStep1() {
+            updateStep(1);
+        }
+
+        async function attemptDecryption() {
+            const sentence = document.getElementById('decryptionSentence').value.trim();
+            const words = sentence.split(/\s+/).filter(w => w.length > 0);
+            
+            if (words.length < 7) {
+                alert('Please enter your 7-word sentence');
+                return;
+            }
+            
+            const decryptBtn = document.getElementById('decryptBtn');
+            decryptBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Decrypting...';
+            decryptBtn.disabled = true;
+            
+            try {
+                let result;
+                
+                if (encryptedData.encryptedSeed && encryptedData.encryptedPrivateKey) {
+                    result = await decryptBackup(encryptedData, sentence);
+                } else {
+                    result = await decryptSingleItem(encryptedData, sentence);
+                }
+                
+                if (result.success) {
+                    decryptedWallet = result.wallet;
+                    showDecryptionResults(result.wallet);
+                } else {
+                    showDecryptionError(result.error);
+                }
+            } catch (error) {
+                showDecryptionError(error.message);
+            } finally {
+                decryptBtn.innerHTML = '<i class="fas fa-unlock-alt"></i> Decrypt Solana Wallet';
+                decryptBtn.disabled = false;
+            }
+        }
+
+        async function decryptBackup(backupData, password) {
+            try {
+                const encryptedSeedObj = typeof backupData.encryptedSeed === 'string' 
+                    ? JSON.parse(backupData.encryptedSeed) 
+                    : backupData.encryptedSeed;
+                    
+                const encryptedPrivateKeyObj = typeof backupData.encryptedPrivateKey === 'string'
+                    ? JSON.parse(backupData.encryptedPrivateKey)
+                    : backupData.encryptedPrivateKey;
+                
+                const seedSalt = encryptedSeedObj.salt || 'default_salt';
+                const privateKeySalt = encryptedPrivateKeyObj.salt || 'default_salt';
+                
+                const seedResult = await decryptWithAESGCM(encryptedSeedObj, password, seedSalt, 'seed');
+                const privateKeyResult = await decryptWithAESGCM(encryptedPrivateKeyObj, password, privateKeySalt, 'private');
+                
+                // Verify by recreating keypair
+                const seed = await bip39.mnemonicToSeed(seedResult);
+                const seedBuffer = new Uint8Array(seed);
+                const keypair = solanaWeb3.Keypair.fromSeed(seedBuffer.slice(0, 32));
+                
+                if (keypair.secretKey.toString('hex') !== privateKeyResult) {
+                    throw new Error('Decryption consistency check failed');
+                }
+                
+                return {
+                    success: true,
+                    wallet: {
+                        seed: seedResult,
+                        privateKey: privateKeyResult,
+                        address: keypair.publicKey.toBase58()
+                    }
+                };
+            } catch (error) {
+                return {
+                    success: false,
+                    error: 'Failed to decrypt: ' + error.message
+                };
+            }
+        }
+
+        async function decryptSingleItem(encryptedItem, password) {
+            try {
+                const salt = encryptedItem.salt || 'default_salt';
+                const purpose = encryptedItem.purpose || 'seed';
+                
+                const decrypted = await decryptWithAESGCM(encryptedItem, password, salt, purpose);
+                
+                let wallet;
+                if (purpose === 'seed') {
+                    const seed = await bip39.mnemonicToSeed(decrypted);
+                    const seedBuffer = new Uint8Array(seed);
+                    const keypair = solanaWeb3.Keypair.fromSeed(seedBuffer.slice(0, 32));
+                    
+                    wallet = {
+                        seed: decrypted,
+                        privateKey: Buffer.from(keypair.secretKey).toString('hex'),
+                        address: keypair.publicKey.toBase58()
+                    };
+                } else {
+                    const secretKey = Uint8Array.from(Buffer.from(decrypted, 'hex'));
+                    const keypair = solanaWeb3.Keypair.fromSecretKey(secretKey);
+                    
+                    wallet = {
+                        seed: '',
+                        privateKey: decrypted,
+                        address: keypair.publicKey.toBase58()
+                    };
+                }
+                
+                return {
+                    success: true,
+                    wallet: wallet
+                };
+            } catch (error) {
+                return {
+                    success: false,
+                    error: 'Failed to decrypt: ' + error.message
+                };
+            }
+        }
+
+        async function decryptWithAESGCM(encryptedDataObj, password, salt, purpose) {
+            const encoder = new TextEncoder();
+            
+            const keyMaterial = await crypto.subtle.importKey(
+                'raw',
+                encoder.encode(password + salt + purpose),
+                { name: 'PBKDF2' },
+                false,
+                ['deriveKey']
+            );
+            
+            const key = await crypto.subtle.deriveKey(
+                {
+                    name: 'PBKDF2',
+                    salt: encoder.encode(salt + purpose),
+                    iterations: encryptedDataObj.iterations || SECURITY_CONFIG.PBKDF2_ITERATIONS,
+                    hash: 'SHA-256'
+                },
+                keyMaterial,
+                { name: 'AES-GCM', length: 256 },
+                false,
+                ['decrypt']
+            );
+            
+            const iv = base64ToArray(encryptedDataObj.iv);
+            const ciphertext = base64ToArray(encryptedDataObj.ciphertext);
+            
+            const decrypted = await crypto.subtle.decrypt(
+                {
+                    name: 'AES-GCM',
+                    iv: iv,
+                    tagLength: 128
+                },
+                key,
+                ciphertext
+            );
+            
+            return new TextDecoder().decode(decrypted);
+        }
+
+        function showDecryptionResults(wallet) {
+            updateStep(3);
+            
+            document.getElementById('decryptedAddress').textContent = wallet.address;
+            document.getElementById('decryptedSeed').textContent = wallet.seed || 'Not decrypted (private key only)';
+            document.getElementById('decryptedPrivateKey').textContent = wallet.privateKey;
+        }
+
+        function showDecryptionError(error) {
+            updateStep('error');
+            document.getElementById('errorMessage').textContent = error;
+        }
+
+        function updateStep(step) {
+            ['step1', 'step2', 'step3', 'error'].forEach(id => {
+                document.getElementById(`${id}-content`).classList.add('hidden');
+            });
+            document.getElementById(`${step}-content`).classList.remove('hidden');
+        }
+
+        async function copyToClipboard(elementId, isSecret = false) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent.trim();
+            
+            if (!text) return;
+            
+            try {
+                await navigator.clipboard.writeText(text);
+                alert(isSecret ? '⚠️ Copied! Will auto-clear in 15 seconds.' : 'Copied!');
+                
+                if (isSecret) {
+                    setTimeout(() => {
+                        navigator.clipboard.writeText('').catch(() => {});
+                    }, 15000);
+                }
+            } catch (err) {
+                alert('Failed to copy');
+            }
+        }
+
+        function clearAndRestart() {
+            secureMemoryWipe();
+            updateStep(1);
+            document.getElementById('encryptedData').value = '';
+            document.getElementById('decryptionSentence').value = '';
+            document.getElementById('fileInput').value = '';
+        }
+
+        function secureMemoryWipe() {
+            if (decryptedWallet) {
+                decryptedWallet.seed = '';
+                decryptedWallet.privateKey = '';
+                decryptedWallet.address = '';
+            }
+            decryptedWallet = null;
+            encryptedData = null;
+        }
+
+        function base64ToArray(base64) {
+            const binaryString = atob(base64);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes;
+        }
+
+        let sessionStartTime = Date.now();
+    </script>
+</body>
+</html>

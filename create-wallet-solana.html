@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: light;">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="create-wallet-solana.css">
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Solana Wallet - NexaPay</title>
+    
+    <!-- External Dependencies -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Solana Libraries -->
+    <script src="https://unpkg.com/@solana/web3.js@1.78.0/lib/index.iife.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@noble/ed25519@1.7.1/lib/index.js"></script>
+    
+    <!-- Encryption Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bip39@3.1.0/index.js"></script>
+    
+    <style>
+        /* Solana-specific colors */
+        :root {
+            --solana-purple: #9945FF;
+            --solana-green: #14F195;
+            --solana-blue: #00C2FF;
+            --solana-dark: #0F0F23;
+            --solana-light: #1A1A2E;
+        }
+        
+        .solana-gradient {
+            background: linear-gradient(135deg, var(--solana-purple), var(--solana-green), var(--solana-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn-solana {
+            background: linear-gradient(135deg, var(--solana-purple), var(--solana-green));
+            color: white !important;
+        }
+        
+        .btn-solana:hover {
+            background: linear-gradient(135deg, #7c3aed, #10b981);
+        }
+        
+        .solana-badge {
+            background: linear-gradient(135deg, var(--solana-purple), var(--solana-green));
+            color: white;
+        }
+        
+        .header-solana {
+            background: linear-gradient(135deg, var(--solana-dark), #1A1A2E);
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="session-timer" id="sessionTimer" style="display: none;">
+        <i class="fas fa-clock"></i>
+        <span id="timerText">15:00</span>
+    </div>
+
+    <div class="clipboard-notification" id="clipboardNotification">
+        <i class="fas fa-check-circle"></i>
+        <span>Copied to clipboard! Will clear in 30 seconds.</span>
+    </div>
+
+    <div class="container">
+        <div class="security-badge solana-badge">
+            <i class="fas fa-shield-alt"></i> SOLANA WALLET
+        </div>
+
+        <div class="step-indicator">
+            <div class="step active" id="step1">1</div>
+            <div class="step" id="step2">2</div>
+            <div class="step" id="step3">3</div>
+            <div class="step" id="step4">4</div>
+        </div>
+
+        <!-- Step 1: Create Sentence -->
+        <div id="step1-content">
+            <div class="header header-solana">
+                <h1><i class="fas fa-key"></i> Create Solana Wallet</h1>
+                <p>Generate a secure Solana wallet for SOL and SPL tokens</p>
+            </div>
+
+            <div class="warning-box">
+                <h3><i class="fas fa-exclamation-triangle"></i> IMPORTANT SECURITY NOTES</h3>
+                <p><strong>100% Local:</strong> Everything happens in your browser. No data is sent to any server.</p>
+                <p><strong>No Recovery:</strong> If you lose your sentence, your wallet is gone forever.</p>
+                <p><strong>Write It Down:</strong> Store your 7-word sentence securely offline.</p>
+            </div>
+
+            <div class="info-box">
+                <h3><i class="fas fa-lightbulb"></i> Create Your 7-Word Sentence</h3>
+                <p>Create a memorable sentence with <strong>at least 7 words</strong>. This will encrypt your wallet.</p>
+                <p class="mt-20"><strong>Examples:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>"The quick brown fox jumps over a lazy dog near solana beach"</li>
+                    <li>"My solana wallet holds valuable tokens for future projects"</li>
+                    <li>"Purple green blue gradient represents the solana ecosystem style"</li>
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label for="sentence">
+                    <i class="fas fa-pen"></i> Type your 7+ word sentence:
+                </label>
+                <textarea 
+                    class="sentence-input" 
+                    id="sentence" 
+                    placeholder="Example: My solana investment will grow over the next few years..."
+                    rows="3"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                ></textarea>
+                <div class="word-count">
+                    Words: <span id="wordCount">0</span> (minimum 7)
+                </div>
+            </div>
+
+            <button onclick="advanceToPractice()" class="btn btn-solana" id="step1Btn" disabled>
+                <i class="fas fa-arrow-right"></i> Continue to Practice
+            </button>
+        </div>
+
+        <!-- Step 2: Practice Sentence -->
+        <div id="step2-content" class="hidden">
+            <div class="header header-solana">
+                <h1><i class="fas fa-brain"></i> Practice Your Sentence</h1>
+                <p>Type your sentence 3 times to ensure you remember it perfectly</p>
+            </div>
+
+            <div class="practice-section">
+                <div class="practice-item">
+                    <label>
+                        <i class="fas fa-1"></i> First practice:
+                        <span class="match-indicator" id="practice1Match"></span>
+                    </label>
+                    <textarea 
+                        class="sentence-input" 
+                        id="practice1" 
+                        rows="2"
+                        placeholder="Type your sentence exactly as you wrote it..."
+                    ></textarea>
+                </div>
+
+                <div class="practice-item">
+                    <label>
+                        <i class="fas fa-2"></i> Second practice:
+                        <span class="match-indicator" id="practice2Match"></span>
+                    </label>
+                    <textarea 
+                        class="sentence-input" 
+                        id="practice2" 
+                        rows="2"
+                        placeholder="Type your sentence exactly as you wrote it..."
+                    ></textarea>
+                </div>
+
+                <div class="practice-item">
+                    <label>
+                        <i class="fas fa-3"></i> Third practice:
+                        <span class="match-indicator" id="practice3Match"></span>
+                    </label>
+                    <textarea 
+                        class="sentence-input" 
+                        id="practice3" 
+                        rows="2"
+                        placeholder="Type your sentence exactly as you wrote it..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <button onclick="advanceToEncryption()" class="btn btn-solana" id="step2Btn" disabled>
+                <i class="fas fa-lock"></i> I Can Remember This Sentence
+            </button>
+            
+            <button onclick="goBackToStep1()" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+
+        <!-- Step 3: Encryption Process -->
+        <div id="step3-content" class="hidden">
+            <div class="header header-solana">
+                <h1><i class="fas fa-lock"></i> Encryption in Progress</h1>
+                <p>Generating and encrypting your Solana wallet locally</p>
+            </div>
+
+            <div class="encryption-status" id="encryptionStatus">
+                <i class="fas fa-spinner fa-spin"></i> Generating Solana keypair...
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div class="info-box">
+                <h3><i class="fas fa-microchip"></i> Local Processing</h3>
+                <p><strong>No internet required:</strong> All encryption happens in your browser</p>
+                <p><strong>Ed25519 Curve:</strong> Solana uses Ed25519 elliptic curve cryptography</p>
+                <p><strong>Military-grade:</strong> AES-256-GCM encryption with PBKDF2 key derivation</p>
+            </div>
+
+            <button onclick="advanceToResults()" class="btn btn-solana" id="step3Btn" disabled>
+                <i class="fas fa-arrow-right"></i> View Your Encrypted Wallet
+            </button>
+            
+            <button onclick="goBackToStep2()" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+
+        <!-- Step 4: Results Page -->
+        <div id="step4-content" class="hidden">
+            <div class="header header-solana">
+                <h1><i class="fas fa-check-circle"></i> Solana Wallet Created!</h1>
+                <p>Your encrypted Solana wallet is ready. Save this information securely.</p>
+            </div>
+
+            <div class="warning-box">
+                <h3><i class="fas fa-exclamation-triangle"></i> FINAL WARNING</h3>
+                <p><strong>This is your ONLY chance to save this data.</strong></p>
+                <p>Once you close this page, the unencrypted wallet data will be permanently erased.</p>
+                <p>Your 7-word sentence is the ONLY way to decrypt this wallet.</p>
+            </div>
+
+            <!-- Wallet Address -->
+            <div class="wallet-address-box" style="background: linear-gradient(135deg, var(--solana-purple), var(--solana-green));">
+                <span class="label">Your Solana Wallet Address:</span>
+                <div id="walletAddressDisplay">Loading...</div>
+            </div>
+
+            <!-- Supported Chains -->
+            <h3 class="text-center mb-20"><i class="fas fa-link"></i> Works on Solana Networks</h3>
+            <div class="chains-grid" id="chainsGrid">
+                <div class="chain-card">
+                    <div class="chain-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="chain-name">Solana Mainnet</div>
+                    <div class="chain-symbol">Real SOL & Tokens</div>
+                </div>
+                <div class="chain-card">
+                    <div class="chain-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="chain-name">Solana Devnet</div>
+                    <div class="chain-symbol">Test SOL</div>
+                </div>
+                <div class="chain-card">
+                    <div class="chain-icon">
+                        <i class="fas fa-vial"></i>
+                    </div>
+                    <div class="chain-name">Solana Testnet</div>
+                    <div class="chain-symbol">Testing</div>
+                </div>
+            </div>
+
+            <!-- Encrypted Seed Phrase -->
+            <div class="encrypted-data-section">
+                <div class="encrypted-data-card">
+                    <div class="encrypted-data-header">
+                        <div class="encrypted-data-title">
+                            <i class="fas fa-seedling" style="color: var(--solana-green);"></i>
+                            <span>Encrypted Seed Phrase</span>
+                        </div>
+                        <div class="status-badge seed-badge">AES-256-GCM Encrypted</div>
+                    </div>
+                    <div class="encrypted-data-content" id="encryptedSeedDisplay">
+                        Loading...
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-copy" onclick="copyToClipboard('encryptedSeed')">
+                            <i class="fas fa-copy"></i> Copy Encrypted Seed
+                        </button>
+                        <button class="btn-download" onclick="downloadEncryptedData('seed')">
+                            <i class="fas fa-download"></i> Download Seed File
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Encrypted Private Key -->
+                <div class="encrypted-data-card">
+                    <div class="encrypted-data-header">
+                        <div class="encrypted-data-title">
+                            <i class="fas fa-key" style="color: var(--solana-purple);"></i>
+                            <span>Encrypted Private Key</span>
+                        </div>
+                        <div class="status-badge private-key-badge">AES-256-GCM Encrypted</div>
+                    </div>
+                    <div class="encrypted-data-content" id="encryptedPrivateKeyDisplay">
+                        Loading...
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-copy" onclick="copyToClipboard('encryptedPrivateKey')">
+                            <i class="fas fa-copy"></i> Copy Encrypted Private Key
+                        </button>
+                        <button class="btn-download" onclick="downloadEncryptedData('privateKey')">
+                            <i class="fas fa-download"></i> Download Private Key File
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Complete Backup -->
+                <div class="encrypted-data-card">
+                    <div class="encrypted-data-header">
+                        <div class="encrypted-data-title">
+                            <i class="fas fa-database"></i>
+                            <span>Complete Wallet Backup</span>
+                        </div>
+                        <div class="status-badge" style="background: var(--solana-purple);">Full JSON Export</div>
+                    </div>
+                    <p style="margin-bottom: 20px;">Download a complete backup file containing all encrypted data in standard JSON format.</p>
+                    <button class="btn btn-solana" onclick="downloadCompleteBackup()" style="margin: 0;">
+                        <i class="fas fa-file-export"></i> Download Complete Backup
+                    </button>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3><i class="fas fa-shield-alt"></i> Next Steps</h3>
+                <p><strong>1.</strong> Save your 7-word sentence securely offline</p>
+                <p><strong>2.</strong> Download and backup the encrypted files</p>
+                <p><strong>3.</strong> Use the Solana decryptor tool to access your wallet</p>
+                <p><strong>4.</strong> Never share your sentence or encrypted files</p>
+            </div>
+
+            <button onclick="startOver()" class="btn-secondary">
+                <i class="fas fa-redo"></i> Create Another Wallet
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ========== SOLANA WALLET CREATION ==========
+        const SECURITY_CONFIG = {
+            PBKDF2_ITERATIONS: 600000,
+            SESSION_TIMEOUT: 15 * 60 * 1000,
+            CLIPBOARD_CLEAR_TIME: 30 * 1000
+        };
+
+        let userSentence = '';
+        let walletData = {
+            mnemonic: '',
+            privateKey: '',
+            publicKey: '',
+            address: '',
+            encryptedSeed: '',
+            encryptedPrivateKey: '',
+            clientNonce: ''
+        };
+        let encryptionComplete = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔐 Solana Wallet Creator Initialized');
+            setupEventListeners();
+            startSessionTimer();
+        });
+
+        function setupEventListeners() {
+            const sentenceInput = document.getElementById('sentence');
+            sentenceInput.addEventListener('input', function() {
+                const sentence = this.value.trim();
+                const words = sentence.split(/\s+/).filter(w => w.length > 0);
+                const wordCount = words.length;
+                
+                document.getElementById('wordCount').textContent = wordCount;
+                document.getElementById('step1Btn').disabled = wordCount < 7;
+                
+                if (wordCount >= 7) {
+                    userSentence = sentence;
+                }
+            });
+
+            ['practice1', 'practice2', 'practice3'].forEach((id, index) => {
+                document.getElementById(id).addEventListener('input', function() {
+                    checkPracticeMatch(this, index);
+                });
+            });
+        }
+
+        function startSessionTimer() {
+            const timerElement = document.getElementById('sessionTimer');
+            const timerText = document.getElementById('timerText');
+            
+            timerElement.style.display = 'flex';
+            
+            const sessionTimer = setInterval(() => {
+                const elapsed = Date.now() - sessionStartTime;
+                const remaining = SECURITY_CONFIG.SESSION_TIMEOUT - elapsed;
+                
+                if (remaining <= 0) {
+                    clearInterval(sessionTimer);
+                    alert('Session expired. Page will refresh.');
+                    window.location.reload();
+                    return;
+                }
+                
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                timerText.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // ========== STEP NAVIGATION ==========
+        function advanceToPractice() {
+            const words = userSentence.split(/\s+/).filter(w => w.length > 0);
+            if (words.length < 7) {
+                alert('Please create a sentence with at least 7 words');
+                return;
+            }
+            
+            updateStep(2);
+            ['practice1', 'practice2', 'practice3'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('step2Btn').disabled = true;
+        }
+
+        function goBackToStep1() { updateStep(1); }
+        function goBackToStep2() { updateStep(2); }
+
+        function advanceToEncryption() {
+            updateStep(3);
+            startEncryptionProcess();
+        }
+
+        async function advanceToResults() {
+            if (!encryptionComplete) {
+                alert('Please wait for encryption to complete');
+                return;
+            }
+            updateStep(4);
+            displayResults();
+        }
+
+        function updateStep(step) {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`step${i}-content`).classList.add('hidden');
+                const stepEl = document.getElementById(`step${i}`);
+                stepEl.classList.remove('active', 'completed');
+                
+                if (i < step) {
+                    stepEl.classList.add('completed');
+                } else if (i === step) {
+                    stepEl.classList.add('active');
+                    document.getElementById(`step${i}-content`).classList.remove('hidden');
+                }
+            }
+        }
+
+        // ========== PRACTICE MATCH CHECKING ==========
+        function checkPracticeMatch(textarea, index) {
+            const matchEl = document.getElementById(`practice${index + 1}Match`);
+            const isMatch = textarea.value === userSentence;
+            
+            if (textarea.value.length === 0) {
+                matchEl.innerHTML = '';
+                return false;
+            }
+            
+            if (isMatch) {
+                matchEl.innerHTML = '<i class="fas fa-check-circle match-yes"></i> <span class="match-yes">Exact match</span>';
+                textarea.style.borderColor = '#10b981';
+                textarea.style.backgroundColor = '#f0fdf4';
+            } else {
+                matchEl.innerHTML = '<i class="fas fa-times-circle match-no"></i> <span class="match-no">Does not match</span>';
+                textarea.style.borderColor = '#dc2626';
+                textarea.style.backgroundColor = '#fef2f2';
+            }
+            
+            const practice1 = document.getElementById('practice1').value;
+            const practice2 = document.getElementById('practice2').value;
+            const practice3 = document.getElementById('practice3').value;
+            
+            const allMatch = practice1 === userSentence &&
+                           practice2 === userSentence &&
+                           practice3 === userSentence;
+            
+            document.getElementById('step2Btn').disabled = !allMatch;
+            return isMatch;
+        }
+
+        // ========== SOLANA WALLET GENERATION ==========
+        async function startEncryptionProcess() {
+            const statusEl = document.getElementById('encryptionStatus');
+            const progressBar = document.getElementById('progressBar');
+            const step3Btn = document.getElementById('step3Btn');
+            
+            try {
+                // Step 1: Generate mnemonic
+                statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating BIP39 mnemonic...';
+                progressBar.style.width = '25%';
+                
+                // Generate random entropy
+                const entropy = new Uint8Array(16);
+                crypto.getRandomValues(entropy);
+                walletData.mnemonic = bip39.entropyToMnemonic(entropy);
+                
+                progressBar.style.width = '50%';
+                await sleep(500);
+                
+                // Step 2: Generate Solana keypair from mnemonic
+                statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Solana keypair...';
+                
+                // Create seed from mnemonic
+                const seed = await bip39.mnemonicToSeed(walletData.mnemonic);
+                const seedBuffer = new Uint8Array(seed);
+                
+                // Generate keypair using Ed25519
+                const keypair = solanaWeb3.Keypair.fromSeed(seedBuffer.slice(0, 32));
+                
+                walletData.privateKey = Buffer.from(keypair.secretKey).toString('hex');
+                walletData.publicKey = keypair.publicKey.toBase58();
+                walletData.address = walletData.publicKey;
+                walletData.clientNonce = generateSecureNonce();
+                
+                progressBar.style.width = '75%';
+                await sleep(500);
+                
+                // Step 3: Encrypt data
+                statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Encrypting wallet data...';
+                
+                walletData.encryptedSeed = await encryptData(
+                    walletData.mnemonic,
+                    userSentence,
+                    walletData.clientNonce,
+                    'seed'
+                );
+                
+                walletData.encryptedPrivateKey = await encryptData(
+                    walletData.privateKey,
+                    userSentence,
+                    walletData.clientNonce,
+                    'private'
+                );
+                
+                progressBar.style.width = '100%';
+                statusEl.innerHTML = '<i class="fas fa-check-circle" style="color: #10b981;"></i> Encryption complete!';
+                
+                encryptionComplete = true;
+                step3Btn.disabled = false;
+                
+            } catch (error) {
+                console.error('Encryption error:', error);
+                statusEl.innerHTML = '<i class="fas fa-times-circle" style="color: #dc2626;"></i> Encryption failed';
+                alert('Encryption failed: ' + error.message);
+            }
+        }
+
+        // ========== ENCRYPTION FUNCTIONS ==========
+        async function encryptData(plaintext, password, salt, purpose) {
+            const encoder = new TextEncoder();
+            
+            const keyMaterial = await crypto.subtle.importKey(
+                'raw',
+                encoder.encode(password + salt + purpose),
+                { name: 'PBKDF2' },
+                false,
+                ['deriveKey']
+            );
+            
+            const key = await crypto.subtle.deriveKey(
+                {
+                    name: 'PBKDF2',
+                    salt: encoder.encode(salt + purpose),
+                    iterations: SECURITY_CONFIG.PBKDF2_ITERATIONS,
+                    hash: 'SHA-256'
+                },
+                keyMaterial,
+                { name: 'AES-GCM', length: 256 },
+                false,
+                ['encrypt']
+            );
+            
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const encrypted = await crypto.subtle.encrypt(
+                {
+                    name: 'AES-GCM',
+                    iv: iv,
+                    tagLength: 128
+                },
+                key,
+                encoder.encode(plaintext)
+            );
+            
+            const result = {
+                version: 'solana-nexapay-v1',
+                ciphertext: arrayToBase64(new Uint8Array(encrypted)),
+                iv: arrayToBase64(iv),
+                salt: salt,
+                purpose: purpose,
+                iterations: SECURITY_CONFIG.PBKDF2_ITERATIONS,
+                timestamp: new Date().toISOString(),
+                algorithm: 'AES-256-GCM'
+            };
+            
+            return JSON.stringify(result);
+        }
+
+        function generateSecureNonce() {
+            const array = new Uint8Array(32);
+            crypto.getRandomValues(array);
+            return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+        }
+
+        function arrayToBase64(array) {
+            return btoa(String.fromCharCode.apply(null, array));
+        }
+
+        // ========== RESULTS DISPLAY ==========
+        function displayResults() {
+            document.getElementById('walletAddressDisplay').textContent = walletData.address;
+            
+            const seedData = JSON.parse(walletData.encryptedSeed);
+            const privateKeyData = JSON.parse(walletData.encryptedPrivateKey);
+            
+            document.getElementById('encryptedSeedDisplay').textContent = 
+                `Ciphertext: ${seedData.ciphertext.substring(0, 50)}...\n` +
+                `IV: ${seedData.iv.substring(0, 16)}...\n` +
+                `Salt: ${seedData.salt.substring(0, 16)}...`;
+            
+            document.getElementById('encryptedPrivateKeyDisplay').textContent = 
+                `Ciphertext: ${privateKeyData.ciphertext.substring(0, 50)}...\n` +
+                `IV: ${privateKeyData.iv.substring(0, 16)}...\n` +
+                `Salt: ${privateKeyData.salt.substring(0, 16)}...`;
+            
+            // Auto-download backup after 2 seconds
+            setTimeout(downloadCompleteBackup, 2000);
+        }
+
+        // ========== COPY & DOWNLOAD FUNCTIONS ==========
+        async function copyToClipboard(type) {
+            let text = type === 'encryptedSeed' ? walletData.encryptedSeed : walletData.encryptedPrivateKey;
+            
+            try {
+                await navigator.clipboard.writeText(text);
+                showClipboardNotification();
+                
+                setTimeout(() => {
+                    navigator.clipboard.writeText('').catch(() => {});
+                }, SECURITY_CONFIG.CLIPBOARD_CLEAR_TIME);
+            } catch (err) {
+                alert('Failed to copy: ' + err.message);
+            }
+        }
+
+        function showClipboardNotification() {
+            const notification = document.getElementById('clipboardNotification');
+            notification.style.display = 'flex';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function downloadEncryptedData(type) {
+            let data, filename;
+            
+            if (type === 'seed') {
+                data = walletData.encryptedSeed;
+                filename = `solana-encrypted-seed-${walletData.address.substring(0, 8)}.json`;
+            } else {
+                data = walletData.encryptedPrivateKey;
+                filename = `solana-encrypted-private-key-${walletData.address.substring(0, 8)}.json`;
+            }
+            
+            downloadFile(data, filename);
+        }
+
+        function downloadCompleteBackup() {
+            const backupData = {
+                version: 'solana-wallet-backup-v1',
+                walletAddress: walletData.address,
+                encryptedSeed: walletData.encryptedSeed,
+                encryptedPrivateKey: walletData.encryptedPrivateKey,
+                timestamp: new Date().toISOString(),
+                networks: ['Solana Mainnet', 'Solana Devnet', 'Solana Testnet'],
+                notes: 'This is an encrypted Solana wallet backup. Use your 7-word sentence to decrypt.'
+            };
+            
+            const data = JSON.stringify(backupData, null, 2);
+            const filename = `solana-wallet-${walletData.address.substring(0, 8)}-backup.json`;
+            downloadFile(data, filename);
+        }
+
+        function downloadFile(data, filename) {
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // ========== UTILITY FUNCTIONS ==========
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function startOver() {
+            if (confirm('Are you sure? This will clear all current wallet data.')) {
+                window.location.reload();
+            }
+        }
+
+        let sessionStartTime = Date.now();
+    </script>
+</body>
+</html>

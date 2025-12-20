@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: light;">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="create-wallet-bitcoin.css">
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#f7931a">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Bitcoin Wallet - NexaPay</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bitcoin Libraries - TESTED & WORKING VERSIONS -->
+    <script src="https://unpkg.com/@bitcoinjs/bip39@3.0.0/dist/bip39.browser.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@bitcoinjs/bip32@3.0.0/dist/bip32.browser.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bitcoinjs-lib@6.1.0/dist/bitcoinjs.min.js"></script>
+           
+    <script>
+    // DIAGNOSTIC: Check what libraries loaded
+    console.log('=== LIBRARY DIAGNOSTIC ===');
+    console.log('window.bip39:', typeof window.bip39);
+    console.log('window.bip32:', typeof window.bip32);
+    console.log('window.bitcoin:', typeof window.bitcoin);
+    console.log('window.bitcoinjs:', typeof window.bitcoinjs);
+    console.log('window.bitcoinjsLib:', typeof window.bitcoinjsLib);
+    console.log('==========================');
+    </script>
+    <style>
+        /* Bitcoin-specific colors */
+        :root {
+            --bitcoin-orange: #F7931A;
+            --bitcoin-dark: #0C0C0C;
+            --bitcoin-light: #FF9900;
+            --bitcoin-gray: #8C8C8C;
+        }
+        
+        .bitcoin-gradient {
+            background: linear-gradient(135deg, var(--bitcoin-orange), #FF9900);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn-bitcoin {
+            background: linear-gradient(135deg, var(--bitcoin-orange), #FF9900);
+            color: white !important;
+        }
+        
+        .btn-bitcoin:hover {
+            background: linear-gradient(135deg, #e07b0a, #e68a00);
+        }
+        
+        .bitcoin-badge {
+            background: linear-gradient(135deg, var(--bitcoin-orange), #FF9900);
+            color: white;
+        }
+        
+        .header-bitcoin {
+            background: linear-gradient(135deg, var(--bitcoin-dark), #1A1A1A);
+            color: white !important;
+        }
+        
+        .address-type-selector {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .address-type-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .address-type-btn.active {
+            border-color: var(--bitcoin-orange);
+            background: #fff7ed;
+        }
+    </style>
+</head>
+<body>
+    <div class="session-timer" id="sessionTimer" style="display: none;">
+        <i class="fas fa-clock"></i>
+        <span id="timerText">15:00</span>
+    </div>
+
+    <div class="container">
+        <div class="security-badge bitcoin-badge">
+            <i class="fab fa-bitcoin"></i> BITCOIN WALLET
+        </div>
+
+        <div class="step-indicator">
+            <div class="step active" id="step1">1</div>
+            <div class="step" id="step2">2</div>
+            <div class="step" id="step3">3</div>
+            <div class="step" id="step4">4</div>
+        </div>
+
+        <!-- Step 1: Create Sentence -->
+        <div id="step1-content">
+            <div class="header header-bitcoin">
+                <h1><i class="fab fa-bitcoin"></i> Create Bitcoin Wallet</h1>
+                <p>Generate a secure Bitcoin wallet with HD derivation</p>
+            </div>
+
+            <div class="warning-box">
+                <h3><i class="fas fa-exclamation-triangle"></i> BITCOIN SECURITY</h3>
+                <p><strong>100% Local:</strong> Everything happens in your browser. No data is sent to any server.</p>
+                <p><strong>BIP39 Standard:</strong> Uses industry-standard BIP39 mnemonic phrases</p>
+                <p><strong>HD Wallet:</strong> Hierarchical Deterministic wallet with BIP44 derivation</p>
+            </div>
+
+            <div class="address-type-selector">
+                <div class="address-type-btn active" id="btnLegacy" onclick="selectAddressType('legacy')">
+                    <i class="fas fa-coins"></i>
+                    <div>Legacy</div>
+                    <small>P2PKH (1...)</small>
+                </div>
+                <div class="address-type-btn" id="btnSegwit" onclick="selectAddressType('segwit')">
+                    <i class="fas fa-bolt"></i>
+                    <div>SegWit</div>
+                    <small>P2SH-P2WPKH (3...)</small>
+                </div>
+                <div class="address-type-btn" id="btnNative" onclick="selectAddressType('native')">
+                    <i class="fas fa-rocket"></i>
+                    <div>Native SegWit</div>
+                    <small>P2WPKH (bc1...)</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="sentence">
+                    <i class="fas fa-pen"></i> Type your 7+ word sentence:
+                </label>
+                <textarea 
+                    class="sentence-input" 
+                    id="sentence" 
+                    placeholder="Example: My bitcoin investment will be secure for decades to come..."
+                    rows="3"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                ></textarea>
+                <div class="word-count">
+                    Words: <span id="wordCount">0</span> (minimum 7)
+                </div>
+            </div>
+
+            <button onclick="advanceToPractice()" class="btn btn-bitcoin" id="step1Btn" disabled>
+                <i class="fas fa-arrow-right"></i> Continue to Practice
+            </button>
+        </div>
+
+        <!-- Step 2: Practice Sentence -->
+        <div id="step2-content" class="hidden">
+            <div class="header header-bitcoin">
+                <h1><i class="fas fa-brain"></i> Practice Your Sentence</h1>
+                <p>Type your sentence 3 times to ensure you remember it perfectly</p>
+            </div>
+
+            <div class="practice-section">
+                <div class="practice-item">
+                    <label>
+                        <i class="fas fa-1"></i> First practice:
+                        <span class="match-indicator" id="practice1Match"></span>
+                    </label>
+                    <textarea 
+                        class="sentence-input" 
+                        id="practice1" 
+                        rows="2"
+                        placeholder="Type your sentence exactly as you wrote it..."
+                    ></textarea>
+                </div>
+
+                <div class="practice-item">
+                    <label>
+                        <i class="fas fa-2"></i> Second practice:
+                        <span class="match-indicator" id="practice2Match"></span>
+                    </label>
+                    <textarea 
+                        class="sentence-input" 
+                        id="practice2" 
+                        rows="2"
+                        placeholder="Type your sentence exactly as you wrote it..."
+                    ></textarea>
+                </div>
+
+                <div class="practice-item">
+                    <label>
+                        <i class="fas fa-3"></i> Third practice:
+                        <span class="match-indicator" id="practice3Match"></span>
+                    </label>
+                    <textarea 
+                        class="sentence-input" 
+                        id="practice3" 
+                        rows="2"
+                        placeholder="Type your sentence exactly as you wrote it..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <button onclick="advanceToEncryption()" class="btn btn-bitcoin" id="step2Btn" disabled>
+                <i class="fas fa-lock"></i> I Can Remember This Sentence
+            </button>
+            
+            <button onclick="goBackToStep1()" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+
+        <!-- Step 3: Encryption Process -->
+        <div id="step3-content" class="hidden">
+            <div class="header header-bitcoin">
+                <h1><i class="fas fa-lock"></i> Encryption in Progress</h1>
+                <p>Generating and encrypting your Bitcoin HD wallet locally</p>
+            </div>
+
+            <div class="encryption-status" id="encryptionStatus">
+                <i class="fas fa-spinner fa-spin"></i> Generating Bitcoin HD wallet...
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div class="info-box">
+                <h3><i class="fas fa-microchip"></i> Bitcoin HD Wallet</h3>
+                <p><strong>BIP39:</strong> 12-word mnemonic phrase</p>
+                <p><strong>BIP32:</strong> Hierarchical Deterministic keys</p>
+                <p><strong>BIP44:</strong> Derivation path: m/44'/0'/0'/0/0</p>
+            </div>
+
+            <button onclick="advanceToResults()" class="btn btn-bitcoin" id="step3Btn" disabled>
+                <i class="fas fa-arrow-right"></i> View Your Encrypted Wallet
+            </button>
+            
+            <button onclick="goBackToStep2()" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+
+        <!-- Step 4: Results Page -->
+        <div id="step4-content" class="hidden">
+            <div class="header header-bitcoin">
+                <h1><i class="fas fa-check-circle"></i> Bitcoin Wallet Created!</h1>
+                <p>Your encrypted Bitcoin wallet is ready. Save this information securely.</p>
+            </div>
+
+            <!-- Address Type Display -->
+            <div class="info-box">
+                <h3><i class="fas fa-map-signs"></i> Address Type: <span id="addressTypeDisplay">Legacy</span></h3>
+                <p>Derivation Path: <code>m/44'/0'/0'/0/0</code></p>
+            </div>
+
+            <!-- Wallet Address -->
+            <div class="wallet-address-box" style="background: linear-gradient(135deg, var(--bitcoin-orange), #FF9900);">
+                <span class="label">Your Bitcoin Wallet Address:</span>
+                <div id="walletAddressDisplay">Loading...</div>
+            </div>
+
+            <!-- Supported Networks -->
+            <h3 class="text-center mb-20"><i class="fas fa-link"></i> Bitcoin Networks</h3>
+            <div class="chains-grid">
+                <div class="chain-card">
+                    <div class="chain-icon">
+                        <i class="fab fa-bitcoin"></i>
+                    </div>
+                    <div class="chain-name">Bitcoin Mainnet</div>
+                    <div class="chain-symbol">Real BTC</div>
+                </div>
+                <div class="chain-card">
+                    <div class="chain-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="chain-name">Bitcoin Testnet</div>
+                    <div class="chain-symbol">Test BTC</div>
+                </div>
+                <div class="chain-card">
+                    <div class="chain-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="chain-name">Bitcoin Signet</div>
+                    <div class="chain-symbol">Testing</div>
+                </div>
+            </div>
+
+            <!-- Encrypted Data -->
+            <div class="encrypted-data-section">
+                <div class="encrypted-data-card">
+                    <div class="encrypted-data-header">
+                        <div class="encrypted-data-title">
+                            <i class="fas fa-seedling" style="color: #22c55e;"></i>
+                            <span>Encrypted Seed Phrase</span>
+                        </div>
+                        <div class="status-badge seed-badge">AES-256-GCM Encrypted</div>
+                    </div>
+                    <div class="encrypted-data-content" id="encryptedSeedDisplay">
+                        Loading...
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-copy" onclick="copyToClipboard('encryptedSeed')">
+                            <i class="fas fa-copy"></i> Copy Encrypted Seed
+                        </button>
+                        <button class="btn-download" onclick="downloadEncryptedData('seed')">
+                            <i class="fas fa-download"></i> Download Seed File
+                        </button>
+                    </div>
+                </div>
+
+                <div class="encrypted-data-card">
+                    <div class="encrypted-data-header">
+                        <div class="encrypted-data-title">
+                            <i class="fas fa-key" style="color: var(--bitcoin-orange);"></i>
+                            <span>Encrypted Extended Private Key (xpriv)</span>
+                        </div>
+                        <div class="status-badge private-key-badge">AES-256-GCM Encrypted</div>
+                    </div>
+                    <div class="encrypted-data-content" id="encryptedPrivateKeyDisplay">
+                        Loading...
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-copy" onclick="copyToClipboard('encryptedPrivateKey')">
+                            <i class="fas fa-copy"></i> Copy xpriv
+                        </button>
+                        <button class="btn-download" onclick="downloadEncryptedData('privateKey')">
+                            <i class="fas fa-download"></i> Download xpriv File
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Complete Backup -->
+                <div class="encrypted-data-card">
+                    <div class="encrypted-data-header">
+                        <div class="encrypted-data-title">
+                            <i class="fas fa-database"></i>
+                            <span>Complete Wallet Backup</span>
+                        </div>
+                        <div class="status-badge" style="background: var(--bitcoin-orange);">Full JSON Export</div>
+                    </div>
+                    <p style="margin-bottom: 20px;">Download a complete backup file containing all encrypted data.</p>
+                    <button class="btn btn-bitcoin" onclick="downloadCompleteBackup()" style="margin: 0;">
+                        <i class="fas fa-file-export"></i> Download Complete Backup
+                    </button>
+                </div>
+            </div>
+
+            <button onclick="startOver()" class="btn-secondary">
+                <i class="fas fa-redo"></i> Create Another Wallet
+            </button>
+        </div>
+    </div>
+
+    <script>
+
+        // Add this at the top of your main <script> tag
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔐 Bitcoin Wallet Creator Initialized');
+            
+            // Check if libraries are available
+            const libsAvailable = (
+                (typeof window.bip39 !== 'undefined') &&
+                (typeof window.bitcoin !== 'undefined') &&
+                (typeof window.bip32 !== 'undefined' || typeof window.bitcoin.bip32 !== 'undefined')
+            );
+            
+            if (!libsAvailable) {
+                console.error('❌ Missing libraries:');
+                console.error('- bip39:', typeof window.bip39);
+                console.error('- bitcoin:', typeof window.bitcoin);
+                console.error('- bip32:', typeof window.bip32);
+                
+                // Try alternative names
+                console.error('Checking alternative names...');
+                console.error('window.bitcoinjs:', typeof window.bitcoinjs);
+                console.error('window.bitcoinjsLib:', typeof window.bitcoinjsLib);
+                console.error('window.Bitcoin:', typeof window.Bitcoin);
+                
+                alert('❌ Bitcoin libraries failed to load. Check browser console for details.');
+                return;
+            }
+            
+            console.log('✅ All Bitcoin libraries loaded successfully');
+            setupEventListeners();
+            startSessionTimer();
+        });
+
+        // Add this at the very top of your <script> tag
+        if (!window.crypto || !window.crypto.subtle) {
+            alert('❌ Your browser does not support Web Crypto API. Please use Chrome, Firefox, or Edge.');
+            throw new Error('Web Crypto API not available');
+        }
+
+        // Also check if bitcoin library is loaded
+        if (typeof bitcoin === 'undefined') {
+            alert('❌ Bitcoin library failed to load. Please check your internet connection.');
+            throw new Error('Bitcoin library not loaded');
+        }
+
+        const SECURITY_CONFIG = {
+            PBKDF2_ITERATIONS: 600000,
+            SESSION_TIMEOUT: 15 * 60 * 1000
+        };
+
+        let userSentence = '';
+        let walletData = {
+            mnemonic: '',
+            xpriv: '',
+            xpub: '',
+            address: '',
+            wif: '',
+            encryptedSeed: '',
+            encryptedPrivateKey: '',
+            clientNonce: '',
+            addressType: 'legacy' // legacy, segwit, native
+        };
+        let encryptionComplete = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔐 Bitcoin Wallet Creator Initialized');
+            setupEventListeners();
+            startSessionTimer();
+        });
+
+        function setupEventListeners() {
+            const sentenceInput = document.getElementById('sentence');
+            sentenceInput.addEventListener('input', function() {
+                const sentence = this.value.trim();
+                const words = sentence.split(/\s+/).filter(w => w.length > 0);
+                const wordCount = words.length;
+                
+                document.getElementById('wordCount').textContent = wordCount;
+                document.getElementById('step1Btn').disabled = wordCount < 7;
+                
+                if (wordCount >= 7) {
+                    userSentence = sentence;
+                }
+            });
+
+            ['practice1', 'practice2', 'practice3'].forEach((id, index) => {
+                document.getElementById(id).addEventListener('input', function() {
+                    checkPracticeMatch(this, index);
+                });
+            });
+        }
+
+        function selectAddressType(type) {
+            walletData.addressType = type;
+            
+            // Update UI
+            ['legacy', 'segwit', 'native'].forEach(t => {
+                document.getElementById(`btn${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.remove('active');
+            });
+            document.getElementById(`btn${type.charAt(0).toUpperCase() + type.slice(1)}`).classList.add('active');
+            
+            if (document.getElementById('addressTypeDisplay')) {
+                document.getElementById('addressTypeDisplay').textContent = 
+                    type === 'legacy' ? 'Legacy (P2PKH)' :
+                    type === 'segwit' ? 'SegWit (P2SH-P2WPKH)' : 'Native SegWit (P2WPKH)';
+            }
+        }
+
+        function startSessionTimer() {
+            const timerElement = document.getElementById('sessionTimer');
+            const timerText = document.getElementById('timerText');
+            
+            timerElement.style.display = 'flex';
+            
+            const sessionTimer = setInterval(() => {
+                const elapsed = Date.now() - sessionStartTime;
+                const remaining = SECURITY_CONFIG.SESSION_TIMEOUT - elapsed;
+                
+                if (remaining <= 0) {
+                    clearInterval(sessionTimer);
+                    alert('Session expired. Page will refresh.');
+                    window.location.reload();
+                    return;
+                }
+                
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                timerText.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // ========== STEP NAVIGATION ==========
+        function advanceToPractice() {
+            const words = userSentence.split(/\s+/).filter(w => w.length > 0);
+            if (words.length < 7) {
+                alert('Please create a sentence with at least 7 words');
+                return;
+            }
+            
+            updateStep(2);
+            ['practice1', 'practice2', 'practice3'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('step2Btn').disabled = true;
+        }
+
+        function goBackToStep1() { updateStep(1); }
+        function goBackToStep2() { updateStep(2); }
+
+        function advanceToEncryption() {
+            updateStep(3);
+            startEncryptionProcess();
+        }
+
+        async function advanceToResults() {
+            if (!encryptionComplete) {
+                alert('Please wait for encryption to complete');
+                return;
+            }
+            updateStep(4);
+            displayResults();
+        }
+
+        function updateStep(step) {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`step${i}-content`).classList.add('hidden');
+                const stepEl = document.getElementById(`step${i}`);
+                stepEl.classList.remove('active', 'completed');
+                
+                if (i < step) {
+                    stepEl.classList.add('completed');
+                } else if (i === step) {
+                    stepEl.classList.add('active');
+                    document.getElementById(`step${i}-content`).classList.remove('hidden');
+                }
+            }
+        }
+
+        function checkPracticeMatch(textarea, index) {
+            const matchEl = document.getElementById(`practice${index + 1}Match`);
+            const isMatch = textarea.value === userSentence;
+            
+            if (textarea.value.length === 0) {
+                matchEl.innerHTML = '';
+                return false;
+            }
+            
+            if (isMatch) {
+                matchEl.innerHTML = '<i class="fas fa-check-circle match-yes"></i> <span class="match-yes">Exact match</span>';
+            } else {
+                matchEl.innerHTML = '<i class="fas fa-times-circle match-no"></i> <span class="match-no">Does not match</span>';
+            }
+            
+            const practice1 = document.getElementById('practice1').value;
+            const practice2 = document.getElementById('practice2').value;
+            const practice3 = document.getElementById('practice3').value;
+            
+            const allMatch = practice1 === userSentence &&
+                           practice2 === userSentence &&
+                           practice3 === userSentence;
+            
+            document.getElementById('step2Btn').disabled = !allMatch;
+            return isMatch;
+        }
+
+        // ========== BITCOIN WALLET GENERATION ==========
+                // ========== BITCOIN WALLET GENERATION ==========
+        async function startEncryptionProcess() {
+            const statusEl = document.getElementById('encryptionStatus');
+            const progressBar = document.getElementById('progressBar');
+            const step3Btn = document.getElementById('step3Btn');
+            
+            try {
+                statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating BIP39 mnemonic...';
+                progressBar.style.width = '25%';
+                
+                // Generate 128 bits of entropy (12 words)
+                const entropy = new Uint8Array(16);
+                window.crypto.getRandomValues(entropy); // Use window.crypto
+                walletData.mnemonic = bip39.entropyToMnemonic(entropy);
+                
+                progressBar.style.width = '50%';
+                await sleep(500);
+                
+                // Generate seed from mnemonic
+                statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating HD wallet...';
+                const seed = await bip39.mnemonicToSeed(walletData.mnemonic);
+                
+                // Create root node (BIP32)
+                const root = bitcoin.bip32.fromSeed(seed);
+                
+                // Derive according to BIP44: m/44'/0'/0'/0/0
+                const path = "m/44'/0'/0'/0/0";
+                const child = root.derivePath(path);
+                
+                walletData.xpriv = child.toBase58();
+                walletData.xpub = child.neutered().toBase58();
+                
+                // Generate address based on selected type
+                const publicKey = child.publicKey;
+                let address;
+                
+                if (walletData.addressType === 'legacy') {
+                    // P2PKH (Legacy) - starts with 1
+                    const { address: legacyAddress } = bitcoin.payments.p2pkh({ pubkey: publicKey });
+                    address = legacyAddress;
+                } else if (walletData.addressType === 'segwit') {
+                    // P2SH-P2WPKH (SegWit) - starts with 3
+                    const { address: segwitAddress } = bitcoin.payments.p2sh({
+                        redeem: bitcoin.payments.p2wpkh({ pubkey: publicKey })
+                    });
+                    address = segwitAddress;
+                } else {
+                    // P2WPKH (Native SegWit) - starts with bc1
+                    const { address: nativeAddress } = bitcoin.payments.p2wpkh({ pubkey: publicKey });
+                    address = nativeAddress;
+                }
+                
+                walletData.address = address;
+                walletData.wif = child.toWIF();
+                walletData.clientNonce = generateSecureNonce();
+                
+                progressBar.style.width = '75%';
+                await sleep(500);
+                
+                // Encrypt data
+                statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Encrypting wallet data...';
+                
+                walletData.encryptedSeed = await encryptData(
+                    walletData.mnemonic,
+                    userSentence,
+                    walletData.clientNonce,
+                    'seed'
+                );
+                
+                walletData.encryptedPrivateKey = await encryptData(
+                    walletData.xpriv,
+                    userSentence,
+                    walletData.clientNonce,
+                    'private'
+                );
+                
+                progressBar.style.width = '100%';
+                statusEl.innerHTML = '<i class="fas fa-check-circle" style="color: #10b981;"></i> Encryption complete!';
+                
+                encryptionComplete = true;
+                step3Btn.disabled = false;
+                
+            } catch (error) {
+                console.error('Bitcoin wallet error:', error);
+                statusEl.innerHTML = '<i class="fas fa-times-circle" style="color: #dc2626;"></i> Wallet generation failed';
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function encryptData(plaintext, password, salt, purpose) {
+            const encoder = new TextEncoder();
+            
+            const keyMaterial = await window.crypto.subtle.importKey(
+                'raw',
+                encoder.encode(password + salt + purpose),
+                { name: 'PBKDF2' },
+                false,
+                ['deriveKey']
+            );
+            
+            const key = await window.crypto.subtle.deriveKey(
+                {
+                    name: 'PBKDF2',
+                    salt: encoder.encode(salt + purpose),
+                    iterations: SECURITY_CONFIG.PBKDF2_ITERATIONS,
+                    hash: 'SHA-256'
+                },
+                keyMaterial,
+                { name: 'AES-GCM', length: 256 },
+                false,
+                ['encrypt']
+            );
+            
+            const iv = window.crypto.getRandomValues(new Uint8Array(12));
+            const encrypted = await crypto.subtle.encrypt(
+                {
+                    name: 'AES-GCM',
+                    iv: iv,
+                    tagLength: 128
+                },
+                key,
+                encoder.encode(plaintext)
+            );
+            
+            const result = {
+                version: 'bitcoin-nexapay-v1',
+                ciphertext: arrayToBase64(new Uint8Array(encrypted)),
+                iv: arrayToBase64(iv),
+                salt: salt,
+                purpose: purpose,
+                iterations: SECURITY_CONFIG.PBKDF2_ITERATIONS,
+                timestamp: new Date().toISOString(),
+                algorithm: 'AES-256-GCM',
+                addressType: walletData.addressType
+            };
+            
+            return JSON.stringify(result);
+        }
+
+        function generateSecureNonce() {
+            const array = new Uint8Array(32);
+            window.crypto.getRandomValues(array);
+            return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+        }
+
+        function arrayToBase64(array) {
+            return btoa(String.fromCharCode.apply(null, array));
+        }
+
+        function displayResults() {
+            document.getElementById('addressTypeDisplay').textContent = 
+                walletData.addressType === 'legacy' ? 'Legacy (P2PKH)' :
+                walletData.addressType === 'segwit' ? 'SegWit (P2SH-P2WPKH)' : 'Native SegWit (P2WPKH)';
+            
+            document.getElementById('walletAddressDisplay').textContent = walletData.address;
+            
+            const seedData = JSON.parse(walletData.encryptedSeed);
+            const privateKeyData = JSON.parse(walletData.encryptedPrivateKey);
+            
+            document.getElementById('encryptedSeedDisplay').textContent = 
+                `Ciphertext: ${seedData.ciphertext.substring(0, 50)}...\n` +
+                `Address Type: ${seedData.addressType}`;
+            
+            document.getElementById('encryptedPrivateKeyDisplay').textContent = 
+                `Ciphertext: ${privateKeyData.ciphertext.substring(0, 50)}...\n` +
+                `Address Type: ${privateKeyData.addressType}`;
+            
+            // Auto-download backup after 2 seconds
+            setTimeout(downloadCompleteBackup, 2000);
+        }
+
+        async function copyToClipboard(type) {
+            let text = type === 'encryptedSeed' ? walletData.encryptedSeed : walletData.encryptedPrivateKey;
+            
+            try {
+                await navigator.clipboard.writeText(text);
+                alert('Copied to clipboard!');
+                
+                setTimeout(() => {
+                    navigator.clipboard.writeText('').catch(() => {});
+                }, 30000);
+            } catch (err) {
+                alert('Failed to copy');
+            }
+        }
+
+        function downloadEncryptedData(type) {
+            let data, filename;
+            
+            if (type === 'seed') {
+                data = walletData.encryptedSeed;
+                filename = `bitcoin-encrypted-seed-${walletData.address.substring(0, 8)}.json`;
+            } else {
+                data = walletData.encryptedPrivateKey;
+                filename = `bitcoin-encrypted-xpriv-${walletData.address.substring(0, 8)}.json`;
+            }
+            
+            downloadFile(data, filename);
+        }
+
+        function downloadCompleteBackup() {
+            const backupData = {
+                version: 'bitcoin-wallet-backup-v1',
+                walletAddress: walletData.address,
+                addressType: walletData.addressType,
+                encryptedSeed: walletData.encryptedSeed,
+                encryptedPrivateKey: walletData.encryptedPrivateKey,
+                timestamp: new Date().toISOString(),
+                derivationPath: "m/44'/0'/0'/0/0",
+                networks: ['Bitcoin Mainnet', 'Bitcoin Testnet', 'Bitcoin Signet'],
+                notes: 'This is an encrypted Bitcoin HD wallet backup. Use your 7-word sentence to decrypt.'
+            };
+            
+            const data = JSON.stringify(backupData, null, 2);
+            const filename = `bitcoin-wallet-${walletData.address.substring(0, 8)}-backup.json`;
+            downloadFile(data, filename);
+        }
+
+        function downloadFile(data, filename) {
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function startOver() {
+            if (confirm('Are you sure? This will clear all current wallet data.')) {
+                window.location.reload();
+            }
+        }
+
+        let sessionStartTime = Date.now();
+    </script>
+</body>
+</html>

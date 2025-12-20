@@ -1,0 +1,522 @@
+/* create-wallet-solana.css - Solana Wallet Styling */
+
+:root {
+    /* Solana Colors */
+    --color-primary: #9945FF;
+    --color-primary-dark: #7c3aed;
+    --color-secondary: #14F195;
+    --color-accent: #00C2FF;
+    
+    /* Light theme colors */
+    --color-neutral-50: #f8fafc;
+    --color-neutral-100: #f1f5f9;
+    --color-neutral-200: #e2e8f0;
+    --color-neutral-300: #cbd5e1;
+    --color-neutral-400: #94a3b8;
+    --color-neutral-500: #64748b;
+    --color-neutral-600: #475569;
+    --color-neutral-700: #334155;
+    --color-neutral-800: #1e293b;
+    --color-neutral-900: #0f172a;
+    
+    /* Solana specific */
+    --solana-purple: #9945FF;
+    --solana-green: #14F195;
+    --solana-blue: #00C2FF;
+    --solana-dark: #0F0F23;
+    
+    --font-family: 'Inter', system-ui, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    color: var(--color-neutral-800);
+    background: white;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    border: 1px solid var(--color-neutral-200);
+    position: relative;
+}
+
+/* Security Badge */
+.security-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(153, 69, 255, 0.3);
+    z-index: 10;
+}
+
+/* Step Indicator */
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.step-indicator::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--color-neutral-200);
+    z-index: 1;
+}
+
+.step {
+    background: var(--color-neutral-200);
+    color: var(--color-neutral-600);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s;
+}
+
+.step.active {
+    background: linear-gradient(135deg, var(--solana-purple), var(--solana-green));
+    color: white;
+    transform: scale(1.1);
+}
+
+.step.completed {
+    background: var(--solana-green);
+    color: white;
+}
+
+/* Header */
+.header {
+    background: linear-gradient(135deg, var(--solana-dark), #1A1A2E);
+    color: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 1.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    width: 100%;
+    margin: 10px 0;
+    color: white;
+}
+
+.btn:disabled {
+    background: var(--color-neutral-300);
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--color-neutral-700);
+    border: 1px solid var(--color-neutral-300);
+}
+
+.btn-secondary:hover {
+    background: var(--color-neutral-100);
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 30px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.sentence-input {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid var(--color-neutral-300);
+    border-radius: 10px;
+    font-size: 16px;
+    min-height: 80px;
+    resize: vertical;
+    transition: border-color 0.3s;
+    background: white;
+    color: var(--color-neutral-800);
+}
+
+.sentence-input:focus {
+    outline: none;
+    border-color: var(--solana-purple);
+    box-shadow: 0 0 0 3px rgba(153, 69, 255, 0.1);
+}
+
+.word-count {
+    text-align: right;
+    font-size: 14px;
+    color: var(--color-neutral-600);
+    margin-top: 8px;
+}
+
+/* Practice Section */
+.practice-section {
+    background: var(--color-neutral-100);
+    border: 2px solid var(--color-neutral-300);
+    border-radius: 10px;
+    padding: 25px;
+    margin: 25px 0;
+}
+
+.practice-item {
+    margin-bottom: 20px;
+}
+
+.match-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.match-yes {
+    color: var(--solana-green);
+}
+
+.match-no {
+    color: #ef4444;
+}
+
+/* Encryption Status */
+.encryption-status {
+    background: var(--color-neutral-100);
+    border: 2px solid var(--color-neutral-200);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Progress Bar */
+.progress-container {
+    width: 100%;
+    height: 10px;
+    background: var(--color-neutral-200);
+    border-radius: 5px;
+    margin: 30px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(135deg, var(--solana-purple), var(--solana-green));
+    border-radius: 5px;
+    transition: width 0.5s;
+    width: 0%;
+}
+
+/* Warning & Info Boxes */
+.warning-box {
+    background: #fee2e2;
+    border: 2px solid #ef4444;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.warning-box h3 {
+    color: #ef4444;
+    margin-bottom: 10px;
+}
+
+.info-box {
+    background: #f0f9ff;
+    border: 2px solid #7dd3fc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.info-box h3 {
+    color: #0369a1;
+    margin-bottom: 10px;
+}
+
+/* Wallet Address Box */
+.wallet-address-box {
+    background: linear-gradient(135deg, var(--solana-purple), var(--solana-green));
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin: 25px 0;
+    word-break: break-all;
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.wallet-address-box .label {
+    display: block;
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 10px;
+    font-family: var(--font-family);
+}
+
+/* Chains Grid */
+.chains-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.chain-card {
+    background: white;
+    border: 2px solid var(--color-neutral-200);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.chain-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--solana-purple);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.chain-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: var(--solana-purple);
+}
+
+.chain-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.chain-symbol {
+    font-size: 14px;
+    color: var(--color-neutral-600);
+}
+
+/* Encrypted Data Cards */
+.encrypted-data-card {
+    background: white;
+    border: 2px solid var(--color-neutral-200);
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.encrypted-data-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.encrypted-data-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.encrypted-data-content {
+    background: var(--color-neutral-100);
+    padding: 20px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    word-break: break-all;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+}
+
+.seed-badge {
+    background: var(--solana-green);
+}
+
+.private-key-badge {
+    background: var(--solana-purple);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-copy, .btn-download {
+    flex: 1;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: white;
+}
+
+.btn-copy {
+    background: #3b82f6;
+}
+
+.btn-copy:hover {
+    background: #2563eb;
+}
+
+.btn-download {
+    background: var(--solana-green);
+}
+
+.btn-download:hover {
+    background: #10b981;
+}
+
+/* Session Timer */
+.session-timer {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #fef3c7;
+    color: #b45309;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 100;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Clipboard Notification */
+.clipboard-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--solana-green);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: none;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+}
+
+/* Utility Classes */
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.my-6 { margin: 24px 0; }
+.mb-20 { margin-bottom: 20px; }
+.mt-20 { margin-top: 20px; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.gap-4 { gap: 16px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    
+    .header {
+        padding: 20px;
+    }
+    
+    .chains-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .chains-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .step-indicator {
+        margin-bottom: 30px;
+    }
+    
+    .step {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+}
