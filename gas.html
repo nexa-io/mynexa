@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaGas - Real-Time Gas Fee Tracker</title>
+    <meta name="description" content="Track real-time gas fees across Ethereum, Base, Polygon, Arbitrum, Optimism, and BSC blockchains. Optimize your transactions with live data.">
+    
+    <!-- Google Fonts - Montserrat for consistent typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="gas.css">
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <div class="logo-icon">N</div>
+                    <span class="logo-text">NexaGas</span>
+                </a>
+
+                <nav id="nav">
+                    <a href="#tracker">Live Tracker</a>
+                    <a href="#chains">Blockchains</a>
+                    <a href="#analytics">Analytics</a>
+                    <a href="#info">Info</a>
+                </nav>
+
+                <div class="nav-buttons" id="navButtons">
+                    <button class="btn btn-secondary" id="refreshButton">
+                        <i data-lucide="refresh-cw" style="width: 18px; height: 18px; margin-right: 0.5rem;"></i>
+                        Refresh
+                    </button>
+                    <button class="btn btn-primary" id="subscribeButton">
+                        <i data-lucide="bell" style="width: 18px; height: 18px; margin-right: 0.5rem;"></i>
+                        Alerts
+                    </button>
+                </div>
+
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i data-lucide="menu" style="width: 24px; height: 24px;"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#tracker">Live Tracker</a>
+            <a href="#chains">Blockchains</a>
+            <a href="#analytics">Analytics</a>
+            <a href="#info">Info</a>
+            <div class="mobile-menu-buttons">
+                <button class="btn btn-secondary" id="refreshButtonMobile">
+                    <i data-lucide="refresh-cw" style="width: 18px; height: 18px; margin-right: 0.5rem;"></i>
+                    Refresh
+                </button>
+                <button class="btn btn-primary" id="subscribeButtonMobile">
+                    <i data-lucide="bell" style="width: 18px; height: 18px; margin-right: 0.5rem;"></i>
+                    Alerts
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-circle-1"></div>
+        <div class="hero-bg-circle-2"></div>
+
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="countdown-timer">
+                        <div class="countdown-label">Data Updated</div>
+                        <div class="countdown-grid" id="lastUpdated">
+                            <div class="countdown-item">
+                                <div class="countdown-value" id="updateTime">00</div>
+                                <div class="countdown-unit">Sec Ago</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-value" id="blockHeight">--</div>
+                                <div class="countdown-unit">ETH Block</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="trust-badge">
+                        <i data-lucide="zap" style="width: 16px; height: 16px;"></i>
+                        <span>Live gas data from 6+ blockchains</span>
+                    </div>
+
+                    <h1>Real-Time <span style="background: linear-gradient(to right, var(--color-primary), var(--color-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Gas Fee Tracker</span></h1>
+
+                    <p style="font-size: clamp(1rem, 2vw, 1.25rem); color: var(--color-neutral-600);">
+                        Monitor and optimize transaction costs across Ethereum, Base, Polygon, Arbitrum, Optimism, and BSC. Get live gas prices updated every 30 seconds.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" id="autoRefreshToggle">
+                            <span>Auto-Refresh: ON</span>
+                            <i data-lucide="rotate-cw" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
+                        </button>
+                        <button class="btn btn-secondary" id="recommendButton">
+                            <i data-lucide="trending-down" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                            Best Chain Now
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="card-container">
+                        <div class="gas-summary-card">
+                            <div class="card-header">
+                                <div class="card-title">Gas Fee Summary</div>
+                                <div class="card-icon">
+                                    <i data-lucide="activity" style="width: 24px; height: 24px;"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="card-balance">
+                                <div class="balance-label">Lowest Gas Now</div>
+                                <div class="balance-amount" id="lowestGas">-- Gwei</div>
+                                <div class="balance-subtitle" id="lowestChain">--</div>
+                                
+                                <div style="font-size: 0.875rem; opacity: 0.8; margin-top: 1.5rem;">Live Gas Prices</div>
+                                
+                                <div class="blockchains-grid" id="quickGasView">
+                                    <!-- Filled by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-container" id="statsContainer">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Gas Tracker Section -->
+    <section id="tracker" class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Live Tracker</div>
+                <h2>Real-Time Gas Fees</h2>
+                <p class="section-description">
+                    Monitor current gas prices across all supported blockchains. Prices are updated every 30 seconds. All values in Gwei unless specified.
+                </p>
+            </div>
+
+            <div class="gas-table-container">
+                <div class="table-responsive">
+                    <table class="gas-table">
+                        <thead>
+                            <tr>
+                                <th>Blockchain</th>
+                                <th>Slow</th>
+                                <th>Standard</th>
+                                <th>Fast</th>
+                                <th>Instant</th>
+                                <th>USD Cost*</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gasTableBody">
+                            <!-- Filled by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-note">
+                    *Estimated cost for a standard ERC-20 transfer
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blockchains Section -->
+    <section id="chains" class="security-section">
+        <div class="container">
+            <div class="security-content">
+                <div class="security-text">
+                    <div class="section-badge">Blockchains</div>
+                    <h2>Supported Networks</h2>
+                    <p class="security-description">
+                        Track gas fees across the most popular EVM-compatible blockchains. Each network has unique characteristics and gas fee structures.
+                    </p>
+
+                    <div class="security-features-list">
+                        <div class="security-feature-item">
+                            <div class="check-icon">
+                                <svg style="width: 16px; height: 16px; color: white;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                            <div class="security-feature-content">
+                                <h4>Real-Time Data</h4>
+                                <p>Live gas prices sourced directly from blockchain nodes and reliable APIs.</p>
+                            </div>
+                        </div>
+
+                        <div class="security-feature-item">
+                            <div class="check-icon">
+                                <svg style="width: 16px; height: 16px; color: white;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                            <div class="security-feature-content">
+                                <h4>Historical Trends</h4>
+                                <p>View 24-hour gas trends to identify optimal transaction times.</p>
+                            </div>
+                        </div>
+
+                        <div class="security-feature-item">
+                            <div class="check-icon">
+                                <svg style="width: 16px; height: 16px; color: white;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                            <div class="security-feature-content">
+                                <h4>Multi-Chain Comparison</h4>
+                                <p>Compare gas costs across different networks for the same transaction.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="security-grid" id="blockchainsGrid">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section id="analytics" class="how-it-works-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Analytics</div>
+                <h2>Gas Fee Insights</h2>
+                <p class="section-description">
+                    Understand gas fee patterns and learn when to transact for optimal cost efficiency.
+                </p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon-box">
+                        <i data-lucide="clock"></i>
+                    </div>
+                    <h3>Time Your Transactions</h3>
+                    <p>Gas fees fluctuate based on network congestion. Weekends and off-peak hours often offer lower rates.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon-box">
+                        <i data-lucide="layers"></i>
+                    </div>
+                    <h3>Layer 2 Advantages</h3>
+                    <p>L2 solutions like Arbitrum and Optimism offer significantly lower gas fees than Ethereum mainnet.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon-box">
+                        <i data-lucide="bar-chart"></i>
+                    </div>
+                    <h3>Monitor Trends</h3>
+                    <p>Track 24-hour gas patterns to identify recurring low-fee periods for your transactions.</p>
+                </div>
+            </div>
+
+            <div class="trend-chart-container">
+                <div class="trend-chart-header">
+                    <h3>24-Hour Gas Fee Trends</h3>
+                    <div class="trend-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: var(--color-primary);"></span>
+                            <span>Ethereum</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: var(--color-secondary);"></span>
+                            <span>Polygon</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="trend-chart" id="trendChart">
+                    <!-- Simple CSS-based chart -->
+                    <div class="chart-bars">
+                        <div class="chart-bar" style="height: 80%;" data-value="80"></div>
+                        <div class="chart-bar" style="height: 65%;" data-value="65"></div>
+                        <div class="chart-bar" style="height: 45%;" data-value="45"></div>
+                        <div class="chart-bar" style="height: 70%;" data-value="70"></div>
+                        <div class="chart-bar" style="height: 85%;" data-value="85"></div>
+                        <div class="chart-bar" style="height: 40%;" data-value="40"></div>
+                        <div class="chart-bar" style="height: 30%;" data-value="30"></div>
+                    </div>
+                    <div class="chart-labels">
+                        <span>12h ago</span>
+                        <span>Now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section id="info" class="what-we-dont">
+        <div class="container">
+            <div class="warning-card">
+                <div class="warning-icon">
+                    <i data-lucide="info"></i>
+                </div>
+                <div class="warning-content">
+                    <h3>Understanding Gas Fees</h3>
+                    <p>Gas fees are payments made by users to compensate for the computing energy required to process transactions on blockchain networks.</p>
+                    
+                    <div class="warning-grid">
+                        <div class="warning-item">
+                            <div class="warning-item-icon">
+                                <i data-lucide="cpu"></i>
+                            </div>
+                            <h4>Computational Cost</h4>
+                            <p style="font-size: 0.875rem; color: var(--color-neutral-600);">Gas fees pay for the computational work of executing smart contracts and transactions.</p>
+                        </div>
+                        
+                        <div class="warning-item">
+                            <div class="warning-item-icon">
+                                <i data-lucide="users"></i>
+                            </div>
+                            <h4>Network Demand</h4>
+                            <p style="font-size: 0.875rem; color: var(--color-neutral-600);">Fees increase when many users are transacting simultaneously (network congestion).</p>
+                        </div>
+                        
+                        <div class="warning-item">
+                            <div class="warning-item-icon">
+                                <i data-lucide="zap"></i>
+                            </div>
+                            <h4>Transaction Speed</h4>
+                            <p style="font-size: 0.875rem; color: var(--color-neutral-600);">Higher gas fees prioritize your transaction for faster inclusion in the next block.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-bg-circle-1"></div>
+        <div class="cta-bg-circle-2"></div>
+
+        <div class="container">
+            <div class="cta-content">
+                <h2>Optimize Your Transactions</h2>
+                <p>
+                    Use NexaGas to save on transaction fees and time your blockchain interactions perfectly. Bookmark this page for quick access to live gas data.
+                </p>
+
+                <div class="cta-buttons">
+                    <button class="btn btn-white" id="bookmarkButton">
+                        <i data-lucide="bookmark" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                        <span>Bookmark This Page</span>
+                    </button>
+                    <button class="btn btn-outline-white" onclick="window.open('https://twitter.com/search?q=%23GasFees', '_blank')">
+                        <i data-lucide="twitter" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                        <span>Share on Twitter</span>
+                    </button>
+                </div>
+
+                <div class="trust-indicators">
+                    <div class="indicators-grid">
+                        <div class="indicator-item">
+                            <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Live gas data</span>
+                        </div>
+                        <div class="indicator-item">
+                            <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>6+ blockchains</span>
+                        </div>
+                        <div class="indicator-item">
+                            <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Auto-refresh</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a href="#" class="logo" style="margin-bottom: 1rem; justify-content: center; display: inline-flex;">
+                            <div class="logo-icon">N</div>
+                            <span class="logo-text">NexaGas</span>
+                        </a>
+                        <p>
+                            Real-time gas fee tracker for Ethereum, Base, Polygon, Arbitrum, Optimism, and BSC. Optimize your blockchain transactions with live data.
+                        </p>
+                        <div class="social-links">
+                            <a href="https://twitter.com/search?q=%23GasFees" class="social-link" target="_blank">
+                                <i data-lucide="twitter" style="width: 20px; height: 20px;"></i>
+                            </a>
+                            <a href="#" class="social-link" id="githubLink">
+                                <i data-lucide="github" style="width: 20px; height: 20px;"></i>
+                            </a>
+                            <a href="mailto:info@nexagas.com" class="social-link">
+                                <i data-lucide="mail" style="width: 20px; height: 20px;"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-column">
+                        <h3>Blockchains</h3>
+                        <ul class="footer-links">
+                            <li><a href="#tracker">Ethereum</a></li>
+                            <li><a href="#tracker">Base</a></li>
+                            <li><a href="#tracker">Polygon</a></li>
+                            <li><a href="#tracker">Arbitrum</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h3>Resources</h3>
+                        <ul class="footer-links">
+                            <li><a href="#info">Gas Fee Guide</a></li>
+                            <li><a href="#analytics">Analytics</a></li>
+                            <li><a href="#chains">Network Info</a></li>
+                            <li><a href="#tracker">Live Tracker</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h3>Tools</h3>
+                        <ul class="footer-links">
+                            <li><a href="#" id="exportData">Export Data</a></li>
+                            <li><a href="#" id="setAlert">Set Alerts</a></li>
+                            <li><a href="#" id="apiLink">API (Coming Soon)</a></li>
+                            <li><a href="#" id="widgetLink">Widget</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="disclaimer-box">
+                    <h4>Data Source & Disclaimer</h4>
+                    <p>
+                        Gas fee data is collected from public blockchain APIs and may have slight delays. All data is for informational purposes only. Actual transaction costs may vary based on network conditions, transaction complexity, and wallet settings. Always verify gas fees in your wallet before confirming transactions.
+                    </p>
+                </div>
+
+                <div class="footer-bottom">
+                    <div class="copyright">
+                        © 2025 NexaGas. All rights reserved. Data updates every 30 seconds.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="gas.js"></script>
+</body>
+</html>
