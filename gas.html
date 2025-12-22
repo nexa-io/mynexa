@@ -3,516 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexa - Real-Time Gas Fee Tracker</title>
-    <meta name="description" content="Track real-time gas fees across Ethereum, Base, Polygon, Arbitrum, Optimism, and BSC blockchains. Optimize your transactions with live data.">
+    <title>Gas Fee Checker - See Current Transaction Costs</title>
+    <meta name="description" content="Simple gas fee tracker. See current transaction costs for Ethereum, Base, Polygon, Arbitrum, Optimism, and BSC.">
     
-    <!-- Google Fonts - Montserrat -->
+    <!-- Google Fonts - Simple font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Lucide Icons -->
+    <!-- Simple Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- CSS -->
     <link rel="stylesheet" href="gas.css">
 </head>
 <body>
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <a href="#" class="logo">
-                <div class="logo-icon">N</div>
-                <span class="logo-text">Nexa</span>
-            </a>
-            <div class="tagline">Gas Fee Tracker</div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <div class="nav-section">
-                <div class="nav-section-title">Navigation</div>
-                <a href="index.html" class="nav-item">
-                    <i data-lucide="home"></i>
-                    <span>Home</span>
-                </a>
-                <a href="#" class="nav-item active">
-                    <i data-lucide="activity"></i>
-                    <span>Live Tracker</span>
-                </a>
-                <a href="#history" class="nav-item">
-                    <i data-lucide="history"></i>
-                    <span>History</span>
-                </a>
-                <a href="#alerts" class="nav-item">
-                    <i data-lucide="bell"></i>
-                    <span>Alerts</span>
-                </a>
+    <!-- Simple Header -->
+    <header class="simple-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo">
+                        <div class="logo-icon">⛽</div>
+                        <h1>Gas Fee Checker</h1>
+                    </div>
+                    <p class="tagline">See current transaction costs</p>
+                </div>
+                <div class="header-right">
+                    <div class="auto-refresh">
+                        <div class="auto-refresh-label">
+                            <i data-lucide="refresh-cw"></i>
+                            <span>Auto-updates every 30s</span>
+                        </div>
+                        <div class="last-updated" id="lastUpdated">
+                            Updated <span id="updateSeconds">0</span>s ago
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+    </header>
 
-            <div class="nav-section">
-                <div class="nav-section-title">Blockchains</div>
-                <a href="#ethereum" class="nav-item blockchain-filter" data-chain="ethereum">
+    <!-- Simple Navigation -->
+    <nav class="simple-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="#ethereum" class="nav-item active" data-chain="all">
+                    <i data-lucide="globe"></i>
+                    <span>All Networks</span>
+                </a>
+                <a href="#ethereum" class="nav-item" data-chain="ethereum">
                     <div class="chain-dot" style="background: #627eea;"></div>
                     <span>Ethereum</span>
                 </a>
-                <a href="#base" class="nav-item blockchain-filter" data-chain="base">
+                <a href="#base" class="nav-item" data-chain="base">
                     <div class="chain-dot" style="background: #0052ff;"></div>
                     <span>Base</span>
                 </a>
-                <a href="#polygon" class="nav-item blockchain-filter" data-chain="polygon">
+                <a href="#polygon" class="nav-item" data-chain="polygon">
                     <div class="chain-dot" style="background: #8247e5;"></div>
                     <span>Polygon</span>
                 </a>
-                <a href="#arbitrum" class="nav-item blockchain-filter" data-chain="arbitrum">
+                <a href="#arbitrum" class="nav-item" data-chain="arbitrum">
                     <div class="chain-dot" style="background: #28a0f0;"></div>
                     <span>Arbitrum</span>
                 </a>
-                <a href="#optimism" class="nav-item blockchain-filter" data-chain="optimism">
+                <a href="#optimism" class="nav-item" data-chain="optimism">
                     <div class="chain-dot" style="background: #ff0420;"></div>
                     <span>Optimism</span>
                 </a>
-                <a href="#bsc" class="nav-item blockchain-filter" data-chain="bsc">
+                <a href="#bsc" class="nav-item" data-chain="bsc">
                     <div class="chain-dot" style="background: #f3ba2f;"></div>
                     <span>BSC</span>
                 </a>
             </div>
+        </div>
+    </nav>
 
-            <div class="nav-section">
-                <div class="nav-section-title">Settings</div>
-                <div class="setting-item">
-                    <div class="setting-label">Auto Refresh</div>
-                    <label class="switch">
-                        <input type="checkbox" id="autoRefreshToggle" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-label">Dark Mode</div>
-                    <label class="switch">
-                        <input type="checkbox" id="darkModeToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-label">Show USD</div>
-                    <label class="switch">
-                        <input type="checkbox" id="showUSDToggle" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="footer-actions">
-                <button class="action-btn secondary" id="exportDataBtn">
-                    <i data-lucide="download"></i>
-                    Export Data
-                </button>
-                <button class="action-btn primary" id="refreshNowBtn">
-                    <i data-lucide="refresh-cw"></i>
-                    Refresh Now
-                </button>
-            </div>
-        </nav>
-    </aside>
-
-    <!-- Mobile Menu Button -->
-    <button class="mobile-menu-btn" id="mobileMenuBtn">
-        <i data-lucide="menu"></i>
-    </button>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Header -->
-        <header class="dashboard-header">
-            <div class="header-left">
-                <h1>Gas Fee Tracker</h1>
-                <div class="header-subtitle" id="lastUpdatedText">
-                    <i data-lucide="clock"></i>
-                    <span>Updated <span id="updateTime">0</span> seconds ago</span>
-                </div>
-            </div>
-
-            <div class="header-right">
-                <div class="network-status">
-                    <div class="status-indicator active"></div>
-                    <span>6 Networks Active</span>
-                </div>
-                <div class="header-actions">
-                    <button class="action-btn" id="bestChainBtn">
-                        <i data-lucide="zap"></i>
-                        <span>Best Chain</span>
-                    </button>
-                    <button class="action-btn primary" id="addAlertBtn">
-                        <i data-lucide="bell"></i>
-                        <span>Set Alert</span>
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Dashboard Content -->
-        <div class="dashboard-content">
-                        <!-- Summary Cards -->
-            <div class="summary-grid">
-                <!-- Current Gas Summary -->
-                <div class="summary-card primary">
-                    <div class="summary-icon">
-                        <i data-lucide="zap"></i>
-                    </div>
-                    <div class="summary-content">
-                        <div class="summary-label">Current Lowest Gas</div>
-                        <div class="summary-value" id="lowestGasValue">--</div>
-                        <div class="summary-usd" id="lowestGasUSD">$--</div>
-                        <div class="summary-subtitle" id="lowestGasChain">--</div>
-                    </div>
-                </div>
-
-                <!-- Average Gas -->
-                <div class="summary-card">
-                    <div class="summary-icon">
-                        <i data-lucide="activity"></i>
-                    </div>
-                    <div class="summary-content">
-                        <div class="summary-label">Average Gas</div>
-                        <div class="summary-value" id="averageGasValue">--</div>
-                        <div class="summary-usd" id="averageGasUSD">$--</div>
-                        <div class="summary-subtitle">Across all chains</div>
-                    </div>
-                </div>
-
-                <!-- Highest Gas -->
-                <div class="summary-card warning">
-                    <div class="summary-icon">
-                        <i data-lucide="trending-up"></i>
-                    </div>
-                    <div class="summary-content">
-                        <div class="summary-label">Highest Gas</div>
-                        <div class="summary-value" id="highestGasValue">--</div>
-                        <div class="summary-usd" id="highestGasUSD">$--</div>
-                        <div class="summary-subtitle" id="highestGasChain">--</div>
-                    </div>
-                </div>
-
-                <!-- Last Block -->
-                <div class="summary-card">
-                    <div class="summary-icon">
-                        <i data-lucide="cube"></i>
-                    </div>
-                    <div class="summary-content">
-                        <div class="summary-label">ETH Block</div>
-                        <div class="summary-value" id="ethBlockNumber">--</div>
-                        <div class="summary-subtitle">Latest block</div>
-                    </div>
-                </div>
-            </div>
-            <!-- Live Gas Table -->
-            <div class="section-card">
-                <div class="section-header">
-                    <h3>Live Gas Prices</h3>
-                    <div class="section-actions">
-                        <div class="view-toggle">
-                            <button class="view-btn active" data-view="table">
-                                <i data-lucide="table"></i>
-                                Table
-                            </button>
-                            <button class="view-btn" data-view="cards">
-                                <i data-lucide="grid"></i>
-                                Cards
-                            </button>
+    <!-- Main Content - Super Simple -->
+    <main class="simple-main">
+        <div class="container">
+            <!-- Current Best Deal -->
+            <div class="best-deal-section">
+                <h2 class="section-title">
+                    <i data-lucide="zap"></i>
+                    Best Deal Right Now
+                </h2>
+                <div class="best-deal-card" id="bestDealCard">
+                    <div class="best-deal-content">
+                        <div class="best-deal-label">Cheapest Network</div>
+                        <div class="best-deal-network" id="bestNetwork">--</div>
+                        <div class="best-deal-price">
+                            <span class="gwei" id="bestGwei">-- Gwei</span>
+                            <span class="usd" id="bestUSD">$--</span>
                         </div>
-                        <div class="filter-group">
-                            <select id="gasSpeedFilter" class="filter-select">
-                                <option value="all">All Speeds</option>
-                                <option value="slow">Slow Only</option>
-                                <option value="standard">Standard Only</option>
-                                <option value="fast">Fast Only</option>
-                                <option value="instant">Instant Only</option>
-                            </select>
-                            <select id="chainFilter" class="filter-select">
-                                <option value="all">All Chains</option>
-                                <option value="ethereum">Ethereum</option>
-                                <option value="base">Base</option>
-                                <option value="polygon">Polygon</option>
-                                <option value="arbitrum">Arbitrum</option>
-                                <option value="optimism">Optimism</option>
-                                <option value="bsc">BSC</option>
-                            </select>
-                        </div>
+                        <div class="best-deal-note">For a standard transaction</div>
                     </div>
-                </div>
-
-                <!-- Table View -->
-                <div class="gas-table-container active" id="tableView">
-                    <div class="table-responsive">
-                        <table class="gas-table">
-                            <thead>
-                                <tr>
-                                    <th>Blockchain</th>
-                                    <th>Slow</th>
-                                    <th>Standard</th>
-                                    <th>Fast</th>
-                                    <th>Instant</th>
-                                    <th>USD Cost*</th>
-                                    <th>Status</th>
-                                    <th>24h Change</th>
-                                </tr>
-                            </thead>
-                            <tbody id="gasTableBody">
-                                <!-- Filled by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="table-footer">
-                        <div class="table-note">
-                            *Estimated cost for a standard ERC-20 transfer
-                        </div>
-                        <div class="table-stats">
-                            <span id="tableStats">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cards View -->
-                <div class="gas-cards-container" id="cardsView">
-                    <div class="cards-grid" id="gasCardsGrid">
-                        <!-- Filled by JavaScript -->
+                    <div class="best-deal-action">
+                        <button class="simple-btn primary" id="useBestBtn">
+                            <i data-lucide="send"></i>
+                            Use This Network
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="section-card">
-                <div class="section-header">
-                    <h3>24-Hour Gas Trends</h3>
-                    <div class="section-actions">
-                        <select id="chartChainSelect" class="filter-select">
-                            <option value="ethereum">Ethereum</option>
-                            <option value="polygon">Polygon</option>
-                            <option value="arbitrum">Arbitrum</option>
-                            <option value="base">Base</option>
-                            <option value="optimism">Optimism</option>
-                            <option value="bsc">BSC</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <div class="chart" id="gasChart">
-                        <!-- Simple CSS chart -->
-                        <div class="chart-bars">
-                            <div class="chart-bar" style="height: 80%;" data-time="12h" data-value="80"></div>
-                            <div class="chart-bar" style="height: 65%;" data-time="10h" data-value="65"></div>
-                            <div class="chart-bar" style="height: 45%;" data-time="8h" data-value="45"></div>
-                            <div class="chart-bar" style="height: 70%;" data-time="6h" data-value="70"></div>
-                            <div class="chart-bar" style="height: 85%;" data-time="4h" data-value="85"></div>
-                            <div class="chart-bar" style="height: 40%;" data-time="2h" data-value="40"></div>
-                            <div class="chart-bar" style="height: 30%;" data-time="Now" data-value="30"></div>
-                        </div>
-                        <div class="chart-labels">
-                            <span>12h ago</span>
-                            <span>Now</span>
-                        </div>
-                    </div>
-                    <div class="chart-legend">
-                        <div class="legend-item">
-                            <span class="legend-color" style="background: var(--color-primary);"></span>
-                            <span>Standard Gas</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color" style="background: var(--color-success);"></span>
-                            <span>Low Range</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color" style="background: var(--color-danger);"></span>
-                            <span>High Range</span>
-                        </div>
-                    </div>
+            <!-- Simple Price Cards -->
+            <div class="simple-section">
+                <h2 class="section-title">
+                    <i data-lucide="layers"></i>
+                    Current Network Prices
+                </h2>
+                <div class="price-cards-grid" id="priceCardsGrid">
+                    <!-- Filled by JavaScript -->
                 </div>
             </div>
 
-            <!-- Network Comparison -->
-            <div class="section-card">
-                <div class="section-header">
-                    <h3>Network Comparison</h3>
-                    <div class="section-subtitle">Standard gas fee comparison across networks</div>
-                </div>
-                <div class="comparison-container">
+            <!-- Simple Comparison -->
+            <div class="simple-section">
+                <h2 class="section-title">
+                    <i data-lucide="trending-up"></i>
+                    Price Comparison
+                </h2>
+                <div class="comparison-section">
                     <div class="comparison-bars" id="comparisonBars">
                         <!-- Filled by JavaScript -->
                     </div>
-                    <div class="comparison-labels">
-                        <div class="label-row">
-                            <span>0 Gwei</span>
-                            <span>25 Gwei</span>
-                            <span>50 Gwei</span>
-                            <span>75 Gwei</span>
-                            <span>100+ Gwei</span>
+                    <div class="comparison-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #10b981;"></div>
+                            <span>Cheap</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #f59e0b;"></div>
+                            <span>Average</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #ef4444;"></div>
+                            <span>Expensive</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Gas Alert Setup -->
-            <div class="section-card" id="alerts">
-                <div class="section-header">
-                    <h3>Gas Price Alerts</h3>
-                    <div class="section-subtitle">Get notified when gas prices reach your desired levels</div>
-                </div>
-                <div class="alert-setup">
-                    <div class="alert-input-group">
-                        <div class="input-with-icon">
-                            <i data-lucide="bell"></i>
-                            <input type="text" id="alertPrice" placeholder="Enter gas price (Gwei)">
-                        </div>
-                        <select id="alertChain" class="filter-select">
-                            <option value="ethereum">Ethereum</option>
-                            <option value="all">All Chains</option>
-                            <option value="polygon">Polygon</option>
-                            <option value="arbitrum">Arbitrum</option>
-                            <option value="base">Base</option>
-                            <option value="optimism">Optimism</option>
-                            <option value="bsc">BSC</option>
-                        </select>
-                        <select id="alertSpeed" class="filter-select">
-                            <option value="standard">Standard</option>
-                            <option value="slow">Slow</option>
-                            <option value="fast">Fast</option>
-                            <option value="instant">Instant</option>
-                        </select>
-                        <button class="action-btn primary" id="addAlertButton">
-                            <i data-lucide="plus"></i>
-                            Add Alert
-                        </button>
-                    </div>
-                    <div class="alerts-list" id="alertsList">
-                        <div class="empty-alerts">
-                            <i data-lucide="bell-off"></i>
-                            <p>No alerts set up yet</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tips Section -->
-            <div class="section-card" id="history">
-                <div class="section-header">
-                    <h3>Gas Saving Tips</h3>
-                    <div class="section-subtitle">Optimize your transactions</div>
-                </div>
+            <!-- Simple Tips -->
+            <div class="simple-section tips-section">
+                <h2 class="section-title">
+                    <i data-lucide="lightbulb"></i>
+                    Simple Tips
+                </h2>
                 <div class="tips-grid">
                     <div class="tip-card">
-                        <div class="tip-icon">
-                            <i data-lucide="clock"></i>
-                        </div>
-                        <h4>Time Your Transactions</h4>
-                        <p>Gas fees are typically lower during weekends and off-peak hours (late night/early morning UTC).</p>
+                        <div class="tip-icon">💡</div>
+                        <h3>What are gas fees?</h3>
+                        <p>Fees you pay to send transactions on blockchain networks. Like paying for postage.</p>
                     </div>
                     <div class="tip-card">
-                        <div class="tip-icon">
-                            <i data-lucide="layers"></i>
-                        </div>
-                        <h4>Use Layer 2</h4>
-                        <p>Consider using Arbitrum, Base, or Optimism for significantly lower fees than Ethereum mainnet.</p>
+                        <div class="tip-icon">⏰</div>
+                        <h3>When to send?</h3>
+                        <p>Weekends and late nights (UTC time) are usually cheaper than weekday afternoons.</p>
                     </div>
                     <div class="tip-card">
-                        <div class="tip-icon">
-                            <i data-lucide="zap"></i>
-                        </div>
-                        <h4>Batch Transactions</h4>
-                        <p>Combine multiple operations into single transactions to save on gas costs.</p>
+                        <div class="tip-icon">🚀</div>
+                        <h3>Need it fast?</h3>
+                        <p>If you want your transaction to be processed quickly, you'll need to pay higher fees.</p>
                     </div>
                     <div class="tip-card">
-                        <div class="tip-icon">
-                            <i data-lucide="shield"></i>
-                        </div>
-                        <h4>Set Gas Limits</h4>
-                        <p>Always set appropriate gas limits to avoid failed transactions and wasted fees.</p>
+                        <div class="tip-icon">🔄</div>
+                        <h3>Save money</h3>
+                        <p>Use networks like Base, Arbitrum, or Polygon for much lower fees than Ethereum.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simple FAQ -->
+            <div class="simple-section faq-section">
+                <h2 class="section-title">
+                    <i data-lucide="help-circle"></i>
+                    Quick Questions
+                </h2>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h3>What's a "standard transaction"?</h3>
+                        <p>A simple transfer of tokens from one wallet to another. More complex actions (like trading) cost more.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Why do fees change?</h3>
+                        <p>When many people are sending transactions at the same time, fees go up. When it's quiet, fees go down.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>What's Gwei?</h3>
+                        <p>It's a unit for measuring gas fees. Just like cents are for dollars. Lower Gwei = cheaper transaction.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Can I avoid fees?</h3>
+                        <p>You can't avoid fees completely, but you can save by choosing cheaper networks or waiting for quiet times.</p>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Footer -->
-        <footer class="dashboard-footer">
-            <div class="footer-content">
-                <div class="data-source">
-                    <i data-lucide="database"></i>
-                    <span>Data updates every 30 seconds • Gas prices in Gwei</span>
-                </div>
-                <div class="footer-links">
-                    <a href="index.html">Home</a>
-                    <a href="#" class="active">Gas Tracker</a>
-                    <a href="#history">History</a>
-                    <a href="#alerts">Alerts</a>
-                </div>
-                <div class="footer-disclaimer">
-                    <p><strong>Disclaimer:</strong> Gas fee data is for informational purposes only. Actual transaction costs may vary. Always verify gas fees in your wallet before confirming transactions.</p>
-                </div>
-            </div>
-        </footer>
     </main>
 
-    <!-- Alert Modal -->
-    <div class="modal-overlay" id="alertModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Set Gas Price Alert</h3>
-                <button class="modal-close" id="closeAlertModal">
-                    <i data-lucide="x"></i>
-                </button>
+    <!-- Simple Footer -->
+    <footer class="simple-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-notice">
+                    <i data-lucide="info"></i>
+                    <p>Prices update every 30 seconds. Actual fees may vary slightly.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" id="refreshBtn">
+                        <i data-lucide="refresh-cw"></i>
+                        Refresh Now
+                    </a>
+                    <a href="#" id="bookmarkBtn">
+                        <i data-lucide="bookmark"></i>
+                        Bookmark
+                    </a>
+                    <a href="#" id="shareBtn">
+                        <i data-lucide="share-2"></i>
+                        Share
+                    </a>
+                </div>
+                <div class="footer-copyright">
+                    ⛽ Gas Fee Checker • Simple tool for everyone
+                </div>
             </div>
-            <div class="modal-content">
-                <div class="alert-preview">
-                    <div class="alert-preview-card">
-                        <div class="alert-chain-icon" id="previewChainIcon">
-                            <i data-lucide="ethereum"></i>
-                        </div>
-                        <div class="alert-preview-content">
-                            <div class="alert-preview-label">Alert will trigger when:</div>
-                            <div class="alert-preview-value" id="previewAlertText">Ethereum standard gas ≤ -- Gwei</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="input-group">
-                    <label for="alertThreshold">Gas Price Threshold (Gwei)</label>
-                    <div class="input-with-icon">
-                        <i data-lucide="dollar-sign"></i>
-                        <input type="number" id="alertThreshold" placeholder="e.g., 20" min="0" step="0.1">
-                    </div>
-                </div>
-                
-                <div class="input-group">
-                    <label for="alertCondition">Condition</label>
-                    <select id="alertCondition" class="filter-select">
-                        <option value="below">Below</option>
-                        <option value="above">Above</option>
-                    </select>
-                </div>
-                
-                <div class="input-group">
-                    <label for="alertNotification">Notification Method</label>
-                    <div class="notification-options">
-                        <label class="notification-option">
-                            <input type="checkbox" name="notification" value="browser" checked>
-                            <span>Browser Notification</span>
-                        </label>
-                        <label class="notification-option">
-                            <input type="checkbox" name="notification" value="email">
-                            <span>Email</span>
-                        </label>
-                    </div>
-                </div>
+        </div>
+    </footer>
 
-                <div class="modal-actions">
-                    <button class="btn-primary" id="saveAlertBtn">
-                        <i data-lucide="bell"></i>
-                        Save Alert
-                    </button>
-                    <button class="btn-secondary" id="cancelAlertBtn">
-                        Cancel
-                    </button>
-                </div>
-            </div>
+    <!-- Simple Notification -->
+    <div class="simple-notification" id="notification">
+        <div class="notification-content">
+            <i data-lucide="check-circle"></i>
+            <span id="notificationText">Updated!</span>
         </div>
     </div>
 
