@@ -316,38 +316,54 @@ function updateGasCards() {
 }
 
 // Update summary statistics
+// Update summary statistics
 function updateSummaryStats() {
     let totalGas = 0;
+    let totalUSD = 0;
     let chainCount = 0;
     let lowestGas = Infinity;
     let lowestGasChainName = '';
+    let lowestGasChainId = '';
     let highestGas = 0;
     let highestGasChainName = '';
+    let highestGasChainId = '';
     
     Object.entries(blockchainData).forEach(([id, chain]) => {
         if (!gasData[id]) return;
         
         const gas = gasData[id].standard;
+        const usdCost = parseFloat(calculateUSDCost(gas, id));
+        
         totalGas += gas;
+        totalUSD += usdCost;
         chainCount++;
         
         if (gas < lowestGas) {
             lowestGas = gas;
             lowestGasChainName = chain.name;
+            lowestGasChainId = id;
         }
         
         if (gas > highestGas) {
             highestGas = gas;
             highestGasChainName = chain.name;
+            highestGasChainId = id;
         }
     });
     
     const averageGas = totalGas / chainCount;
+    const averageUSD = totalUSD / chainCount;
     
+    // Update DOM elements
     lowestGasValue.textContent = `${lowestGas.toFixed(2)} Gwei`;
+    document.getElementById('lowestGasUSD').textContent = `$${calculateUSDCost(lowestGas, lowestGasChainId)}`;
     lowestGasChain.textContent = lowestGasChainName;
+    
     averageGasValue.textContent = `${averageGas.toFixed(2)} Gwei`;
+    document.getElementById('averageGasUSD').textContent = `$${averageUSD.toFixed(2)}`;
+    
     highestGasValue.textContent = `${highestGas.toFixed(2)} Gwei`;
+    document.getElementById('highestGasUSD').textContent = `$${calculateUSDCost(highestGas, highestGasChainId)}`;
     highestGasChain.textContent = highestGasChainName;
     
     // Update block number
@@ -507,8 +523,10 @@ function switchView(view) {
 }
 
 // Find best chain for transactions
+// Find best chain for transactions
 function findBestChain() {
     let bestChain = '';
+    let bestChainId = '';
     let lowestGas = Infinity;
     
     Object.entries(blockchainData).forEach(([id, chain]) => {
@@ -518,10 +536,12 @@ function findBestChain() {
         if (gas < lowestGas) {
             lowestGas = gas;
             bestChain = chain.name;
+            bestChainId = id;
         }
     });
     
-    showNotification(`Best chain: ${bestChain} (${lowestGas.toFixed(2)} Gwei)`, 'success');
+    const usdCost = calculateUSDCost(lowestGas, bestChainId);
+    showNotification(`Best chain: ${bestChain} (${lowestGas.toFixed(2)} Gwei, $${usdCost})`, 'success');
 }
 
 // Add gas alert
