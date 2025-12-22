@@ -310,6 +310,80 @@
             padding-top: 1rem;
         }
 
+        /* Quick Tools Grid Section */
+        .quick-tools-section {
+            padding: clamp(3rem, 6vw, 4rem) 1.5rem;
+            background: linear-gradient(135deg, #f8f5ff, white);
+        }
+
+        .quick-tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .quick-tool-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid var(--color-neutral-200);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .quick-tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.15);
+            border-color: var(--color-primary);
+        }
+
+        .quick-tool-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .quick-tool-icon i {
+            width: 24px;
+            height: 24px;
+            color: var(--color-primary);
+        }
+
+        .quick-tool-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .quick-tool-card p {
+            color: var(--color-neutral-600);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-tool-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--color-neutral-100);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-neutral-700);
+        }
+
+        .all-tools-cta {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
         /* Hero Section - Improved Responsiveness */
         .hero {
             position: relative;
@@ -1076,7 +1150,7 @@
             color: white;
         }
 
-        /* Footer - Clean and centered */
+        /* Footer - Updated with all required links */
         footer {
             background: var(--color-neutral-900);
             color: white;
@@ -1086,7 +1160,6 @@
         .footer-content {
             max-width: 1280px;
             margin: 0 auto;
-            text-align: center;
         }
 
         .footer-grid {
@@ -1096,14 +1169,19 @@
             margin-bottom: 3rem;
         }
 
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 2fr repeat(4, 1fr);
+            }
+        }
+
         .footer-brand {
             margin-bottom: 2rem;
         }
 
         .footer-brand p {
             color: var(--color-neutral-400);
-            margin: 1rem auto 1.5rem;
-            max-width: 28rem;
+            margin: 1rem 0 1.5rem;
             line-height: 1.7;
             font-size: clamp(0.875rem, 1.5vw, 1rem);
         }
@@ -1111,7 +1189,6 @@
         .social-links {
             display: flex;
             gap: 1rem;
-            justify-content: center;
         }
 
         .social-link {
@@ -1193,6 +1270,46 @@
             color: var(--color-neutral-400);
         }
 
+        /* Mobile Quick Tools Styling */
+        .mobile-tools-section {
+            padding: 1.5rem;
+            background: var(--color-neutral-50);
+            border-radius: 0.75rem;
+            border: 1px solid var(--color-neutral-200);
+            margin-bottom: 1rem;
+        }
+
+        .mobile-tools-section h4 {
+            margin-bottom: 1rem;
+            color: var(--color-neutral-700);
+            font-size: 1rem;
+        }
+
+        .mobile-tool-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: white;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--color-neutral-700);
+            border: 1px solid var(--color-neutral-200);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-tool-link:hover {
+            transform: translateX(5px);
+            border-color: var(--color-primary);
+        }
+
+        .mobile-tool-link i {
+            width: 18px;
+            height: 18px;
+            color: var(--color-primary);
+        }
+
         /* Responsive Styles */
         @media (min-width: 768px) {
             .mobile-menu-btn {
@@ -1223,15 +1340,6 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .footer-grid {
-                grid-template-columns: repeat(3, 1fr);
-                text-align: left;
-            }
-
-            .social-links {
-                justify-content: flex-start;
-            }
-
             .warning-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -1247,6 +1355,10 @@
             .hero-visual {
                 order: 2;
             }
+
+            .quick-tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (min-width: 1024px) {
@@ -1254,13 +1366,8 @@
                 grid-template-columns: repeat(3, 1fr);
             }
 
-            .footer-grid {
-                grid-template-columns: 2fr repeat(3, 1fr);
-            }
-
-            .hero-content {
-                grid-template-columns: repeat(2, 1fr);
-                align-items: center;
+            .quick-tools-grid {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
@@ -1328,6 +1435,10 @@
             .mobile-menu-buttons .btn {
                 width: 100%;
                 justify-content: center;
+            }
+
+            .quick-tools-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1409,14 +1520,15 @@
 
                 <nav id="nav">
                     <a href="#features">Tools</a>
+                    <a href="#quick-tools">Quick Tools</a>
                     <a href="#how-it-works">How It Works</a>
                     <a href="#security">Security</a>
                     <a href="#what-we-dont">Transparency</a>
                 </nav>
 
                 <div class="nav-buttons" id="navButtons">
-                    <a href="dashboard.html"><button class="btn btn-secondary">Wallet Explorer</button></a>
-                    <a href="create-wallet.html"><button class="btn btn-primary" onclick="createWallet()">Create Wallet</button></a>
+                    <a href="tools.html"><button class="btn btn-secondary">All Tools</button></a>
+                    <a href="create-wallet.html"><button class="btn btn-primary">Create Wallet</button></a>
                 </div>
 
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -1427,12 +1539,31 @@
 
         <div class="mobile-menu" id="mobileMenu">
             <a href="#features">Tools</a>
+            <a href="#quick-tools">Quick Tools</a>
             <a href="#how-it-works">How It Works</a>
             <a href="#security">Security</a>
             <a href="#what-we-dont">Transparency</a>
+            
+            <!-- Quick Tools in Mobile Menu -->
+            <div class="mobile-tools-section">
+                <h4>Quick Tools</h4>
+                <a href="gas.html" class="mobile-tool-link">
+                    <i data-lucide="fuel" style="width: 18px; height: 18px;"></i>
+                    <span>Gas Tracker</span>
+                </a>
+                <a href="create-wallet.html" class="mobile-tool-link">
+                    <i data-lucide="key" style="width: 18px; height: 18px;"></i>
+                    <span>Wallet Generator</span>
+                </a>
+                <a href="decrypt-wallet.html" class="mobile-tool-link">
+                    <i data-lucide="unlock" style="width: 18px; height: 18px;"></i>
+                    <span>Wallet Decryptor</span>
+                </a>
+            </div>
+            
             <div class="mobile-menu-buttons">
-              <a href="dashboard.html"><button class="btn btn-secondary">Wallet Explorer</button></a> 
-                <a href="create-wallet.html"><button class="btn btn-primary" onclick="createWallet()">Create Wallet</button></a>
+                <a href="tools.html"><button class="btn btn-secondary" style="width: 100%;">View All Tools</button></a>
+                <a href="create-wallet.html"><button class="btn btn-primary" style="width: 100%;">Create Wallet</button></a>
             </div>
         </div>
     </header>
@@ -1479,19 +1610,35 @@
                     </p>
 
                     <div class="hero-buttons">
-                        <a href="create-wallet.html"><button class="btn btn-primary" onclick="createWallet()">
+                        <a href="create-wallet.html"><button class="btn btn-primary">
                             <span>Create New Wallet</span>
                             <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
                         </button></a>
-                        <a href="dashboard.html"><button class="btn btn-secondary" onclick="restoreWallet()">Wallet Explorer</button></a>
-                        <a href="decrypt-tool.html"><button class="btn btn-primary" onclick="decryptEncryptedData()">
-                            <span>Decrypt Wallet</span>
+                        <a href="dashboard.html"><button class="btn btn-secondary">Wallet Explorer</button></a>
+                        <a href="gas.html"><button class="btn btn-primary">
+                            <span>Gas Tracker</span>
                             <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
                         </button></a>
-
                     </div>
 
-                
+                    <div class="quick-features">
+                        <div class="quick-feature">
+                            <i data-lucide="shield" style="width: 20px; height: 20px;"></i>
+                            <span>100% Client-Side</span>
+                        </div>
+                        <div class="quick-feature">
+                            <i data-lucide="zap" style="width: 20px; height: 20px;"></i>
+                            <span>Free Tools</span>
+                        </div>
+                        <div class="quick-feature">
+                            <i data-lucide="lock" style="width: 20px; height: 20px;"></i>
+                            <span>Local Encryption</span>
+                        </div>
+                        <div class="quick-feature">
+                            <i data-lucide="tool" style="width: 20px; height: 20px;"></i>
+                            <span>Multi-Chain</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="hero-visual">
@@ -1522,6 +1669,64 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Tools Section -->
+    <section id="quick-tools" class="quick-tools-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Quick Access</div>
+                <h2>Essential Web3 Tools</h2>
+                <p class="section-description">
+                    Fast access to the most frequently used Web3 utilities. All tools are free and run entirely in your browser.
+                </p>
+            </div>
+
+            <div class="quick-tools-grid">
+                <a href="gas.html" class="quick-tool-card">
+                    <div class="quick-tool-icon">
+                        <i data-lucide="fuel"></i>
+                    </div>
+                    <h3>Gas Tracker</h3>
+                    <p>Real-time gas price monitoring across Ethereum, Base, Arbitrum, and other L2 networks.</p>
+                    <span class="quick-tool-badge">Network Tool</span>
+                </a>
+
+                <a href="create-wallet.html" class="quick-tool-card">
+                    <div class="quick-tool-icon">
+                        <i data-lucide="key"></i>
+                    </div>
+                    <h3>Wallet Generator</h3>
+                    <p>Create and encrypt Ethereum wallets securely. All processing happens client-side.</p>
+                    <span class="quick-tool-badge">Wallet Tool</span>
+                </a>
+
+                <a href="decrypt-wallet.html" class="quick-tool-card">
+                    <div class="quick-tool-icon">
+                        <i data-lucide="unlock"></i>
+                    </div>
+                    <h3>Wallet Decryptor</h3>
+                    <p>Securely decrypt your encrypted wallet files using your password. No data sent to servers.</p>
+                    <span class="quick-tool-badge">Wallet Tool</span>
+                </a>
+
+                <a href="dashboard.html" class="quick-tool-card">
+                    <div class="quick-tool-icon">
+                        <i data-lucide="eye"></i>
+                    </div>
+                    <h3>Wallet Explorer</h3>
+                    <p>Comprehensive wallet analytics and transaction history viewer across multiple blockchains.</p>
+                    <span class="quick-tool-badge">Analytics Tool</span>
+                </a>
+            </div>
+
+            <div class="all-tools-cta">
+                <a href="tools.html"><button class="btn btn-primary">
+                    <span>View All Tools</span>
+                    <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
+                </button></a>
             </div>
         </div>
     </section>
@@ -1695,7 +1900,7 @@
             </div>
 
             <div class="cta-center">
-                <button class="btn btn-primary" onclick="createWallet()">Start Creating Wallet</button>
+                <a href="create-wallet.html"><button class="btn btn-primary">Start Creating Wallet</button></a>
             </div>
         </div>
     </section>
@@ -1800,13 +2005,13 @@
                 </p>
 
                 <div class="cta-buttons">
-                    <a href="create-wallet.html><button class="btn btn-white" onclick="createWallet()">
+                    <a href="create-wallet.html"><button class="btn btn-white">
                         <span>Create New Wallet</span>
                         <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
                     </button></a>
-                    <a href="dashboard.html"><button class="btn btn-outline-white" onclick="restoreWallet()">
-                        <i data-lucide="upload" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
-                        <span>Restore Wallet</span>
+                    <a href="tools.html"><button class="btn btn-outline-white">
+                        <i data-lucide="tool" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                        <span>Explore All Tools</span>
                     </button></a>
                 </div>
 
@@ -1837,73 +2042,81 @@
     </section>
 
     <!-- Footer -->
-    <footer id="about">
+    <footer>
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-grid">
-                    <div class="footer-brand">
-                        <a href="#" class="logo" style="margin-bottom: 1rem; justify-content: center; display: inline-flex;">
-                            <div class="logo-icon">N</div>
-                            <span class="logo-text">NexaPay</span>
-                        </a>
-                        <p>
-                            Client-side Web3 wallet tools. Generate, encrypt, and manage wallets entirely in your browser.
-                        </p>
-                        <div class="social-links">
-                            <a href="https://twitter.com/search?q=%23NexaPay" class="social-link" target="_blank">
-                                <i data-lucide="twitter" style="width: 20px; height: 20px;"></i>
-                            </a>
-                            <a href="#" class="social-link">
-                                <i data-lucide="github" style="width: 20px; height: 20px;"></i>
-                            </a>
-                            <a href="#" class="social-link">
-                                <i data-lucide="mail" style="width: 20px; height: 20px;"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="footer-column">
-                        <h3>Tools</h3>
-                        <ul class="footer-links">
-                            <li><a href="#features" onclick="createWallet()">Create Wallet</a></li>
-                            <li><a href="#features" onclick="restoreWallet()">Wallet Explorer</a></li>
-                            <li><a href="#features">Wallet Encryption</a></li>
-                            <li><a href="#features">Multi-Chain Support</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-column">
-                        <h3>Company</h3>
-                        <ul class="footer-links">
-                            <li><a href="#about">About Us</a></li>
-                            <li><a href="#security">Security Model</a></li>
-                            <li><a href="#what-we-dont">Transparency</a></li>
-                            <li><a href="#">Open Source</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-column">
-                        <h3>Blockchains</h3>
-                        <ul class="footer-links">
-                            <li><a href="#">Ethereum</a></li>
-                            <li><a href="#">Base</a></li>
-                            <li><a href="#">Arbitrum</a></li>
-                            <li><a href="#">Polygon</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="disclaimer-box">
-                    <h4>Important Disclaimer</h4>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo" style="margin-bottom: 1rem; justify-content: flex-start; display: flex;">
+                        <div class="logo-icon">N</div>
+                        <span class="logo-text">NexaPay</span>
+                    </a>
                     <p>
-                        NexaPay provides client-side wallet generation tools. We never have access to your funds, private keys, or wallet data. All operations happen locally in your browser. You are solely responsible for securing your encrypted wallet files and passphrases. Cryptocurrency involves risk and is not insured. This is a tool, not a financial service.
+                        Client-side Web3 wallet tools. Generate, encrypt, and manage wallets entirely in your browser.
                     </p>
+                    <div class="social-links">
+                        <a href="https://twitter.com/search?q=%23NexaPay" class="social-link" target="_blank">
+                            <i data-lucide="twitter" style="width: 20px; height: 20px;"></i>
+                        </a>
+                        <a href="https://github.com" class="social-link" target="_blank">
+                            <i data-lucide="github" style="width: 20px; height: 20px;"></i>
+                        </a>
+                        <a href="mailto:contact@nexapay.com" class="social-link">
+                            <i data-lucide="mail" style="width: 20px; height: 20px;"></i>
+                        </a>
+                    </div>
                 </div>
 
-                <div class="footer-bottom">
-                    <div class="copyright">
-                        © 2025 NexaPay. Client-side wallet tools.
-                    </div>
+                <div class="footer-column">
+                    <h3>Quick Tools</h3>
+                    <ul class="footer-links">
+                        <li><a href="gas.html">Gas Tracker</a></li>
+                        <li><a href="create-wallet.html">Wallet Generator</a></li>
+                        <li><a href="decrypt-wallet.html">Wallet Decryptor</a></li>
+                        <li><a href="dashboard.html">Wallet Explorer</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#security">Security</a></li>
+                        <li><a href="#what-we-dont">Transparency</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="#security">Security Policy</a></li>
+                        <li><a href="disclaimer.html">Disclaimer</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="tools.html">All Tools</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="disclaimer-box">
+                <h4>Important Disclaimer</h4>
+                <p>
+                    NexaPay provides client-side wallet generation tools. We never have access to your funds, private keys, or wallet data. All operations happen locally in your browser. You are solely responsible for securing your encrypted wallet files and passphrases. Cryptocurrency involves risk and is not insured. This is a tool, not a financial service.
+                </p>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    © 2025 NexaPay. Client-side wallet tools.
                 </div>
             </div>
         </div>
@@ -2006,17 +2219,6 @@
         // Update countdown every second
         setInterval(updateCountdown, 1000);
         updateCountdown(); // Initial call
-
-        // Wallet functions
-        function createWallet() {
-            // Redirect to wallet creation page
-            window.location.href = '/create-wallet';
-        }
-
-        function restoreWallet() {
-            // Redirect to wallet restoration page
-            window.location.href = '/restore-wallet';
-        }
 
         // Three.js Card Animation
         function initThreeJSCard() {
@@ -2148,7 +2350,7 @@
             }
             
             // Add hover effects to cards
-            const cards = document.querySelectorAll('.feature-card, .step-card, .security-card, .warning-item');
+            const cards = document.querySelectorAll('.feature-card, .step-card, .security-card, .warning-item, .quick-tool-card');
             cards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-5px)';
