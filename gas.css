@@ -432,6 +432,21 @@ input:checked + .slider:before {
     margin-bottom: 0.25rem;
 }
 
+.summary-usd {
+    font-size: 0.875rem;
+    color: var(--color-neutral-500);
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.summary-card.primary .summary-usd {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.summary-card.warning .summary-usd {
+    color: var(--color-warning-dark);
+}
+
 .summary-card.primary .summary-value {
     color: white;
 }
