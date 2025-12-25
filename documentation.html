@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaPay - Project Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+        }
+        
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 28px;
+            color: white;
+        }
+        
+        .logo-text {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .tagline {
+            font-size: 20px;
+            color: #94a3b8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Sections */
+        .section {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+        
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-title i {
+            color: #60a5fa;
+        }
+        
+        /* Project Overview */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .overview-card {
+            background: rgba(51, 65, 85, 0.5);
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .overview-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #f1f5f9;
+        }
+        
+        .overview-card p {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .tech-item {
+            background: rgba(30, 64, 175, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tech-icon {
+            color: #60a5fa;
+            font-size: 18px;
+        }
+        
+        /* Links */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .link-card {
+            background: rgba(51, 65, 85, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .link-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .link-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+        }
+        
+        .link-text h3 {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+        
+        .link-text a {
+            color: #60a5fa;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .link-text a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Team */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .team-card {
+            background: rgba(51, 65, 85, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .team-info h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: #f1f5f9;
+        }
+        
+        .team-role {
+            color: #60a5fa;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        /* Tool Details */
+        .tool-details {
+            margin-top: 20px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            color: #10b981;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(100, 116, 139, 0.3);
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .logo-text {
+                font-size: 28px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">NP</div>
+                <div class="logo-text">NexaPay</div>
+            </div>
+            <p class="tagline">Secure, Convenient Web3 Tools - Making Self-Custody Simple</p>
+        </header>
+
+        <!-- Project Overview -->
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-rocket"></i> Project Overview</h2>
+            <p style="color: #cbd5e1; font-size: 18px; margin-bottom: 25px;">
+                NexaPay is a platform providing secure, client-side Web3 tools designed to make self-custody and crypto interactions simple, safe, and convenient for everyone.
+            </p>
+            
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <h3>Core Value Proposition</h3>
+                    <p>NexaPay makes crypto secure and convenient with tools like an encrypted wallet that lets you safely back up your seed phrase anywhere.</p>
+                </div>
+                
+                <div class="overview-card">
+                    <h3>Target Audience</h3>
+                    <p>Crypto users, especially those new to self-custody, who are stressed about losing their seed phrase or having it stolen.</p>
+                </div>
+                
+                <div class="overview-card">
+                    <h3>Problem Solved</h3>
+                    <p>Removes the risk and hassle of physically securing vulnerable 12-24 word mnemonics by replacing them with encrypted, portable files.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Tools -->
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-tools"></i> Current Tools & Features</h2>
+            
+            <div class="tool-details">
+                <h3 style="color: #f1f5f9; font-size: 22px; margin-bottom: 15px;">Encrypted Wallet Generator</h3>
+                <p style="color: #cbd5e1; margin-bottom: 20px;">
+                    Our flagship tool transforms vulnerable seed phrases into secure, encrypted files that can be safely stored anywhere—even in cloud storage or digital backups.
+                </p>
+                
+                <ul class="feature-list">
+                    <li><strong>Client-Side Encryption:</strong> All cryptographic operations happen 100% in the user's browser</li>
+                    <li><strong>No Server Storage:</strong> Private keys and seed phrases never leave the user's device</li>
+                    <li><strong>Simple Backup:</strong> Single encrypted file + passphrase replaces complex seed phrase management</li>
+                    <li><strong>Secure Recovery:</strong> Decrypt wallet files anytime with your passphrase to restore access</li>
+                    <li><strong>Multi-Chain Support:</strong> Compatible with Ethereum, Polygon, BSC, and other EVM-compatible chains</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Technology Stack -->
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-code"></i> Technology Stack</h2>
+            
+            <p style="color: #cbd5e1; margin-bottom: 20px;">
+                NexaPay is built with modern web technologies focused on security, performance, and accessibility.
+            </p>
+            
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <i class="fab fa-html5 tech-icon"></i>
+                    <span>HTML5</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-css3-alt tech-icon"></i>
+                    <span>CSS3</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-js tech-icon"></i>
+                    <span>Vanilla JavaScript</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-shield-alt tech-icon"></i>
+                    <span>Web Crypto API</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-cloud tech-icon"></i>
+                    <span>Cloudflare Pages</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 25px; background: rgba(30, 64, 175, 0.1); padding: 20px; border-radius: 12px; border-left: 4px solid #3b82f6;">
+                <h4 style="color: #60a5fa; margin-bottom: 10px;">Security Architecture</h4>
+                <p style="color: #cbd5e1;">
+                    All sensitive operations (key generation, encryption, decryption) are performed client-side using the Web Crypto API. 
+                    No cryptographic keys, seed phrases, or wallet data are ever transmitted to our servers or stored in our infrastructure.
+                </p>
+            </div>
+        </section>
+
+        <!-- Team -->
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-users"></i> Team</h2>
+            
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">ZU</div>
+                    <div class="team-info">
+                        <h3>Zion UduakObong</h3>
+                        <div class="team-role">Co-founder & Technical Lead</div>
+                        <p style="color: #cbd5e1;">Responsible for the architecture and development of NexaPay's client-side tools. Focused on security implementation and technical roadmap.</p>
+                    </div>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-avatar">MN</div>
+                    <div class="team-info">
+                        <h3>Mike Nkan</h3>
+                        <div class="team-role">Founder & Product Lead</div>
+                        <p style="color: #cbd5e1;">Oversees product strategy, growth, and community development. Focused on making Web3 sovereignty accessible through intuitive tools.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 25px; color: #cbd5e1;">
+                <p>We are supported by a dedicated group of volunteers contributing to community management, testing, and feedback.</p>
+            </div>
+        </section>
+
+        <!-- Links & Resources -->
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-link"></i> Official Links & Resources</h2>
+            
+            <div class="links-grid">
+                <div class="link-card">
+                    <div class="link-icon"><i class="fas fa-globe"></i></div>
+                    <div class="link-text">
+                        <h3>Live Platform</h3>
+                        <a href="https://mynexa.pages.dev" target="_blank">mynexa.pages.dev</a>
+                    </div>
+                </div>
+                
+                <div class="link-card">
+                    <div class="link-icon"><i class="fab fa-github"></i></div>
+                    <div class="link-text">
+                        <h3>Source Code</h3>
+                        <a href="https://github.com/nexa-io/mynexa" target="_blank">github.com/nexa-io/mynexa</a>
+                    </div>
+                </div>
+                
+                <div class="link-card">
+                    <div class="link-icon"><i class="fab fa-twitter"></i></div>
+                    <div class="link-text">
+                        <h3>Twitter / X</h3>
+                        <a href="https://twitter.com/myneXaPay" target="_blank">@myNexaPay</a>
+                    </div>
+                </div>
+                
+                <div class="link-card">
+                    <div class="link-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="link-text">
+                        <h3>Contact Email</h3>
+                        <a href="mailto:infocontactnexa@gmail.com">infocontactnexa@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Roadmap -->
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-map"></i> Development Roadmap</h2>
+            
+            <div style="color: #cbd5e1; margin-top: 15px;">
+                <p style="margin-bottom: 15px; font-size: 18px;">NexaPay is evolving into a comprehensive platform of Web3 tools:</p>
+                
+                <ul class="feature-list">
+                    <li><strong>Phase 1 (Current):</strong> Encrypted wallet generator with multi-chain support</li>
+                    <li><strong>Phase 2 (Next):</strong> Transaction simulator and gas optimization tools</li>
+                    <li><strong>Phase 3 (Planned):</strong> Multi-signature wallet manager and DeFi dashboard</li>
+                    <li><strong>Phase 4 (Future):</strong> Developer API and enterprise white-label solutions</li>
+                </ul>
+                
+                <div style="margin-top: 25px; background: rgba(34, 197, 94, 0.1); padding: 20px; border-radius: 12px; border-left: 4px solid #22c55e;">
+                    <h4 style="color: #86efac; margin-bottom: 10px;">Open Source Commitment</h4>
+                    <p style="color: #cbd5e1;">
+                        All NexaPay tools are and will remain open source. We believe in transparency, community auditability, 
+                        and collaborative improvement of Web3 security tools.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>NexaPay Project Documentation | Version 1.0 | Last Updated: December 2024</p>
+            <p style="margin-top: 10px;">Confidential - For partnership review purposes</p>
+        </footer>
+    </div>
+
+    <script>
+        // Simple script to add print/PDF functionality
+        document.addEventListener('keydown', function(e) {
+            // Press 'P' to print (which can save as PDF)
+            if (e.key === 'p' || e.key === 'P') {
+                window.print();
+            }
+        });
+        
+        // Add a subtle notification about print functionality
+        window.onload = function() {
+            console.log("NexaPay Documentation loaded. Press 'P' to print/save as PDF.");
+        };
+    </script>
+</body>
+  </html>
