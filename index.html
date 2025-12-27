@@ -12,8 +12,8 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexaPay - Web3 Wallet Tools</title>
-    <meta name="description" content="NexaPay provides client-side Web3 wallet tools. Generate and manage wallets locally with 100% non-custodial control.">
+    <title>NexaPay - Web3 Tools Hub</title>
+    <meta name="description" content="NexaPay Web3 Tools Hub: Discover and use client-side wallet tools, gas trackers, and utilities. Generate and manage wallets locally with 100% non-custodial control.">
     
     <!-- Google Fonts - Montserrat for consistent typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -164,6 +164,24 @@
 
         .btn-outline-white:hover {
             background: rgba(255, 255, 255, 0.1);
+        }
+
+        .hub-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .hub-badge svg {
+            width: 12px;
+            height: 12px;
         }
 
         /* Header */
@@ -333,6 +351,7 @@
             text-decoration: none;
             display: block;
             color: inherit;
+            position: relative;
         }
 
         .quick-tool-card:hover {
@@ -1150,6 +1169,63 @@
             color: white;
         }
 
+        /* Hub Features Section */
+        .hub-features-section {
+            padding: clamp(4rem, 8vw, 6rem) 1.5rem;
+            background: linear-gradient(135deg, #f0f9ff, #f8f5ff);
+        }
+
+        .hub-features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: clamp(1.5rem, 3vw, 2rem);
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .hub-feature-card {
+            background: white;
+            padding: clamp(1.5rem, 3vw, 2rem);
+            border-radius: clamp(0.75rem, 2vw, 1rem);
+            border: 1px solid var(--color-neutral-200);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .hub-feature-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(124, 58, 237, 0.1);
+            border-color: var(--color-primary);
+            transform: translateY(-5px);
+        }
+
+        .hub-feature-icon {
+            width: clamp(3rem, 6vw, 4rem);
+            height: clamp(3rem, 6vw, 4rem);
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .hub-feature-card:hover .hub-feature-icon {
+            background: var(--color-primary);
+            transform: scale(1.1);
+        }
+
+        .hub-feature-icon svg {
+            width: clamp(1.5rem, 3vw, 2rem);
+            height: clamp(1.5rem, 3vw, 2rem);
+            color: var(--color-primary);
+            transition: color 0.3s ease;
+        }
+
+        .hub-feature-card:hover .hub-feature-icon svg {
+            color: white;
+        }
+
         /* Footer - Updated with all required links */
         footer {
             background: var(--color-neutral-900);
@@ -1359,6 +1435,10 @@
             .quick-tools-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .hub-features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         @media (min-width: 1024px) {
@@ -1524,6 +1604,7 @@
                     <a href="#how-it-works">How It Works</a>
                     <a href="#security">Security</a>
                     <a href="#what-we-dont">Transparency</a>
+                    <a href="https://mynexa.pythonanywhere.com" target="_blank">Browse All Tools</a>
                 </nav>
 
                 <div class="nav-buttons" id="navButtons">
@@ -1543,6 +1624,7 @@
             <a href="#how-it-works">How It Works</a>
             <a href="#security">Security</a>
             <a href="#what-we-dont">Transparency</a>
+            <a href="https://mynexa.pythonanywhere.com" target="_blank">Browse All Tools</a>
             
             <!-- Quick Tools in Mobile Menu -->
             <div class="mobile-tools-section">
@@ -1555,7 +1637,7 @@
                     <i data-lucide="key" style="width: 18px; height: 18px;"></i>
                     <span>Wallet Generator</span>
                 </a>
-                <a href="decrypt-wallet.html" class="mobile-tool-link">
+                <a href="decrypt-tool.html" class="mobile-tool-link">
                     <i data-lucide="unlock" style="width: 18px; height: 18px;"></i>
                     <span>Wallet Decryptor</span>
                 </a>
@@ -1574,29 +1656,25 @@
         <div class="hero-bg-circle-2"></div>
 
         <div class="container">
-        
-
+            <div class="hero-content">
+                <div class="hero-text">
                     <div class="trust-badge">
                         <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i>
                         <span>100% client-side wallet generation</span>
                     </div>
 
-                    <h1>Web3 Wallet <span style="background: linear-gradient(to right, var(--color-primary), var(--color-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Tools</span> Made Simple</h1>
+                    <h1>Your Web3 <span style="background: linear-gradient(to right, var(--color-primary), var(--color-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Tools Hub</span></h1>
 
                     <p style="font-size: clamp(1rem, 2vw, 1.25rem); color: var(--color-neutral-600);">
-                        NexaPay provides client-side wallet tools for true Web3 sovereignty. Generate wallets locally, stay in control, and manage assets with confidence.
+                        Discover, use, and share essential Web3 tools. Start with our featured wallet tools or explore the complete community directory.
                     </p>
 
                     <div class="hero-buttons">
-                        <a href="create-wallet.html"><button class="btn btn-primary">
-                            <span>Create New Wallet</span>
+                        <a href="https://mynexa.pythonanywhere.com" target="_blank"><button class="btn btn-primary">
+                            <span>Browse All Tools</span>
                             <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
                         </button></a>
-                        <a href="dashboard.html"><button class="btn btn-secondary">Wallet Explorer</button></a>
-                        <a href="gas.html"><button class="btn btn-primary">
-                            <span>Gas Tracker</span>
-                            <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
-                        </button></a>
+                        <a href="create-wallet.html"><button class="btn btn-secondary">Generate Secure Wallet</button></a>
                     </div>
 
                     <div class="quick-features">
@@ -1609,8 +1687,8 @@
                             <span>Free Tools</span>
                         </div>
                         <div class="quick-feature">
-                            <i data-lucide="lock" style="width: 20px; height: 20px;"></i>
-                            <span>Local Encryption</span>
+                            <i data-lucide="users" style="width: 20px; height: 20px;"></i>
+                            <span>Community-Driven</span>
                         </div>
                         <div class="quick-feature">
                             <i data-lucide="tool" style="width: 20px; height: 20px;"></i>
@@ -1624,16 +1702,16 @@
                         <div id="threejs-card"></div>
                         <div class="card-overlay">
                             <div class="card-header">
-                                <div class="card-title">Local Wallet Tools</div>
+                                <div class="card-title">Web3 Tools Hub</div>
                                 <div class="card-icon">
-                                    <i data-lucide="shield" style="width: 24px; height: 24px;"></i>
+                                    <i data-lucide="layers" style="width: 24px; height: 24px;"></i>
                                 </div>
                             </div>
                             
                             <div class="card-balance">
-                                <div class="balance-label">Client-Side Generation</div>
-                                <div class="balance-amount">100% Local</div>
-                                <div style="font-size: 0.875rem; opacity: 0.8; margin-top: 0.5rem;">Compatible Blockchains</div>
+                                <div class="balance-label">Featured Tool</div>
+                                <div class="balance-amount">Wallet Generator</div>
+                                <div style="font-size: 0.875rem; opacity: 0.8; margin-top: 0.5rem;">Supported Blockchains</div>
                                 
                                 <div class="blockchains-grid">
                                     <div class="blockchain-badge">ETH</div>
@@ -1656,14 +1734,18 @@
         <div class="container">
             <div class="section-header">
                 <div class="section-badge">Quick Access</div>
-                <h2>Essential Web3 Tools</h2>
+                <h2>Featured Web3 Tools</h2>
                 <p class="section-description">
-                    Fast access to the most frequently used Web3 utilities. All tools are free and run entirely in your browser.
+                    Fast access to our most popular Web3 utilities. All tools are free and run entirely in your browser.
                 </p>
             </div>
 
             <div class="quick-tools-grid">
                 <a href="gas.html" class="quick-tool-card">
+                    <div class="hub-badge">
+                        <i data-lucide="star" style="width: 12px; height: 12px;"></i>
+                        <span>Featured in our Hub</span>
+                    </div>
                     <div class="quick-tool-icon">
                         <i data-lucide="fuel"></i>
                     </div>
@@ -1673,15 +1755,23 @@
                 </a>
 
                 <a href="create-wallet.html" class="quick-tool-card">
+                    <div class="hub-badge">
+                        <i data-lucide="star" style="width: 12px; height: 12px;"></i>
+                        <span>Featured in our Hub</span>
+                    </div>
                     <div class="quick-tool-icon">
                         <i data-lucide="key"></i>
                     </div>
                     <h3>Wallet Generator</h3>
-                    <p>Create and encrypt Ethereum wallets securely. All processing happens client-side.</p>
+                    <p>Create and encrypt Ethereum wallets securely with AES-256. All processing happens client-side.</p>
                     <span class="quick-tool-badge">Wallet Tool</span>
                 </a>
 
-                <a href="decrypt-wallet.html" class="quick-tool-card">
+                <a href="decrypt-tool.html" class="quick-tool-card">
+                    <div class="hub-badge">
+                        <i data-lucide="star" style="width: 12px; height: 12px;"></i>
+                        <span>Featured in our Hub</span>
+                    </div>
                     <div class="quick-tool-icon">
                         <i data-lucide="unlock"></i>
                     </div>
@@ -1691,6 +1781,10 @@
                 </a>
 
                 <a href="dashboard.html" class="quick-tool-card">
+                    <div class="hub-badge">
+                        <i data-lucide="star" style="width: 12px; height: 12px;"></i>
+                        <span>Featured in our Hub</span>
+                    </div>
                     <div class="quick-tool-icon">
                         <i data-lucide="eye"></i>
                     </div>
@@ -1701,8 +1795,8 @@
             </div>
 
             <div class="all-tools-cta">
-                <a href="tools.html"><button class="btn btn-primary">
-                    <span>View All Tools</span>
+                <a href="https://mynexa.pythonanywhere.com" target="_blank"><button class="btn btn-primary">
+                    <span>Explore Full Tool Library</span>
                     <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
                 </button></a>
             </div>
@@ -1726,9 +1820,55 @@
                     <div class="stat-item-label">Server Storage</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-item-value">0 KYC</div>
-                    <div class="stat-item-label">No Data Collection</div>
+                    <div class="stat-item-value">Open Source</div>
+                    <div class="stat-item-label">Transparent Code</div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hub Features Section -->
+    <section class="hub-features-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Why Choose Our Hub</div>
+                <h2>More Than Just Tools</h2>
+                <p class="section-description">
+                    We're building a community-driven ecosystem for Web3 tool discovery and development.
+                </p>
+            </div>
+
+            <div class="hub-features-grid">
+                <div class="hub-feature-card">
+                    <div class="hub-feature-icon">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <h3>Community-Driven</h3>
+                    <p>Tools are submitted and reviewed by the community. Discover what other developers are building.</p>
+                </div>
+
+                <div class="hub-feature-card">
+                    <div class="hub-feature-icon">
+                        <i data-lucide="shield-check"></i>
+                    </div>
+                    <h3>Verified Tools</h3>
+                    <p>Each tool undergoes verification to ensure security and functionality before being featured.</p>
+                </div>
+
+                <div class="hub-feature-card">
+                    <div class="hub-feature-icon">
+                        <i data-lucide="git-branch"></i>
+                    </div>
+                    <h3>Open Source First</h3>
+                    <p>We believe in transparency. Most tools in our hub are open source and publicly auditable.</p>
+                </div>
+            </div>
+
+            <div class="cta-center">
+                <a href="https://mynexa.pythonanywhere.com" target="_blank"><button class="btn btn-primary">
+                    <i data-lucide="compass" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                    <span>Visit Community Hub</span>
+                </button></a>
             </div>
         </div>
     </section>
@@ -1737,7 +1877,7 @@
     <section id="features" class="features-section">
         <div class="container">
             <div class="section-header">
-                <div class="section-badge">Wallet Tools</div>
+                <div class="section-badge">Core Technology</div>
                 <h2>Client-Side Wallet Management</h2>
                 <p class="section-description">
                     Generate, encrypt, and manage wallets entirely in your browser. No data leaves your device.
@@ -1757,8 +1897,8 @@
                     <div class="feature-icon">
                         <i data-lucide="lock"></i>
                     </div>
-                    <h3>Client-Side Encryption</h3>
-                    <p>Encrypt wallet data locally with your passphrase. We never see your encryption keys.</p>
+                    <h3>AES-256 Encryption</h3>
+                    <p>Encrypt wallet data locally with your passphrase using military-grade AES-256 encryption.</p>
                 </div>
 
                 <div class="feature-card">
@@ -1805,7 +1945,7 @@
                 </div>
                 <div class="warning-content">
                     <h3>Transparency & Focus</h3>
-                    <p>NexaPay is a client-side wallet tool. Here's what we don't offer to maintain true sovereignty:</p>
+                    <p>NexaPay is a client-side wallet tool hub. Here's what we don't offer to maintain true sovereignty:</p>
                     
                     <div class="warning-grid">
                         <div class="warning-item">
@@ -1864,7 +2004,7 @@
                         <i data-lucide="lock"></i>
                     </div>
                     <h3>Encrypt & Save</h3>
-                    <p>Encrypt your wallet with a secure passphrase and download the encrypted file to your device.</p>
+                    <p>Encrypt your wallet with a secure passphrase using AES-256 and download the encrypted file.</p>
                 </div>
 
                 <div class="step-card">
@@ -1947,7 +2087,7 @@
                             <i data-lucide="code"></i>
                         </div>
                         <h4>Open Source</h4>
-                        <p>Our code is publicly available for transparency and security audits.</p>
+                        <p>Our code is publicly available on GitHub for transparency and security audits.</p>
                     </div>
 
                     <div class="security-card">
@@ -1977,19 +2117,19 @@
 
         <div class="container">
             <div class="cta-content">
-                <h2>Start Using Local Wallet Tools</h2>
+                <h2>Join Our Web3 Tools Community</h2>
                 <p>
-                    Take control of your Web3 experience with client-side wallet generation. No accounts, no data collection, just pure sovereignty.
+                    Discover tools, share your creations, and be part of a growing ecosystem of Web3 developers and enthusiasts.
                 </p>
 
                 <div class="cta-buttons">
-                    <a href="create-wallet.html"><button class="btn btn-white">
-                        <span>Create New Wallet</span>
+                    <a href="https://mynexa.pythonanywhere.com" target="_blank"><button class="btn btn-white">
+                        <span>Browse Tool Library</span>
                         <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
                     </button></a>
-                    <a href="tools.html"><button class="btn btn-outline-white">
-                        <i data-lucide="tool" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
-                        <span>Explore All Tools</span>
+                    <a href="https://github.com/nexa-io/mynexa" target="_blank"><button class="btn btn-outline-white">
+                        <i data-lucide="github" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                        <span>View on GitHub</span>
                     </button></a>
                 </div>
 
@@ -2011,7 +2151,7 @@
                             <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
-                            <span>Zero server storage</span>
+                            <span>Open source</span>
                         </div>
                     </div>
                 </div>
@@ -2029,16 +2169,16 @@
                         <span class="logo-text">NexaPay</span>
                     </a>
                     <p>
-                        Client-side Web3 wallet tools. Generate, encrypt, and manage wallets entirely in your browser.
+                        Your Web3 Tools Hub. Discover, use, and share client-side Web3 tools and utilities.
                     </p>
                     <div class="social-links">
-                        <a href="https://twitter.com/search?q=%23NexaPay" class="social-link" target="_blank">
+                        <a href="https://twitter.com/myNexaPay" class="social-link" target="_blank">
                             <i data-lucide="twitter" style="width: 20px; height: 20px;"></i>
                         </a>
-                        <a href="https://github.com" class="social-link" target="_blank">
+                        <a href="https://github.com/nexa-io/mynexa" class="social-link" target="_blank">
                             <i data-lucide="github" style="width: 20px; height: 20px;"></i>
                         </a>
-                        <a href="mailto:contact@nexapay.com" class="social-link">
+                        <a href="mailto:infocontactnexa@gmail.com" class="social-link">
                             <i data-lucide="mail" style="width: 20px; height: 20px;"></i>
                         </a>
                     </div>
@@ -2049,7 +2189,7 @@
                     <ul class="footer-links">
                         <li><a href="gas.html">Gas Tracker</a></li>
                         <li><a href="create-wallet.html">Wallet Generator</a></li>
-                        <li><a href="decrypt-wallet.html">Wallet Decryptor</a></li>
+                        <li><a href="decrypt-tool.html">Wallet Decryptor</a></li>
                         <li><a href="dashboard.html">Wallet Explorer</a></li>
                     </ul>
                 </div>
@@ -2057,10 +2197,10 @@
                 <div class="footer-column">
                     <h3>Company</h3>
                     <ul class="footer-links">
-                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="https://mynexa.pages.dev/about">About Us</a></li>
                         <li><a href="#security">Security</a></li>
                         <li><a href="#what-we-dont">Transparency</a></li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="mailto:infocontactnexa@gmail.com">Contact</a></li>
                     </ul>
                 </div>
 
@@ -2077,7 +2217,7 @@
                 <div class="footer-column">
                     <h3>Resources</h3>
                     <ul class="footer-links">
-                        <li><a href="tools.html">All Tools</a></li>
+                        <li><a href="https://mynexa.pythonanywhere.com" target="_blank">Tool Hub</a></li>
                         <li><a href="#how-it-works">How It Works</a></li>
                         <li><a href="#features">Features</a></li>
                         <li><a href="blog.html">Blog</a></li>
@@ -2094,7 +2234,7 @@
 
             <div class="footer-bottom">
                 <div class="copyright">
-                    © 2025 NexaPay. Client-side wallet tools.
+                    © 2025 NexaPay. Web3 Tools Hub.
                 </div>
             </div>
         </div>
@@ -2328,7 +2468,7 @@
             }
             
             // Add hover effects to cards
-            const cards = document.querySelectorAll('.feature-card, .step-card, .security-card, .warning-item, .quick-tool-card');
+            const cards = document.querySelectorAll('.feature-card, .step-card, .security-card, .warning-item, .quick-tool-card, .hub-feature-card');
             cards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-5px)';
