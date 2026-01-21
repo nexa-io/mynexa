@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's Next - NexaPay Web3 Learning</title>
+    <meta name="description" content="Discover the exciting Web3 learning platform we're building at NexaPay. Interactive courses, smart contract tutorials, and comprehensive Web3 education.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* CSS Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Primary Colors - Teal & Purple */
+            --color-primary: #0891b2;
+            --color-primary-dark: #0e7490;
+            --color-primary-light: #22d3ee;
+            
+            --color-secondary: #7c3aed;
+            --color-secondary-dark: #5b21b6;
+            --color-secondary-light: #8b5cf6;
+            
+            --color-accent: #f59e0b;
+            --color-accent-dark: #d97706;
+            
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-error: #ef4444;
+            
+            --color-neutral-50: #f8fafc;
+            --color-neutral-100: #f1f5f9;
+            --color-neutral-200: #e2e8f0;
+            --color-neutral-300: #cbd5e1;
+            --color-neutral-400: #94a3b8;
+            --color-neutral-500: #64748b;
+            --color-neutral-600: #475569;
+            --color-neutral-700: #334155;
+            --color-neutral-800: #1e293b;
+            --color-neutral-900: #0f172a;
+
+            --font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--color-neutral-800);
+            line-height: 1.6;
+            background: white;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-family);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--color-neutral-900);
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: clamp(1.25rem, 3vw, 1.875rem);
+        }
+
+        p {
+            font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+            line-height: 1.7;
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            width: 100%;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-family: var(--font-family);
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(8, 145, 178, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--color-primary-dark), var(--color-secondary-dark));
+            box-shadow: 0 20px 25px -5px rgba(8, 145, 178, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--color-neutral-700);
+            border: 1px solid var(--color-neutral-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-neutral-50);
+            border-color: var(--color-primary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, rgba(8, 145, 178, 0.1), rgba(124, 58, 237, 0.1));
+            color: var(--color-primary);
+            border-radius: 9999px;
+            font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: var(--font-family);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            max-width: 1280px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .logo-text {
+            font-family: var(--font-family);
+            font-size: clamp(1.25rem, 3vw, 1.5rem);
+            font-weight: 800;
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: clamp(1rem, 2vw, 2rem);
+        }
+
+        nav a {
+            color: var(--color-neutral-700);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            font-family: var(--font-family);
+            font-size: clamp(0.875rem, 1.5vw, 1rem);
+        }
+
+        nav a:hover {
+            color: var(--color-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: clamp(8rem, 12vw, 10rem) 1.5rem clamp(4rem, 8vw, 6rem);
+            background: linear-gradient(135deg, #f0f9ff, #faf5ff, white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg-circle-1 {
+            position: absolute;
+            top: 5rem;
+            right: 2.5rem;
+            width: min(18rem, 40vw);
+            height: min(18rem, 40vw);
+            background: rgba(8, 145, 178, 0.05);
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .hero-bg-circle-2 {
+            position: absolute;
+            bottom: 5rem;
+            left: 2.5rem;
+            width: min(24rem, 50vw);
+            height: min(24rem, 50vw);
+            background: rgba(124, 58, 237, 0.05);
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            box-shadow: 0 20px 60px rgba(8, 145, 178, 0.2);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-icon i {
+            font-size: 3rem;
+            color: white;
+        }
+
+        .hero h1 {
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-description {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--color-neutral-600);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Features Grid */
+        .features-section {
+            padding: clamp(4rem, 8vw, 6rem) 1.5rem;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: clamp(3rem, 6vw, 4rem);
+        }
+
+        .section-description {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--color-neutral-600);
+            max-width: 42rem;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: clamp(1.5rem, 3vw, 2rem);
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: clamp(1.5rem, 3vw, 2rem);
+            border-radius: clamp(0.75rem, 2vw, 1rem);
+            border: 1px solid var(--color-neutral-200);
+            transition: all 0.4s ease;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .feature-card:hover {
+            box-shadow: 0 25px 50px -12px rgba(8, 145, 178, 0.15);
+            transform: translateY(-8px);
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(8, 145, 178, 0.1), rgba(124, 58, 237, 0.1));
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .feature-icon i {
+            width: 28px;
+            height: 28px;
+            color: var(--color-primary);
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon i {
+            color: white;
+        }
+
+        .feature-title {
+            font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+            color: var(--color-neutral-900);
+        }
+
+        .feature-description {
+            color: var(--color-neutral-600);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--color-neutral-700);
+            font-weight: 500;
+        }
+
+        .feature-list li i {
+            width: 18px;
+            height: 18px;
+            color: var(--color-success);
+            flex-shrink: 0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            padding: clamp(4rem, 8vw, 6rem) 1.5rem;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        }
+
+        .timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--color-primary), var(--color-secondary));
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+
+        .timeline-marker {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border: 2px solid var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.1);
+        }
+
+        .timeline-marker i {
+            width: 24px;
+            height: 24px;
+            color: var(--color-primary);
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding-top: 0.5rem;
+        }
+
+        .timeline-phase {
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--color-neutral-900);
+        }
+
+        .timeline-content p {
+            color: var(--color-neutral-600);
+            line-height: 1.7;
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            padding: clamp(4rem, 8vw, 6rem) 1.5rem;
+            background: white;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: clamp(1.5rem, 3vw, 2rem);
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .benefit-card {
+            background: linear-gradient(135deg, rgba(8, 145, 178, 0.02), rgba(124, 58, 237, 0.02));
+            padding: clamp(1.5rem, 3vw, 2rem);
+            border-radius: clamp(0.75rem, 2vw, 1rem);
+            border: 1px solid rgba(8, 145, 178, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(8, 145, 178, 0.1);
+            border-color: var(--color-primary);
+        }
+
+        .benefit-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .benefit-icon i {
+            width: 30px;
+            height: 30px;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: clamp(4rem, 8vw, 6rem) 1.5rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cta-content h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .cta-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .cta-input:focus {
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--color-neutral-900);
+            color: white;
+            padding: clamp(3rem, 6vw, 4rem) 1.5rem clamp(1.5rem, 3vw, 2rem);
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0 3rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--color-neutral-400);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            color: var(--color-neutral-400);
+            font-size: 0.875rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .benefits-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .timeline::before {
+                left: 50%;
+                transform: translateX(-1px);
+            }
+            
+            .timeline-item {
+                gap: 0;
+            }
+            
+            .timeline-item:nth-child(odd) {
+                flex-direction: row-reverse;
+                text-align: right;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content {
+                padding-right: 3rem;
+            }
+            
+            .timeline-item:nth-child(even) .timeline-content {
+                padding-left: 3rem;
+            }
+            
+            .timeline-marker {
+                position: relative;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 767px) {
+            nav {
+                display: none;
+            }
+            
+            .cta-form {
+                flex-direction: column;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-content {
+                padding-left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">N</div>
+                    <span class="logo-text">NexaPay</span>
+                </a>
+
+                <nav>
+                    <a href="index.html#features">Tools</a>
+                    <a href="index.html#quick-tools">Quick Tools</a>
+                    <a href="index.html#how-it-works">How It Works</a>
+                    <a href="index.html#security">Security</a>
+                    <a href="index.html">Back to Home</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-circle-1"></div>
+        <div class="hero-bg-circle-2"></div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <span class="badge">Coming Soon</span>
+                
+                <div class="hero-icon">
+                    <i data-lucide="graduation-cap"></i>
+                </div>
+                
+                <h1>Web3 Learning Platform</h1>
+                
+                <p class="hero-description">
+                    We're building an interactive learning platform to help developers, entrepreneurs, 
+                    and enthusiasts master Web3 technologies. From blockchain basics to advanced smart 
+                    contract development, we're creating the most comprehensive Web3 education experience.
+                </p>
+                
+                <a href="#timeline">
+                    <button class="btn btn-primary">
+                        <i data-lucide="calendar" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                        <span>View Development Timeline</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Interactive Learning Features</h2>
+                <p class="section-description">
+                    Our platform combines structured learning with hands-on practice in a friendly, engaging environment.
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i data-lucide="book-open"></i>
+                        </div>
+                        <h3 class="feature-title">Structured Curriculum</h3>
+                    </div>
+                    
+                    <p class="feature-description">
+                        Step-by-step learning paths designed by industry experts. Progress from beginner to advanced at your own pace.
+                    </p>
+                    
+                    <ul class="feature-list">
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Beginner-friendly introductions</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Intermediate skill building</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Advanced project work</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Real-world case studies</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i data-lucide="code"></i>
+                        </div>
+                        <h3 class="feature-title">Hands-On Practice</h3>
+                    </div>
+                    
+                    <p class="feature-description">
+                        Interactive coding exercises and sandbox environments where you can experiment with smart contracts.
+                    </p>
+                    
+                    <ul class="feature-list">
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Browser-based code editor</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Testnet deployment practice</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Instant feedback system</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Project-based learning</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <h3 class="feature-title">Community Learning</h3>
+                    </div>
+                    
+                    <p class="feature-description">
+                        Learn together with peers, participate in study groups, and get help from experienced mentors.
+                    </p>
+                    
+                    <ul class="feature-list">
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Study groups and partnerships</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Mentor matching program</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Community challenges</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Live Q&A sessions</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i data-lucide="award"></i>
+                        </div>
+                        <h3 class="feature-title">Progress Tracking</h3>
+                    </div>
+                    
+                    <p class="feature-description">
+                        Visual progress tracking, achievement badges, and verifiable certificates for completed courses.
+                    </p>
+                    
+                    <ul class="feature-list">
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Personalized learning dashboard</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Skill assessment tools</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Verifiable certificates</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                            <span>Portfolio building tools</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" class="timeline-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Development Timeline</h2>
+                <p class="section-description">
+                    We're taking a structured approach to build the best Web3 learning experience. Here's our roadmap.
+                </p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <i data-lucide="check-circle"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <span class="timeline-phase">Phase 1: Completed</span>
+                        <h3>Research & Planning</h3>
+                        <p>Analyzed learning needs, designed curriculum structure, and validated learning methodologies with early adopters.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <i data-lucide="zap"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <span class="timeline-phase">Phase 2: Current</span>
+                        <h3>Core Platform Development</h3>
+                        <p>Building the interactive learning platform, coding sandbox, and progress tracking systems.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <span class="timeline-phase">Phase 3: Upcoming</span>
+                        <h3>Content Creation</h3>
+                        <p>Developing comprehensive course materials, video lessons, and interactive exercises.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <i data-lucide="rocket"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <span class="timeline-phase">Phase 4: Launch</span>
+                        <h3>Beta Testing & Launch</h3>
+                        <p>Closed beta testing with early users, followed by public launch and continuous improvement.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Learn With Us</h2>
+                <p class="section-description">
+                    Our approach combines the best of structured education with practical, hands-on Web3 experience.
+                </p>
+            </div>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i data-lucide="shield"></i>
+                    </div>
+                    <h3>Security First</h3>
+                    <p>Learn secure development practices from the ground up. Safety is built into every lesson.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i data-lucide="trending-up"></i>
+                    </div>
+                    <h3>Career Focused</h3>
+                    <p>Skills that translate directly to job opportunities in Web3 development and blockchain engineering.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i data-lucide="refresh-cw"></i>
+                    </div>
+                    <h3>Always Updated</h3>
+                    <p>Content continuously updated to reflect the latest Web3 developments and best practices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-bg-pattern"></div>
+        
+        <div class="container">
+            <div class="cta-content">
+                <h2>Stay Updated</h2>
+                <p>
+                    Be the first to know when we launch. Join our early access list for exclusive updates,
+                    beta testing opportunities, and special launch offers.
+                </p>
+                
+                <form class="cta-form" id="notifyForm">
+                    <input type="email" class="cta-input" placeholder="Enter your email address" required>
+                    <button type="submit" class="btn btn-secondary">
+                        <i data-lucide="bell" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                        <span>Notify Me</span>
+                    </button>
+                </form>
+                
+                <p style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7); margin-top: 1rem;">
+                    We respect your privacy. No spam, ever.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <a href="index.html" class="logo" style="justify-content: center; margin-bottom: 2rem; display: flex;">
+                    <div class="logo-icon">N</div>
+                    <span class="logo-text">NexaPay</span>
+                </a>
+                
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#features">Tools</a>
+                    <a href="index.html#security">Security</a>
+                    <a href="index.html#what-we-dont">Transparency</a>
+                    <a href="mailto:infocontactnexa@gmail.com">Contact</a>
+                </div>
+                
+                <div class="copyright">
+                    © 2025 NexaPay. Web3 Learning Platform - Coming Soon.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Form submission handler
+        document.getElementById('notifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            
+            // In a real implementation, you would send this to your backend
+            alert(`Thank you! We'll notify you at ${email} when we launch.`);
+            this.reset();
+        });
+        
+        // Animate elements on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.feature-card, .timeline-item, .benefit-card');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.style.opacity = "1";
+                    element.style.transform = "translateY(0)";
+                }
+            });
+        }
+        
+        // Set initial state and trigger animation
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.feature-card, .timeline-item, .benefit-card').forEach(el => {
+                el.style.opacity = "0";
+                el.style.transform = "translateY(30px)";
+                el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+            });
+            
+            animateOnScroll();
+        });
+        
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>
