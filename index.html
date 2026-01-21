@@ -18,7 +18,7 @@
     <!-- Google Fonts - Montserrat for consistent typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Comic+Neue:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -60,7 +60,6 @@
 
             /* Typography - Using Montserrat consistently */
             --font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
-            --font-family-fun: 'Comic Neue', 'Montserrat', system-ui, -apple-system, sans-serif;
         }
 
         body {
@@ -1588,545 +1587,21 @@
             }
         }
 
-        /* Coming Soon Button Styles - FUN PINK THEME */
-        .coming-soon-fab {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 10000;
-            animation: fabBounce 0.8s ease-out, fabWiggle 3s ease-in-out 2s infinite;
+        /* Coming Soon Button */
+        .coming-soon-cta {
+            text-align: center;
+            padding: 4rem 1.5rem;
+            background: linear-gradient(135deg, #f8f5ff, #f0f9ff);
+            border-top: 1px solid var(--color-neutral-200);
         }
 
-        .coming-soon-btn {
-            display: flex;
+        .coming-soon-cta .btn {
+            display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 1.25rem 1.75rem;
-            background: linear-gradient(135deg, #ff6b9d 0%, #ff8e53 100%);
-            color: white;
-            border: none;
-            border-radius: 20px 50px 50px 50px;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
             font-size: 1.125rem;
-            font-weight: 900;
-            font-family: var(--font-family-fun);
-            cursor: pointer;
-            box-shadow: 0 10px 40px rgba(255, 107, 157, 0.4),
-                        0 0 20px rgba(255, 255, 255, 0.5) inset,
-                        0 -4px 10px rgba(0, 0, 0, 0.1) inset;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            transform-origin: center;
-        }
-
-        .coming-soon-btn::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff6b9d, #ff8e53, #ffd166, #06d6a0, #118ab2);
-            border-radius: 22px 52px 52px 52px;
-            z-index: -1;
-            animation: rainbowBorder 4s linear infinite;
-            opacity: 0.7;
-        }
-
-        .coming-soon-btn::after {
-            content: '✨';
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            font-size: 1.5rem;
-            animation: sparkle 2s ease-in-out infinite;
-        }
-
-        .coming-soon-btn:hover {
-            transform: translateY(-8px) rotate(-3deg) scale(1.1);
-            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.6),
-                        0 0 30px rgba(255, 255, 255, 0.7) inset,
-                        0 -6px 15px rgba(0, 0, 0, 0.15) inset;
-            border-radius: 50px 20px 50px 50px;
-        }
-
-        .coming-soon-btn:active {
-            transform: translateY(-4px) scale(0.98);
-        }
-
-        .coming-soon-btn i {
-            animation: iconBounce 2s ease-in-out infinite;
-        }
-
-        .coming-soon-badge {
-            display: inline-block;
-            padding: 0.35rem 1rem;
-            background: linear-gradient(135deg, #ffd166, #ffb347);
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            animation: badgeGlow 1.5s ease-in-out infinite alternate;
-            box-shadow: 0 4px 15px rgba(255, 209, 102, 0.4);
-            margin-left: 0.5rem;
-        }
-
-        /* Modal Styles - FUN PINK THEME */
-        .coming-soon-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 99999;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(15px);
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
-
-        .coming-soon-modal.active {
-            display: flex;
-            animation: modalPopIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, 
-                #ffcfe9 0%, 
-                #ffb4e1 25%, 
-                #ff9ad9 50%, 
-                #ff80d1 75%, 
-                #ff66c9 100%);
-            border-radius: 40px;
-            max-width: 750px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 30px 100px rgba(255, 107, 157, 0.5),
-                        0 0 0 3px #ffd166,
-                        0 0 0 6px #ff9ad9,
-                        0 0 0 9px #ff6b9d;
-            animation: contentFloat 3s ease-in-out infinite;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .modal-header {
-            padding: 3.5rem 3rem 2.5rem;
-            text-align: center;
-            position: relative;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
-            border-radius: 40px 40px 0 0;
-            border-bottom: 3px dashed #ffd166;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #ff6b9d, #ff8e53);
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            color: white;
-            font-size: 1.5rem;
-            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
-            z-index: 10;
-        }
-
-        .modal-close:hover {
-            transform: rotate(180deg) scale(1.2);
-            background: linear-gradient(135deg, #ff8e53, #ff6b9d);
-            box-shadow: 0 12px 35px rgba(255, 142, 83, 0.6);
-        }
-
-        .modal-icon {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #ff6b9d, #ffd166, #06d6a0);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 2rem;
-            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.4),
-                        0 0 0 10px rgba(255, 255, 255, 0.3),
-                        0 0 0 20px rgba(255, 209, 102, 0.2);
-            animation: iconSpin 8s linear infinite, iconFloat 3s ease-in-out infinite;
-        }
-
-        .modal-icon i {
-            font-size: 3.5rem;
-            color: white;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
-        }
-
-        .modal-title {
-            font-size: 3.2rem;
-            font-weight: 900;
-            font-family: var(--font-family-fun);
-            background: linear-gradient(135deg, #ff006e, #ffbe0b, #3a86ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-            text-shadow: 3px 3px 0 rgba(255, 255, 255, 0.3);
-            position: relative;
-            display: inline-block;
-        }
-
-        .modal-title::after {
-            content: '🎉';
-            position: absolute;
-            right: -50px;
-            top: 0;
-            font-size: 2.5rem;
-            animation: celebration 2s ease-in-out infinite;
-        }
-
-        .modal-subtitle {
-            font-size: 1.4rem;
-            color: #5a189a;
-            font-weight: 700;
-            line-height: 1.7;
-            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-            padding: 0 2rem;
-        }
-
-        .modal-body {
-            padding: 2.5rem 3rem 3.5rem;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
-            border-radius: 0 0 40px 40px;
-        }
-
-        .coming-soon-modal .features-grid {
-            display: grid;
-            gap: 1.8rem;
-            margin-bottom: 3rem;
-        }
-
-        .coming-soon-modal .feature-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            border: 3px solid;
-            border-image: linear-gradient(45deg, #ff006e, #ffbe0b, #3a86ff) 1;
-            border-radius: 25px;
-            padding: 2.5rem;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            animation: cardBounce 0.6s ease-out backwards;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .coming-soon-modal .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #ff006e, #ffbe0b, #3a86ff);
-        }
-
-        .coming-soon-modal .feature-card:nth-child(1) { animation-delay: 0.1s; }
-        .coming-soon-modal .feature-card:nth-child(2) { animation-delay: 0.2s; }
-        .coming-soon-modal .feature-card:nth-child(3) { animation-delay: 0.3s; }
-
-        .coming-soon-modal .feature-card:hover {
-            transform: translateY(-10px) rotate(1deg) scale(1.02);
-            box-shadow: 0 25px 50px rgba(255, 107, 157, 0.3),
-                        0 15px 35px rgba(255, 209, 102, 0.3);
-            border-image: linear-gradient(45deg, #3a86ff, #ff006e, #ffbe0b) 1;
-        }
-
-        .feature-header {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .coming-soon-modal .feature-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, rgba(255, 0, 110, 0.15), rgba(255, 190, 11, 0.15));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            animation: iconPulse 2s ease-in-out infinite;
-        }
-
-        .feature-title {
-            font-size: 1.8rem;
-            font-weight: 900;
-            font-family: var(--font-family-fun);
-            background: linear-gradient(135deg, #ff006e, #ff8e53);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.5);
-        }
-
-        .feature-description {
-            color: #5a189a;
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
             font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .feature-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .feature-list li {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.8rem 0;
-            color: #5a189a;
-            font-weight: 600;
-            font-size: 1.05rem;
-            position: relative;
-        }
-
-        .feature-list li::before {
-            content: '👉';
-            font-size: 1.2rem;
-            animation: pointWiggle 2s ease-in-out infinite;
-        }
-
-        .feature-check {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, #ff006e, #ffbe0b);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: white;
-            font-size: 0.9rem;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(255, 0, 110, 0.3);
-        }
-
-        .modal-cta {
-            text-align: center;
-            padding: 2.5rem;
-            background: linear-gradient(135deg, rgba(255, 0, 110, 0.1), rgba(255, 190, 11, 0.1));
-            border-radius: 25px;
-            border: 3px dashed #ffbe0b;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .modal-cta::before {
-            content: '🎯';
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 2rem;
-            animation: targetSpin 4s linear infinite;
-        }
-
-        .modal-cta::after {
-            content: '🚀';
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 2rem;
-            animation: rocketFly 2s ease-in-out infinite;
-        }
-
-        .cta-text {
-            font-size: 1.8rem;
-            font-weight: 900;
-            font-family: var(--font-family-fun);
-            background: linear-gradient(135deg, #ff006e, #ffbe0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.75rem;
-            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.5);
-        }
-
-        .cta-subtext {
-            color: #5a189a;
-            font-size: 1.1rem;
-            font-weight: 600;
-            line-height: 1.6;
-        }
-
-        /* New Fun Animations */
-        @keyframes fabBounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-30px);}
-            60% {transform: translateY(-15px);}
-        }
-
-        @keyframes fabWiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(5deg); }
-            75% { transform: rotate(-5deg); }
-        }
-
-        @keyframes rainbowBorder {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 400% 50%; }
-        }
-
-        @keyframes sparkle {
-            0%, 100% { opacity: 0.3; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        @keyframes iconBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        @keyframes badgeGlow {
-            0% { box-shadow: 0 4px 15px rgba(255, 209, 102, 0.4); }
-            100% { box-shadow: 0 4px 25px rgba(255, 209, 102, 0.8), 0 0 30px rgba(255, 209, 102, 0.6); }
-        }
-
-        @keyframes modalPopIn {
-            0% { opacity: 0; transform: scale(0.3) rotate(-15deg); }
-            70% { opacity: 1; transform: scale(1.05) rotate(5deg); }
-            100% { opacity: 1; transform: scale(1) rotate(0deg); }
-        }
-
-        @keyframes contentFloat {
-            0%, 100% { transform: translateY(0) rotate(0.5deg); }
-            50% { transform: translateY(-10px) rotate(-0.5deg); }
-        }
-
-        @keyframes iconSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-15px) scale(1.05); }
-        }
-
-        @keyframes celebration {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            25% { transform: scale(1.3) rotate(10deg); }
-            75% { transform: scale(1.3) rotate(-10deg); }
-        }
-
-        @keyframes cardBounce {
-            0% { opacity: 0; transform: translateY(50px) scale(0.8); }
-            70% { transform: translateY(-10px) scale(1.05); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        @keyframes pointWiggle {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(5px); }
-        }
-
-        @keyframes targetSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes rocketFly {
-            0%, 100% { transform: translateX(0) translateY(0); }
-            50% { transform: translateX(-10px) translateY(-10px); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .coming-soon-fab {
-                bottom: 1rem;
-                right: 1rem;
-            }
-
-            .coming-soon-btn {
-                padding: 1rem 1.5rem;
-                font-size: 1rem;
-                border-radius: 15px 40px 40px 40px;
-            }
-
-            .modal-content {
-                border-radius: 30px;
-                max-height: 90vh;
-            }
-
-            .modal-header {
-                padding: 2rem 1.5rem 1.5rem;
-            }
-
-            .modal-body {
-                padding: 1.5rem;
-            }
-
-            .modal-title {
-                font-size: 2.2rem;
-            }
-
-            .modal-title::after {
-                right: -35px;
-                font-size: 1.8rem;
-            }
-
-            .modal-icon {
-                width: 90px;
-                height: 90px;
-            }
-
-            .modal-icon i {
-                font-size: 2.5rem;
-            }
-
-            .coming-soon-modal .feature-card {
-                padding: 1.8rem;
-            }
-
-            .feature-title {
-                font-size: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .coming-soon-btn {
-                padding: 0.875rem 1.25rem;
-                font-size: 0.9375rem;
-            }
-            
-            .modal-content {
-                border-radius: 25px;
-            }
-            
-            .modal-title {
-                font-size: 1.8rem;
-            }
-            
-            .modal-subtitle {
-                font-size: 1.1rem;
-            }
         }
     </style>
 </head>
@@ -2147,6 +1622,7 @@
                     <a href="#security">Security</a>
                     <a href="#what-we-dont">Transparency</a>
                     <a href="https://mynexa.pythonanywhere.com" target="_blank">Browse All Tools</a>
+                    <a href="coming-soon.html" class="coming-soon-link">What's Next</a>
                 </nav>
 
                 <div class="nav-buttons" id="navButtons">
@@ -2167,6 +1643,7 @@
             <a href="#security">Security</a>
             <a href="#what-we-dont">Transparency</a>
             <a href="https://mynexa.pythonanywhere.com" target="_blank">Browse All Tools</a>
+            <a href="coming-soon.html">What's Next</a>
             
             <!-- Quick Tools in Mobile Menu -->
             <div class="mobile-tools-section">
@@ -2652,6 +2129,26 @@
         </div>
     </section>
 
+    <!-- Coming Soon CTA Section -->
+    <section class="coming-soon-cta">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">What's Next</div>
+                <h2>Web3 Learning Platform</h2>
+                <p class="section-description">
+                    We're building an interactive learning platform to help you master Web3 development, smart contracts, and decentralized applications.
+                </p>
+            </div>
+            
+            <a href="coming-soon.html">
+                <button class="btn btn-primary">
+                    <i data-lucide="rocket" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                    <span>Explore Coming Features</span>
+                </button>
+            </a>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="cta-bg-circle-1"></div>
@@ -2742,6 +2239,7 @@
                         <li><a href="https://mynexa.pages.dev/about">About Us</a></li>
                         <li><a href="#security">Security</a></li>
                         <li><a href="#what-we-dont">Transparency</a></li>
+                        <li><a href="coming-soon.html">What's Next</a></li>
                         <li><a href="mailto:infocontactnexa@gmail.com">Contact</a></li>
                     </ul>
                 </div>
@@ -2781,123 +2279,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Coming Soon Floating Button & Modal -->
-    <div class="coming-soon-fab">
-        <button class="coming-soon-btn" onclick="openComingSoonModal()">
-            <i data-lucide="party-popper" style="width: 24px; height: 24px;"></i>
-            <span>Surprise! 🎁</span>
-            <span class="coming-soon-badge">NEW!</span>
-        </button>
-    </div>
-
-    <div class="coming-soon-modal" id="comingSoonModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="modal-close" onclick="closeComingSoonModal()">
-                    <i data-lucide="x" style="width: 24px; height: 24px;"></i>
-                </button>
-                
-                <div class="modal-icon">
-                    <i data-lucide="rocket" style="width: 48px; height: 48px;"></i>
-                </div>
-                
-                <h2 class="modal-title">Woohoo! 🥳</h2>
-                <p class="modal-subtitle">
-                    Get ready for the most FUN Web3 learning experience ever!
-                </p>
-            </div>
-            
-            <div class="modal-body">
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <i data-lucide="gamepad-2" style="width: 32px; height: 32px; color: #ff006e;"></i>
-                            </div>
-                            <h3 class="feature-title">Game-Fied Learning 🎮</h3>
-                        </div>
-                        <p class="feature-description">
-                            Level up your Web3 skills through interactive games, challenges, and quests! Earn XP, collect badges, and climb the leaderboard.
-                        </p>
-                        <ul class="feature-list">
-                            <li>
-                                <span class="feature-check">🎯</span>
-                                <span>Interactive quests with rewards</span>
-                            </li>
-                            <li>
-                                <span class="feature-check">🏆</span>
-                                <span>Leaderboards & achievements</span>
-                            </li>
-                            <li>
-                                <span class="feature-check">🎪</span>
-                                <span>Fun challenges & mini-games</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <i data-lucide="palette" style="width: 32px; height: 32px; color: #ffbe0b;"></i>
-                            </div>
-                            <h3 class="feature-title">Creative Playground 🎨</h3>
-                        </div>
-                        <p class="feature-description">
-                            Build, experiment, and create in our colorful Web3 sandbox. Make learning as fun as playing with building blocks!
-                        </p>
-                        <ul class="feature-list">
-                            <li>
-                                <span class="feature-check">🧱</span>
-                                <span>Drag-and-drop smart contracts</span>
-                            </li>
-                            <li>
-                                <span class="feature-check">🌈</span>
-                                <span>Visual blockchain explorer</span>
-                            </li>
-                            <li>
-                                <span class="feature-check">🎪</span>
-                                <span>Interactive NFT creator studio</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <i data-lucide="users" style="width: 32px; height: 32px; color: #3a86ff;"></i>
-                            </div>
-                            <h3 class="feature-title">Party Mode 🎉</h3>
-                        </div>
-                        <p class="feature-description">
-                            Learn with friends! Join live learning parties, compete in teams, and celebrate milestones together.
-                        </p>
-                        <ul class="feature-list">
-                            <li>
-                                <span class="feature-check">👯</span>
-                                <span>Group learning challenges</span>
-                            </li>
-                            <li>
-                                <span class="feature-check">🎊</span>
-                                <span>Live virtual study parties</span>
-                            </li>
-                            <li>
-                                <span class="feature-check">🥳</span>
-                                <span>Celebration animations & confetti</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="modal-cta">
-                    <div class="cta-text">Ready for the FUN? 🚀</div>
-                    <div class="cta-subtext">
-                        We're building the most entertaining way to learn Web3! Join our party list for early access and special surprises!
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
         // Initialize Lucide icons
@@ -3112,41 +2493,26 @@
                 });
             });
         });
-
-        // Coming Soon Modal Functions - FUN VERSION
-        function openComingSoonModal() {
-            const modal = document.getElementById('comingSoonModal');
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeComingSoonModal() {
-            const modal = document.getElementById('comingSoonModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // Close modal when clicking on backdrop
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('comingSoonModal');
-            if (modal) {
-                modal.addEventListener('click', function(event) {
-                    if (event.target === modal) {
-                        closeComingSoonModal();
-                    }
-                });
-            }
-            
-            // Close modal with ESC key
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    closeComingSoonModal();
-                }
-            });
-            
-            // Reinitialize Lucide icons for the modal
-            lucide.createIcons();
-        });
     </script>
+        <!-- Floating Coming Soon Button -->
+    <a href="coming-soon.html" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 10000; text-decoration: none;">
+        <button style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.5rem; background: linear-gradient(135deg, #ec4899, #8b5cf6); color: white; border: none; border-radius: 50px; font-size: 1rem; font-weight: 600; font-family: 'Montserrat', sans-serif; cursor: pointer; box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3); transition: all 0.3s ease; position: relative; overflow: hidden;">
+            <i data-lucide="rocket" style="width: 20px; height: 20px;"></i>
+            <span>Coming Soon</span>
+            <span style="position: absolute; top: -5px; right: -5px; background: white; color: #ec4899; padding: 0.25rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; animation: pulse 2s infinite;">NEW</span>
+        </button>
+    </a>
+    
+    <style>
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        a[href="coming-soon.html"] button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(236, 72, 153, 0.4);
+        }
+    </style>
 </body>
 </html>
