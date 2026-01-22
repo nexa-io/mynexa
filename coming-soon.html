@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What's Next - NexaPay Web3 Learning</title>
+    <title>What's Next - NexaPay Web3 Learning 🚀</title>
     <meta name="description" content="Discover the exciting Web3 learning platform we're building at NexaPay. Interactive courses, smart contract tutorials, and comprehensive Web3 education.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -23,21 +23,19 @@
         }
 
         :root {
-            /* Primary Colors - Teal & Purple */
-            --color-primary: #0891b2;
-            --color-primary-dark: #0e7490;
-            --color-primary-light: #22d3ee;
+            /* Vibrant Color Palette */
+            --color-primary: #ec4899;
+            --color-primary-dark: #db2777;
+            --color-primary-light: #f472b6;
             
-            --color-secondary: #7c3aed;
-            --color-secondary-dark: #5b21b6;
-            --color-secondary-light: #8b5cf6;
+            --color-secondary: #8b5cf6;
+            --color-secondary-dark: #7c3aed;
+            --color-secondary-light: #a78bfa;
             
-            --color-accent: #f59e0b;
-            --color-accent-dark: #d97706;
-            
-            --color-success: #10b981;
+            --color-accent: #10b981;
+            --color-accent-dark: #059669;
             --color-warning: #f59e0b;
-            --color-error: #ef4444;
+            --color-info: #3b82f6;
             
             --color-neutral-50: #f8fafc;
             --color-neutral-100: #f1f5f9;
@@ -51,40 +49,86 @@
             --color-neutral-900: #0f172a;
 
             --font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+            --font-display: 'Space Grotesk', var(--font-family);
         }
 
         body {
             font-family: var(--font-family);
             color: var(--color-neutral-800);
             line-height: 1.6;
-            background: white;
+            background: linear-gradient(135deg, #fef5f9 0%, #f0f9ff 50%, #f0fff8 100%);
+            background-attachment: fixed;
             overflow-x: hidden;
         }
 
         h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-family);
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-weight: 800;
             line-height: 1.2;
             color: var(--color-neutral-900);
         }
 
         h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(2.5rem, 6vw, 4rem);
             letter-spacing: -0.02em;
         }
 
         h2 {
-            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-size: clamp(2rem, 5vw, 3rem);
             letter-spacing: -0.01em;
         }
 
         h3 {
-            font-size: clamp(1.25rem, 3vw, 1.875rem);
+            font-size: clamp(1.5rem, 3vw, 2rem);
         }
 
-        p {
-            font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
-            line-height: 1.7;
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(3deg); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes rainbow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         /* Utility Classes */
@@ -99,51 +143,54 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.875rem 1.75rem;
+            padding: 1rem 2rem;
             border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 50px;
+            font-size: 1.125rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            font-family: var(--font-family);
+            font-family: var(--font-display);
             white-space: nowrap;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
             color: white;
-            box-shadow: 0 10px 15px -3px rgba(8, 145, 178, 0.2);
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.3);
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, var(--color-primary-dark), var(--color-secondary-dark));
-            box-shadow: 0 20px 25px -5px rgba(8, 145, 178, 0.3);
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(236, 72, 153, 0.4);
         }
 
-        .btn-secondary {
-            background: white;
-            color: var(--color-neutral-700);
-            border: 1px solid var(--color-neutral-300);
-        }
-
-        .btn-secondary:hover {
-            background: var(--color-neutral-50);
-            border-color: var(--color-primary);
-        }
-
-        .badge {
+        .emoji {
             display: inline-block;
-            padding: 0.5rem 1.5rem;
-            background: linear-gradient(135deg, rgba(8, 145, 178, 0.1), rgba(124, 58, 237, 0.1));
-            color: var(--color-primary);
-            border-radius: 9999px;
-            font-size: clamp(0.75rem, 1.5vw, 0.875rem);
-            font-weight: 600;
-            margin-bottom: 1rem;
-            font-family: var(--font-family);
+            font-size: 1.2em;
+            margin: 0 0.25rem;
         }
 
         /* Header */
@@ -153,10 +200,10 @@
             left: 0;
             right: 0;
             z-index: 100;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(236, 72, 153, 0.1);
+            animation: slideInUp 0.6s ease-out;
         }
 
         .header-content {
@@ -166,7 +213,6 @@
             padding: 1rem 1.5rem;
             max-width: 1280px;
             margin: 0 auto;
-            width: 100%;
         }
 
         .logo {
@@ -177,23 +223,24 @@
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-            border-radius: 0.5rem;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 800;
-            font-size: 1.25rem;
+            font-weight: 900;
+            font-size: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .logo-text {
-            font-family: var(--font-family);
-            font-size: clamp(1.25rem, 3vw, 1.5rem);
-            font-weight: 800;
-            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -201,106 +248,210 @@
         nav {
             display: flex;
             align-items: center;
-            gap: clamp(1rem, 2vw, 2rem);
+            gap: 2rem;
         }
 
         nav a {
             color: var(--color-neutral-700);
             text-decoration: none;
-            transition: color 0.3s ease;
-            font-weight: 500;
-            font-family: var(--font-family);
-            font-size: clamp(0.875rem, 1.5vw, 1rem);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
         }
 
         nav a:hover {
             color: var(--color-primary);
+            transform: translateY(-2px);
         }
 
         /* Hero Section */
         .hero {
-            padding: clamp(8rem, 12vw, 10rem) 1.5rem clamp(4rem, 8vw, 6rem);
-            background: linear-gradient(135deg, #f0f9ff, #faf5ff, white);
+            padding: clamp(9rem, 12vw, 11rem) 1.5rem clamp(5rem, 8vw, 7rem);
+            background: linear-gradient(135deg, #fef5f9, #f0f9ff, #f0fff8);
             position: relative;
             overflow: hidden;
         }
 
-        .hero-bg-circle-1 {
+        .hero::before,
+        .hero::after {
+            content: '🚀';
             position: absolute;
-            top: 5rem;
-            right: 2.5rem;
-            width: min(18rem, 40vw);
-            height: min(18rem, 40vw);
-            background: rgba(8, 145, 178, 0.05);
-            border-radius: 50%;
-            filter: blur(60px);
+            font-size: 8rem;
+            opacity: 0.05;
+            animation: float 8s ease-in-out infinite;
         }
 
-        .hero-bg-circle-2 {
-            position: absolute;
-            bottom: 5rem;
-            left: 2.5rem;
-            width: min(24rem, 50vw);
-            height: min(24rem, 50vw);
-            background: rgba(124, 58, 237, 0.05);
-            border-radius: 50%;
-            filter: blur(60px);
+        .hero::before {
+            top: 10%;
+            right: 5%;
+        }
+
+        .hero::after {
+            content: '🎓';
+            bottom: 10%;
+            left: 5%;
+            animation-delay: 2s;
         }
 
         .hero-content {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             text-align: center;
             position: relative;
             z-index: 10;
         }
 
+        .coming-soon-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(139, 92, 246, 0.15));
+            border: 2px solid var(--color-primary);
+            border-radius: 50px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 2rem;
+            animation: bounceIn 0.8s ease-out;
+            font-size: 1.125rem;
+        }
+
+        .sparkle {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .hero-icon-wrapper {
+            margin: 2rem auto;
+            animation: float 6s ease-in-out infinite;
+        }
+
         .hero-icon {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent));
+            background-size: 200% 200%;
+            animation: rainbow 5s linear infinite;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 2rem;
-            box-shadow: 0 20px 60px rgba(8, 145, 178, 0.2);
-            animation: float 6s ease-in-out infinite;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(236, 72, 153, 0.3);
+            position: relative;
+        }
+
+        .hero-icon::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent));
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(15px);
         }
 
         .hero-icon i {
-            font-size: 3rem;
+            font-size: 4rem;
             color: white;
         }
 
         .hero h1 {
             margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero-description {
+            font-size: clamp(1.125rem, 2vw, 1.375rem);
+            color: var(--color-neutral-600);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            animation: slideInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideInUp 0.8s ease-out 0.6s backwards;
+        }
+
+        /* Fun Stats */
+        .fun-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            animation: slideInUp 0.8s ease-out 0.8s backwards;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid rgba(236, 72, 153, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: var(--color-primary);
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.2);
+        }
+
+        .stat-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 900;
+            font-family: var(--font-display);
             background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero-description {
-            font-size: clamp(1rem, 2vw, 1.25rem);
+        .stat-label {
             color: var(--color-neutral-600);
-            margin-bottom: 2rem;
-            line-height: 1.8;
+            font-weight: 600;
+            font-size: 0.9375rem;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        /* Features Grid */
+        /* Features Section */
         .features-section {
             padding: clamp(4rem, 8vw, 6rem) 1.5rem;
             background: white;
+            position: relative;
         }
 
         .section-header {
             text-align: center;
             margin-bottom: clamp(3rem, 6vw, 4rem);
+        }
+
+        .section-emoji {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 1rem;
+            animation: bounceIn 0.8s ease-out;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
         }
 
         .section-description {
@@ -314,19 +465,18 @@
         .features-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: clamp(1.5rem, 3vw, 2rem);
+            gap: 2rem;
             max-width: 1280px;
             margin: 0 auto;
         }
 
         .feature-card {
-            background: white;
-            padding: clamp(1.5rem, 3vw, 2rem);
-            border-radius: clamp(0.75rem, 2vw, 1rem);
-            border: 1px solid var(--color-neutral-200);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 2px solid transparent;
             transition: all 0.4s ease;
-            opacity: 0;
-            animation: fadeInUp 0.6s ease-out forwards;
             position: relative;
             overflow: hidden;
         }
@@ -337,8 +487,8 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-accent));
             transform: translateX(-100%);
             transition: transform 0.6s ease;
         }
@@ -347,13 +497,9 @@
             transform: translateX(0);
         }
 
-        .feature-card:nth-child(1) { animation-delay: 0.1s; }
-        .feature-card:nth-child(2) { animation-delay: 0.2s; }
-        .feature-card:nth-child(3) { animation-delay: 0.3s; }
-        .feature-card:nth-child(4) { animation-delay: 0.4s; }
-
         .feature-card:hover {
-            box-shadow: 0 25px 50px -12px rgba(8, 145, 178, 0.15);
+            border-color: var(--color-primary);
+            box-shadow: 0 25px 50px -12px rgba(236, 72, 153, 0.2);
             transform: translateY(-8px);
         }
 
@@ -364,11 +510,16 @@
             margin-bottom: 1.5rem;
         }
 
+        .feature-emoji {
+            font-size: 3.5rem;
+            animation: wiggle 3s ease-in-out infinite;
+        }
+
         .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, rgba(8, 145, 178, 0.1), rgba(124, 58, 237, 0.1));
-            border-radius: 0.75rem;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(139, 92, 246, 0.15));
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -382,8 +533,8 @@
         }
 
         .feature-icon i {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             color: var(--color-primary);
             transition: color 0.3s ease;
         }
@@ -393,14 +544,15 @@
         }
 
         .feature-title {
-            font-size: clamp(1.125rem, 2.5vw, 1.5rem);
-            color: var(--color-neutral-900);
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
         }
 
         .feature-description {
             color: var(--color-neutral-600);
             margin-bottom: 1.5rem;
-            line-height: 1.7;
+            line-height: 1.8;
+            font-size: 1.0625rem;
         }
 
         .feature-list {
@@ -413,38 +565,27 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.5rem 0;
+            padding: 0.625rem 0;
             color: var(--color-neutral-700);
             font-weight: 500;
         }
 
         .feature-list li i {
-            width: 18px;
-            height: 18px;
-            color: var(--color-success);
+            width: 20px;
+            height: 20px;
+            color: var(--color-accent);
             flex-shrink: 0;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Timeline Section */
+        /* Fun Timeline */
         .timeline-section {
             padding: clamp(4rem, 8vw, 6rem) 1.5rem;
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            background: linear-gradient(135deg, #fef5f9, #f0fff8);
         }
 
         .timeline {
             max-width: 900px;
-            margin: 0 auto;
+            margin: 3rem auto 0;
             position: relative;
         }
 
@@ -454,28 +595,22 @@
             left: 30px;
             top: 0;
             bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, var(--color-primary), var(--color-secondary));
+            width: 3px;
+            background: linear-gradient(to bottom, var(--color-primary), var(--color-secondary), var(--color-accent));
         }
 
         .timeline-item {
             display: flex;
             gap: 2rem;
             margin-bottom: 3rem;
-            opacity: 0;
-            animation: fadeInUp 0.6s ease-out forwards;
+            position: relative;
         }
-
-        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
-        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
-        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
-        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
 
         .timeline-marker {
             width: 60px;
             height: 60px;
             background: white;
-            border: 2px solid var(--color-primary);
+            border: 3px solid var(--color-primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -483,39 +618,64 @@
             flex-shrink: 0;
             position: relative;
             z-index: 10;
-            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.1);
+            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-marker {
+            transform: scale(1.1) rotate(360deg);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+        }
+
+        .timeline-marker-emoji {
+            font-size: 1.75rem;
         }
 
         .timeline-marker i {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             color: var(--color-primary);
+            transition: color 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-marker i {
+            color: white;
         }
 
         .timeline-content {
             flex: 1;
-            padding-top: 0.5rem;
+            padding: 1rem 2rem;
+            background: white;
+            border-radius: 20px;
+            border: 2px solid rgba(236, 72, 153, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--color-primary);
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15);
+            transform: translateX(10px);
         }
 
         .timeline-phase {
             display: inline-block;
-            padding: 0.25rem 1rem;
+            padding: 0.375rem 1rem;
             background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
             color: white;
-            border-radius: 9999px;
+            border-radius: 50px;
             font-size: 0.875rem;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 0.75rem;
         }
 
         .timeline-content h3 {
             margin-bottom: 0.5rem;
-            color: var(--color-neutral-900);
+            font-size: 1.5rem;
         }
 
         .timeline-content p {
             color: var(--color-neutral-600);
-            line-height: 1.7;
+            line-height: 1.8;
         }
 
         /* Benefits Section */
@@ -527,29 +687,54 @@
         .benefits-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: clamp(1.5rem, 3vw, 2rem);
+            gap: 2rem;
             max-width: 1280px;
             margin: 0 auto;
         }
 
         .benefit-card {
-            background: linear-gradient(135deg, rgba(8, 145, 178, 0.02), rgba(124, 58, 237, 0.02));
-            padding: clamp(1.5rem, 3vw, 2rem);
-            border-radius: clamp(0.75rem, 2vw, 1rem);
-            border: 1px solid rgba(8, 145, 178, 0.1);
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.05), rgba(139, 92, 246, 0.05));
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 2px solid rgba(236, 72, 153, 0.1);
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .benefit-card:hover::before {
+            opacity: 1;
         }
 
         .benefit-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(8, 145, 178, 0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(236, 72, 153, 0.2);
             border-color: var(--color-primary);
         }
 
+        .benefit-emoji {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 1rem;
+            animation: float 4s ease-in-out infinite;
+        }
+
         .benefit-icon {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
             border-radius: 50%;
             display: flex;
@@ -560,84 +745,91 @@
         }
 
         .benefit-icon i {
-            width: 30px;
-            height: 30px;
+            width: 36px;
+            height: 36px;
             color: white;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        .benefit-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-card p {
+            color: var(--color-neutral-600);
+            line-height: 1.8;
+            font-size: 1.0625rem;
         }
 
         /* CTA Section */
         .cta-section {
-            padding: clamp(4rem, 8vw, 6rem) 1.5rem;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            padding: clamp(5rem, 10vw, 8rem) 1.5rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent));
             color: white;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        .cta-bg-pattern {
+        .cta-section::before,
+        .cta-section::after {
+            content: '✨';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            font-size: 10rem;
+            opacity: 0.1;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .cta-section::before {
+            top: 10%;
+            left: 5%;
+        }
+
+        .cta-section::after {
+            bottom: 10%;
+            right: 5%;
+            animation-delay: 3s;
         }
 
         .cta-content {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
             position: relative;
             z-index: 10;
         }
 
+        .cta-emoji {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 1.5rem;
+            animation: bounceIn 1s ease-out;
+        }
+
         .cta-content h2 {
             color: white;
             margin-bottom: 1.5rem;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
         }
 
         .cta-content p {
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 2rem;
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 2.5rem;
             line-height: 1.8;
         }
 
-        .cta-form {
-            display: flex;
-            gap: 1rem;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .cta-input {
-            flex: 1;
-            padding: 1rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-family: var(--font-family);
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s ease;
-        }
-
-        .cta-input:focus {
-            outline: none;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        .cta-highlight {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            font-weight: 700;
         }
 
         /* Footer */
         footer {
             background: var(--color-neutral-900);
             color: white;
-            padding: clamp(3rem, 6vw, 4rem) 1.5rem clamp(1.5rem, 3vw, 2rem);
+            padding: clamp(3rem, 6vw, 4rem) 1.5rem 2rem;
         }
 
         .footer-content {
@@ -657,17 +849,18 @@
         .footer-links a {
             color: var(--color-neutral-400);
             text-decoration: none;
-            transition: color 0.3s ease;
-            font-weight: 500;
+            transition: all 0.3s ease;
+            font-weight: 600;
         }
 
         .footer-links a:hover {
-            color: white;
+            color: var(--color-primary);
+            transform: translateY(-2px);
         }
 
         .copyright {
-            color: var(--color-neutral-400);
-            font-size: 0.875rem;
+            color: var(--color-neutral-500);
+            font-size: 0.9375rem;
             margin-top: 2rem;
             padding-top: 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -682,34 +875,6 @@
             .benefits-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
-            
-            .timeline::before {
-                left: 50%;
-                transform: translateX(-1px);
-            }
-            
-            .timeline-item {
-                gap: 0;
-            }
-            
-            .timeline-item:nth-child(odd) {
-                flex-direction: row-reverse;
-                text-align: right;
-            }
-            
-            .timeline-item:nth-child(odd) .timeline-content {
-                padding-right: 3rem;
-            }
-            
-            .timeline-item:nth-child(even) .timeline-content {
-                padding-left: 3rem;
-            }
-            
-            .timeline-marker {
-                position: relative;
-                left: 50%;
-                transform: translateX(-50%);
-            }
         }
 
         @media (max-width: 767px) {
@@ -717,21 +882,18 @@
                 display: none;
             }
             
-            .cta-form {
+            .hero-cta {
                 flex-direction: column;
+            }
+            
+            .fun-stats {
+                flex-direction: column;
+                gap: 1rem;
             }
             
             .footer-links {
                 flex-direction: column;
                 gap: 1rem;
-            }
-            
-            .timeline::before {
-                left: 30px;
-            }
-            
-            .timeline-content {
-                padding-left: 1rem;
             }
         }
     </style>
@@ -749,9 +911,8 @@
                 <nav>
                     <a href="index.html#features">Tools</a>
                     <a href="index.html#quick-tools">Quick Tools</a>
-                    <a href="index.html#how-it-works">How It Works</a>
                     <a href="index.html#security">Security</a>
-                    <a href="index.html">Back to Home</a>
+                    <a href="index.html">🏠 Home</a>
                 </nav>
             </div>
         </div>
@@ -759,25 +920,52 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-bg-circle-1"></div>
-        <div class="hero-bg-circle-2"></div>
-        
         <div class="container">
             <div class="hero-content">
-                <span class="badge">Coming Soon</span>
-                
-                <div class="hero-icon">
-                    <i data-lucide="graduation-cap"></i>
+                <div class="coming-soon-badge">
+                    <span class="sparkle">✨</span>
+                    <span>Coming Soon</span>
+                    <span class="sparkle">✨</span>
                 </div>
                 
-                <h1>Web3 Learning Platform</h1>
+                <div class="hero-icon-wrapper">
+                    <div class="hero-icon">
+                        <i data-lucide="graduation-cap"></i>
+                    </div>
+                </div>
+                
+                <h1>Learn Web3 the Fun Way! 🚀</h1>
                 
                 <p class="hero-description">
-                    We're building an interactive learning platform to help Beginners, entrepreneurs, 
-                    and enthusiasts master Web3 and its technologies. From to basics to expert level, we're creating the most comprehensive Web3 education experience.
+                    We're building an <strong>epic learning platform</strong> where beginners become Web3 pros! 
+                    Interactive courses, hands-on projects, and a supportive community to guide you every step of the way. 
+                    <span class="emoji">🎯</span>
                 </p>
                 
-                
+                <div class="hero-cta">
+                    <a href="#timeline" class="btn btn-primary">
+                        <i data-lucide="rocket" style="width: 24px; height: 24px;"></i>
+                        See What's Coming
+                    </a>
+                </div>
+
+                <div class="fun-stats">
+                    <div class="stat-item">
+                        <span class="stat-emoji">📚</span>
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Lessons Planned</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-emoji">💡</span>
+                        <div class="stat-value">100+</div>
+                        <div class="stat-label">Practice Exercises</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-emoji">🎓</span>
+                        <div class="stat-value">∞</div>
+                        <div class="stat-label">Learning Paths</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -786,135 +974,139 @@
     <section class="features-section">
         <div class="container">
             <div class="section-header">
-                <h2>Interactive Learning Features</h2>
+                <span class="section-emoji">🎨</span>
+                <h2 class="section-title">What Makes Learning Fun?</h2>
                 <p class="section-description">
-                    Our platform combines structured learning with hands-on practice in a friendly, engaging environment.
+                    We're mixing serious education with playful learning to make Web3 accessible and exciting for everyone!
                 </p>
             </div>
             
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-header">
-                        <div class="feature-icon">
-                            <i data-lucide="book-open"></i>
+                        <span class="feature-emoji">📖</span>
+                        <div>
+                            <h3 class="feature-title">Interactive Stories</h3>
                         </div>
-                        <h3 class="feature-title">Structured Curriculum</h3>
                     </div>
                     
                     <p class="feature-description">
-                        Step-by-step learning paths designed by industry experts. Progress from beginner to advanced at your own pace.
+                        Learn through engaging narratives and real-world scenarios. No boring textbooks here! <span class="emoji">😴❌</span>
                     </p>
                     
                     <ul class="feature-list">
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Beginner-friendly introductions</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Beginner-friendly explanations</span>
                         </li>
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Intermediate skill building</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Visual learning with diagrams</span>
                         </li>
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Advanced project work</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Step-by-step tutorials</span>
                         </li>
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Real-world case studies</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Real-world examples</span>
                         </li>
                     </ul>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-header">
-                        <div class="feature-icon">
-                            <i data-lucide="code"></i>
+                        <span class="feature-emoji">🎮</span>
+                        <div>
+                            <h3 class="feature-title">Gamified Learning</h3>
                         </div>
-                        <h3 class="feature-title">Hands-On Practice</h3>
                     </div>
                     
                     <p class="feature-description">
-                        Interactive exercises.
+                        Earn points, unlock achievements, and level up as you master Web3 concepts! <span class="emoji">🏆</span>
                     </p>
                     
                     <ul class="feature-list">
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Interactive Learning</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Interactive coding challenges</span>
                         </li>
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Quiz practice</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Fun quizzes with instant feedback</span>
                         </li>
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Instant feedback system</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Progress tracking dashboard</span>
                         </li>
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Project-based learning</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Achievement badges</span>
                         </li>
                     </ul>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-header">
-                        <div class="feature-icon">
-                            <i data-lucide="users"></i>
+                        <span class="feature-emoji">🤝</span>
+                        <div>
+                            <h3 class="feature-title">Learn Together</h3>
                         </div>
-                        <h3 class="feature-title">Community Learning</h3>
                     </div>
                     
                     <p class="feature-description">
-                        Learn together with peers, participate in study groups, and get help from experienced mentors, all from comment and discussion section.
+                        Join a vibrant community of learners. Ask questions, share wins, and grow together! <span class="emoji">🌱</span>
                     </p>
                     
                     <ul class="feature-list">
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Real World Applications</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Discussion forums</span>
                         </li>
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Practical programs</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Peer code reviews</span>
                         </li>
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Challenges</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Study groups</span>
                         </li>
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span> Q&A sessions</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Live Q&A sessions</span>
                         </li>
                     </ul>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-header">
-                        <div class="feature-icon">
-                            <i data-lucide="award"></i>
+                        <span class="feature-emoji">🎯</span>
+                        <div>
+                            <h3 class="feature-title">Real Projects</h3>
                         </div>
-                        <h3 class="feature-title">Progress Tracking</h3>
                     </div>
                     
                     <p class="feature-description">
-                        Visual progress tracking, achievement badges, and verifiable certificates for completed courses.
+                        Build actual dApps and smart contracts. Theory is great, but practice makes perfect! <span class="emoji">💪</span>
                     </p>
                     
                     <ul class="feature-list">
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Personalized learning dashboard</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Hands-on project tutorials</span>
                         </li>
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Skill assessment tools</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Code along exercises</span>
                         </li>
                         <li>
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            <span>Verifiable certificates</span>
+                            <i data-lucide="check-circle"></i>
+                            <span>Build your portfolio</span>
                         </li>
-                    
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Certification projects</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -925,54 +1117,55 @@
     <section id="timeline" class="timeline-section">
         <div class="container">
             <div class="section-header">
-                <h2>Development Timeline</h2>
+                <span class="section-emoji">🗺️</span>
+                <h2 class="section-title">Our Roadmap to Launch</h2>
                 <p class="section-description">
-                    We're taking a structured approach to build the best Web3 learning experience. Here's our roadmap.
+                    We're working hard to make this dream a reality. Here's where we're at!
                 </p>
             </div>
             
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-marker">
-                        <i data-lucide="check-circle"></i>
+                        <span class="timeline-marker-emoji">✅</span>
                     </div>
                     <div class="timeline-content">
-                        <span class="timeline-phase">Phase 1: Completed</span>
+                        <span class="timeline-phase">✨ Phase 1: Done!</span>
                         <h3>Research & Planning</h3>
-                        <p>Analyzed learning needs, designed curriculum structure, and validated learning methodologies with early adopters.</p>
+                        <p>We talked to hundreds of learners to understand what makes Web3 education click. The curriculum is designed and ready to go! 🎓</p>
                     </div>
                 </div>
                 
                 <div class="timeline-item">
                     <div class="timeline-marker">
-                        <i data-lucide="zap"></i>
+                        <span class="timeline-marker-emoji">⚡</span>
                     </div>
                     <div class="timeline-content">
-                        <span class="timeline-phase">Phase 2: Current</span>
-                        <h3>Core Platform Development</h3>
-                        <p>Building the interactive learning platform, coding sandbox, and progress tracking systems.</p>
+                        <span class="timeline-phase">🚀 Phase 2: Building Now!</span>
+                        <h3>Platform Development</h3>
+                        <p>Our dev team is coding up a storm! Interactive lessons, progress tracking, and gamification features are coming together. 💻✨</p>
                     </div>
                 </div>
                 
                 <div class="timeline-item">
                     <div class="timeline-marker">
-                        <i data-lucide="book-open"></i>
+                        <span class="timeline-marker-emoji">📝</span>
                     </div>
                     <div class="timeline-content">
-                        <span class="timeline-phase">Phase 3: Upcoming</span>
+                        <span class="timeline-phase">📚 Phase 3: Next Up</span>
                         <h3>Content Creation</h3>
-                        <p>Developing comprehensive course materials,lessons, and interactive exercises.</p>
+                        <p>Writing engaging lessons, creating video tutorials, and designing interactive exercises. Learning will be fun, we promise! 🎨</p>
                     </div>
                 </div>
                 
                 <div class="timeline-item">
                     <div class="timeline-marker">
-                        <i data-lucide="rocket"></i>
+                        <span class="timeline-marker-emoji">🎉</span>
                     </div>
                     <div class="timeline-content">
-                        <span class="timeline-phase">Phase 4: Launch</span>
-                        <h3>Beta Testing & Launch</h3>
-                        <p>Closed beta testing with early users, followed by public launch and continuous improvement.</p>
+                        <span class="timeline-phase">🎊 Phase 4: Launch!</span>
+                        <h3>Beta Testing & Go Live</h3>
+                        <p>Beta testers will get early access, then we open the doors to everyone! Get ready to level up your Web3 skills! 🚀</p>
                     </div>
                 </div>
             </div>
@@ -983,35 +1176,30 @@
     <section class="benefits-section">
         <div class="container">
             <div class="section-header">
-                <h2>Why Learn With Us</h2>
+                <span class="section-emoji">🌟</span>
+                <h2 class="section-title">Why You'll Love It</h2>
                 <p class="section-description">
-                    Our approach combines the best of structured education with practical, hands-on Web3 experience.
+                    Serious learning doesn't have to be boring. Here's what makes us different!
                 </p>
             </div>
             
             <div class="benefits-grid">
                 <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i data-lucide="shield"></i>
-                    </div>
+                    <span class="benefit-emoji">🛡️</span>
                     <h3>Security First</h3>
-                    <p>Learn secure practices from the ground up. Safety is built into every lesson.</p>
+                    <p>Learn best practices and security from day one. Build with confidence and avoid costly mistakes! 🔒</p>
                 </div>
                 
                 <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i data-lucide="trending-up"></i>
-                    </div>
-                    <h3>Career Focused</h3>
-                    <p>Skills that translate directly to opportunities in Web3.</p>
+                    <span class="benefit-emoji">💼</span>
+                    <h3>Career Ready</h3>
+                    <p>Build real projects for your portfolio. Our courses prepare you for actual Web3 jobs! 📈</p>
                 </div>
                 
                 <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i data-lucide="refresh-cw"></i>
-                    </div>
-                    <h3>Always Updated</h3>
-                    <p>Content continuously updated to reflect the latest Web3 developments and best practices.</p>
+                    <span class="benefit-emoji">🔄</span>
+                    <h3>Always Fresh</h3>
+                    <p>Web3 moves fast! We keep content updated with the latest trends and technologies. 🆕</p>
                 </div>
             </div>
         </div>
@@ -1019,19 +1207,21 @@
 
     <!-- CTA Section -->
     <section class="cta-section">
-        <div class="cta-bg-pattern"></div>
-        
         <div class="container">
             <div class="cta-content">
-                <h2>Stay Updated</h2>
+                <span class="cta-emoji">🎉</span>
+                <h2>Ready to Start Your Web3 Journey?</h2>
                 <p>
-                    Be the first to know when we launch. Join our early access list for exclusive updates,
-                    beta testing opportunities, and special launch offers.
+                    <span class="cta-highlight">We're almost there!</span> The platform is taking shape and we can't wait to share it with you. 
+                    Your Web3 adventure is about to begin! 🌈
                 </p>
                 
-            
-                
-            
+                <div style="margin-top: 2rem;">
+                    <a href="index.html" class="btn" style="background: white; color: var(--color-primary);">
+                        <i data-lucide="arrow-left" style="width: 20px; height: 20px;"></i>
+                        Back to Home
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -1054,7 +1244,7 @@
                 </div>
                 
                 <div class="copyright">
-                    © 2026 NexaPay. Web3 Learning Platform - Coming Soon.
+                    © 2025 NexaPay. Web3 Learning Platform - Coming Soon. Made with 💜 for the Web3 community
                 </div>
             </div>
         </div>
@@ -1064,43 +1254,62 @@
         // Initialize Lucide icons
         lucide.createIcons();
         
-        // Form submission handler
-        document.getElementById('notifyForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input[type="email"]').value;
-            
-            // In a real implementation, you would send this to your backend
-            alert(`Thank you! We'll notify you at ${email} when we launch.`);
-            this.reset();
-        });
-        
         // Animate elements on scroll
-        function animateOnScroll() {
-            const elements = document.querySelectorAll('.feature-card, .timeline-item, .benefit-card');
-            
-            elements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const elementVisible = 150;
-                
-                if (elementTop < window.innerHeight - elementVisible) {
-                    element.style.opacity = "1";
-                    element.style.transform = "translateY(0)";
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'slideInUp 0.6s ease-out forwards';
                 }
             });
-        }
-        
-        // Set initial state and trigger animation
-        window.addEventListener('load', () => {
-            document.querySelectorAll('.feature-card, .timeline-item, .benefit-card').forEach(el => {
-                el.style.opacity = "0";
-                el.style.transform = "translateY(30px)";
-                el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        }, observerOptions);
+
+        // Observe all feature cards, timeline items, and benefit cards
+        document.querySelectorAll('.feature-card, .timeline-item, .benefit-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add sparkle effect to emojis on hover
+        document.querySelectorAll('.emoji, .section-emoji, .stat-emoji, .feature-emoji, .benefit-emoji, .cta-emoji').forEach(emoji => {
+            emoji.addEventListener('mouseenter', function() {
+                this.style.animation = 'wiggle 0.5s ease-in-out';
             });
             
-            animateOnScroll();
+            emoji.addEventListener('animationend', function() {
+                this.style.animation = '';
+            });
         });
-        
-        window.addEventListener('scroll', animateOnScroll);
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const targetPosition = target.offsetTop - headerHeight - 20;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add confetti effect on timeline markers hover (fun!)
+        document.querySelectorAll('.timeline-marker').forEach(marker => {
+            marker.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.2) rotate(360deg)';
+            });
+            
+            marker.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
     </script>
 </body>
 </html>
