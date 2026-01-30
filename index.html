@@ -12,8 +12,8 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexaPay - Web3 Tools Hub</title>
-    <meta name="description" content="NexaPay Web3 Tools Hub: Discover and use client-side wallet tools, gas trackers, and utilities. Generate and manage wallets locally with 100% non-custodial control.">
+    <title>NexaPay - Making Web3 Easier</title>
+    <meta name="description" content="NexaPay makes Web3 accessible with powerful tools, resources, and our flagship payment gateway. Create crypto payment links in seconds.">
     
     <!-- Google Fonts - Montserrat for consistent typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1386,6 +1386,66 @@
             color: var(--color-primary);
         }
 
+        /* Payment Gateway Promotion Banner */
+        .payment-gateway-banner {
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin: 2rem 0;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-gateway-banner:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(124, 58, 237, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .payment-gateway-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .payment-gateway-text h3 {
+            color: white;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .payment-gateway-text p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0;
+        }
+
+        .payment-gateway-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .payment-gateway-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            border-radius: 50%;
+            transform: translate(100px, -100px);
+        }
+
         /* Responsive Styles */
         @media (min-width: 768px) {
             .mobile-menu-btn {
@@ -1438,6 +1498,10 @@
 
             .hub-features-grid {
                 grid-template-columns: repeat(3, 1fr);
+            }
+
+            .payment-gateway-content {
+                flex-direction: row;
             }
         }
 
@@ -1520,6 +1584,11 @@
             .quick-tools-grid {
                 grid-template-columns: 1fr;
             }
+
+            .payment-gateway-content {
+                flex-direction: column;
+                text-align: center;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1554,6 +1623,10 @@
             }
             
             .countdown-value {
+                font-size: 1.25rem;
+            }
+
+            .payment-gateway-text h3 {
                 font-size: 1.25rem;
             }
         }
@@ -1622,12 +1695,16 @@
                     <a href="#security">Security</a>
                     <a href="#what-we-dont">Transparency</a>
                     <a href="https://mynexa.pythonanywhere.com" target="_blank">Browse All Tools</a>
-                    <a href="coming-soon.html" class="coming-soon-link">What's Next</a>
+                    <a href="https://nexapay.pythonanywhere.com" target="_blank">Payment Gateway</a>
                 </nav>
 
                 <div class="nav-buttons" id="navButtons">
-                    <a href="tools.html"><button class="btn btn-secondary">All Tools</button></a>
-                    <a href="create-wallet.html"><button class="btn btn-primary">Create Wallet</button></a>
+                    <a href="https://nexapay.pythonanywhere.com/create-payment" target="_blank">
+                        <button class="btn btn-primary">
+                            <i data-lucide="credit-card" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                            <span>Create Payment Link</span>
+                        </button>
+                    </a>
                 </div>
 
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -1643,7 +1720,7 @@
             <a href="#security">Security</a>
             <a href="#what-we-dont">Transparency</a>
             <a href="https://mynexa.pythonanywhere.com" target="_blank">Browse All Tools</a>
-            <a href="coming-soon.html">What's Next</a>
+            <a href="https://nexapay.pythonanywhere.com" target="_blank">Payment Gateway</a>
             
             <!-- Quick Tools in Mobile Menu -->
             <div class="mobile-tools-section">
@@ -1652,22 +1729,42 @@
                     <i data-lucide="fuel" style="width: 18px; height: 18px;"></i>
                     <span>Gas Tracker</span>
                 </a>
-                <a href="create-wallet.html" class="mobile-tool-link">
-                    <i data-lucide="key" style="width: 18px; height: 18px;"></i>
-                    <span>Wallet Generator</span>
+                <a href="https://nexapay.pythonanywhere.com/create-payment" target="_blank" class="mobile-tool-link">
+                    <i data-lucide="credit-card" style="width: 18px; height: 18px;"></i>
+                    <span>Payment Gateway</span>
                 </a>
-                <a href="decrypt-tool.html" class="mobile-tool-link">
-                    <i data-lucide="unlock" style="width: 18px; height: 18px;"></i>
-                    <span>Wallet Decryptor</span>
+                <a href="dashboard.html" class="mobile-tool-link">
+                    <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                    <span>Wallet Explorer</span>
                 </a>
             </div>
             
             <div class="mobile-menu-buttons">
-                <a href="tools.html"><button class="btn btn-secondary" style="width: 100%;">View All Tools</button></a>
-                <a href="create-wallet.html"><button class="btn btn-primary" style="width: 100%;">Create Wallet</button></a>
+                <a href="https://nexapay.pythonanywhere.com/create-payment" target="_blank">
+                    <button class="btn btn-primary" style="width: 100%;">
+                        <i data-lucide="credit-card" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                        <span>Create Payment Link</span>
+                    </button>
+                </a>
             </div>
         </div>
     </header>
+
+    <!-- Payment Gateway Promotion Banner -->
+    <div class="container">
+        <a href="https://nexapay.pythonanywhere.com" target="_blank" class="payment-gateway-banner">
+            <div class="payment-gateway-content">
+                <div class="payment-gateway-text">
+                    <h3>🚀 Create Crypto Payment Links Instantly</h3>
+                    <p>Our official payment gateway is live! Accept ETH, MATIC, ARB, and LINEA payments with automated email notifications.</p>
+                </div>
+                <div class="payment-gateway-badge">
+                    <i data-lucide="rocket" style="width: 16px; height: 16px; margin-right: 0.25rem;"></i>
+                    Launched by NexaPay
+                </div>
+            </div>
+        </a>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -1679,40 +1776,25 @@
                 <div class="hero-text">
                     <div class="trust-badge">
                         <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i>
-                        <span>100% client-side wallet generation</span>
+                        <span>Making Web3 accessible for everyone</span>
                     </div>
 
-                    <h1>Your Web3 <span style="background: linear-gradient(to right, var(--color-primary), var(--color-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Tools Hub</span></h1>
+                    <h1>Making <span style="background: linear-gradient(to right, var(--color-primary), var(--color-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Web3 Easier</span></h1>
 
                     <p style="font-size: clamp(1rem, 2vw, 1.25rem); color: var(--color-neutral-600);">
-                        Discover, use, and share essential Web3 tools. Start with our featured wallet tools or explore the complete community directory.
+                        Discover powerful Web3 tools, resources, and our flagship payment gateway. Everything you need to succeed in the decentralized world.
                     </p>
 
                     <div class="hero-buttons">
-                        <a href="https://mynexa.pythonanywhere.com" target="_blank"><button class="btn btn-primary">
-                            <span>Browse All Tools</span>
-                            <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
-                        </button></a>
-                        <a href="create-wallet.html"><button class="btn btn-secondary">Generate Secure Wallet</button></a>
-                    </div>
-
-                    <div class="quick-features">
-                        <div class="quick-feature">
-                            <i data-lucide="shield" style="width: 20px; height: 20px;"></i>
-                            <span>100% Client-Side</span>
-                        </div>
-                        <div class="quick-feature">
-                            <i data-lucide="zap" style="width: 20px; height: 20px;"></i>
-                            <span>Free Tools</span>
-                        </div>
-                        <div class="quick-feature">
-                            <i data-lucide="users" style="width: 20px; height: 20px;"></i>
-                            <span>Community-Driven</span>
-                        </div>
-                        <div class="quick-feature">
-                            <i data-lucide="tool" style="width: 20px; height: 20px;"></i>
-                            <span>Multi-Chain</span>
-                        </div>
+                        <a href="https://nexapay.pythonanywhere.com/create-payment" target="_blank">
+                            <button class="btn btn-primary">
+                                <i data-lucide="credit-card" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                                <span>Create Payment Link</span>
+                            </button>
+                        </a>
+                        <a href="https://mynexa.pythonanywhere.com" target="_blank">
+                            <button class="btn btn-secondary">Browse All Tools</button>
+                        </a>
                     </div>
                 </div>
 
@@ -1721,24 +1803,22 @@
                         <div id="threejs-card"></div>
                         <div class="card-overlay">
                             <div class="card-header">
-                                <div class="card-title">Web3 Tools Hub</div>
+                                <div class="card-title">NexaPay Tools</div>
                                 <div class="card-icon">
-                                    <i data-lucide="layers" style="width: 24px; height: 24px;"></i>
+                                    <i data-lucide="tool" style="width: 24px; height: 24px;"></i>
                                 </div>
                             </div>
                             
                             <div class="card-balance">
-                                <div class="balance-label">Featured Tool</div>
-                                <div class="balance-amount">Wallet Generator</div>
+                                <div class="balance-label">Featured Service</div>
+                                <div class="balance-amount">Payment Gateway</div>
                                 <div style="font-size: 0.875rem; opacity: 0.8; margin-top: 0.5rem;">Supported Blockchains</div>
                                 
                                 <div class="blockchains-grid">
                                     <div class="blockchain-badge">ETH</div>
-                                    <div class="blockchain-badge">BASE</div>
+                                    <div class="blockchain-badge">MATIC</div>
                                     <div class="blockchain-badge">ARB</div>
-                                    <div class="blockchain-badge">BSC</div>
-                                    <div class="blockchain-badge">POLY</div>
-                                    <div class="blockchain-badge">OP</div>
+                                    <div class="blockchain-badge">LINEA</div>
                                 </div>
                             </div>
                         </div>
@@ -1755,15 +1835,28 @@
                 <div class="section-badge">Quick Access</div>
                 <h2>Featured Web3 Tools</h2>
                 <p class="section-description">
-                    Fast access to our most popular Web3 utilities. All tools are free and run entirely in your browser.
+                    Fast access to our most popular Web3 utilities. All tools are free and designed to make Web3 easier.
                 </p>
             </div>
 
             <div class="quick-tools-grid">
+                <a href="https://nexapay.pythonanywhere.com/create-payment" target="_blank" class="quick-tool-card">
+                    <div class="hub-badge">
+                        <i data-lucide="star" style="width: 12px; height: 12px;"></i>
+                        <span>Our Flagship Service</span>
+                    </div>
+                    <div class="quick-tool-icon">
+                        <i data-lucide="credit-card"></i>
+                    </div>
+                    <h3>Payment Gateway</h3>
+                    <p>Create crypto payment links instantly. Accept ETH, MATIC, ARB, and LINEA with automated email notifications.</p>
+                    <span class="quick-tool-badge">Payment Tool</span>
+                </a>
+
                 <a href="gas.html" class="quick-tool-card">
                     <div class="hub-badge">
                         <i data-lucide="star" style="width: 12px; height: 12px;"></i>
-                        <span>Featured in our Hub</span>
+                        <span>Featured Tool</span>
                     </div>
                     <div class="quick-tool-icon">
                         <i data-lucide="fuel"></i>
@@ -1773,36 +1866,10 @@
                     <span class="quick-tool-badge">Network Tool</span>
                 </a>
 
-                <a href="create-wallet.html" class="quick-tool-card">
-                    <div class="hub-badge">
-                        <i data-lucide="star" style="width: 12px; height: 12px;"></i>
-                        <span>Featured in our Hub</span>
-                    </div>
-                    <div class="quick-tool-icon">
-                        <i data-lucide="key"></i>
-                    </div>
-                    <h3>Wallet Generator</h3>
-                    <p>Create and encrypt Ethereum wallets securely with AES-256. All processing happens client-side.</p>
-                    <span class="quick-tool-badge">Wallet Tool</span>
-                </a>
-
-                <a href="decrypt-tool.html" class="quick-tool-card">
-                    <div class="hub-badge">
-                        <i data-lucide="star" style="width: 12px; height: 12px;"></i>
-                        <span>Featured in our Hub</span>
-                    </div>
-                    <div class="quick-tool-icon">
-                        <i data-lucide="unlock"></i>
-                    </div>
-                    <h3>Wallet Decryptor</h3>
-                    <p>Securely decrypt your encrypted wallet files using your password. No data sent to servers.</p>
-                    <span class="quick-tool-badge">Wallet Tool</span>
-                </a>
-
                 <a href="dashboard.html" class="quick-tool-card">
                     <div class="hub-badge">
                         <i data-lucide="star" style="width: 12px; height: 12px;"></i>
-                        <span>Featured in our Hub</span>
+                        <span>Featured Tool</span>
                     </div>
                     <div class="quick-tool-icon">
                         <i data-lucide="eye"></i>
@@ -1811,13 +1878,28 @@
                     <p>Comprehensive wallet analytics and transaction history viewer across multiple blockchains.</p>
                     <span class="quick-tool-badge">Analytics Tool</span>
                 </a>
+
+                <a href="https://mynexa.pythonanywhere.com" target="_blank" class="quick-tool-card">
+                    <div class="hub-badge">
+                        <i data-lucide="star" style="width: 12px; height: 12px;"></i>
+                        <span>Community Hub</span>
+                    </div>
+                    <div class="quick-tool-icon">
+                        <i data-lucide="compass"></i>
+                    </div>
+                    <h3>Tool Library</h3>
+                    <p>Discover hundreds of Web3 tools submitted and reviewed by our growing community.</p>
+                    <span class="quick-tool-badge">Resource Hub</span>
+                </a>
             </div>
 
             <div class="all-tools-cta">
-                <a href="https://mynexa.pythonanywhere.com" target="_blank"><button class="btn btn-primary">
-                    <span>Explore Full Tool Library</span>
-                    <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
-                </button></a>
+                <a href="https://mynexa.pythonanywhere.com" target="_blank">
+                    <button class="btn btn-primary">
+                        <span>Explore Full Tool Library</span>
+                        <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
+                    </button>
+                </a>
             </div>
         </div>
     </section>
@@ -1826,21 +1908,10 @@
     <section class="stats-section">
         <div class="container">
             <div class="stats-container">
+                
                 <div class="stat-item">
-                    <div class="stat-item-value">100%</div>
-                    <div class="stat-item-label">Client-Side</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-item-value">6+</div>
-                    <div class="stat-item-label">Blockchains</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-item-value">0</div>
-                    <div class="stat-item-label">Server Storage</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-item-value">Open Source</div>
-                    <div class="stat-item-label">Transparent Code</div>
+                    <div class="stat-item-value">400+</div>
+                    <div class="stat-item-label">Community Tools</div>
                 </div>
             </div>
         </div>
@@ -1850,44 +1921,37 @@
     <section class="hub-features-section">
         <div class="container">
             <div class="section-header">
-                <div class="section-badge">Why Choose Our Hub</div>
+                <div class="section-badge">Why Choose NexaPay</div>
                 <h2>More Than Just Tools</h2>
                 <p class="section-description">
-                    We're building a community-driven ecosystem for Web3 tool discovery and development.
+                    We're building an ecosystem that makes Web3 accessible, powerful, and easy to use for everyone.
                 </p>
             </div>
 
             <div class="hub-features-grid">
                 <div class="hub-feature-card">
                     <div class="hub-feature-icon">
+                        <i data-lucide="credit-card"></i>
+                    </div>
+                    <h3>Payment Gateway</h3>
+                    <p>Our flagship service that makes accepting crypto payments as easy as creating a link.</p>
+                </div>
+
+                <div class="hub-feature-card">
+                    <div class="hub-feature-icon">
+                        <i data-lucide="tool"></i>
+                    </div>
+                    <h3>Web3 Tools</h3>
+                    <p>Curated collection of essential Web3 utilities for developers and users alike.</p>
+                </div>
+
+                <div class="hub-feature-card">
+                    <div class="hub-feature-icon">
                         <i data-lucide="users"></i>
                     </div>
-                    <h3>Community-Driven</h3>
-                    <p>Tools are submitted and reviewed by the community. Discover what other developers are building.</p>
+                    <h3>Community</h3>
+                    <p>Join thousands of Web3 enthusiasts sharing tools, knowledge, and resources.</p>
                 </div>
-
-                <div class="hub-feature-card">
-                    <div class="hub-feature-icon">
-                        <i data-lucide="shield-check"></i>
-                    </div>
-                    <h3>Verified Tools</h3>
-                    <p>Each tool undergoes verification to ensure security and functionality before being featured.</p>
-                </div>
-
-                <div class="hub-feature-card">
-                    <div class="hub-feature-icon">
-                        <i data-lucide="git-branch"></i>
-                    </div>
-                    <h3>Open Source First</h3>
-                    <p>We believe in transparency. Most tools in our hub are open source and publicly auditable.</p>
-                </div>
-            </div>
-
-            <div class="cta-center">
-                <a href="https://mynexa.pythonanywhere.com" target="_blank"><button class="btn btn-primary">
-                    <i data-lucide="compass" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
-                    <span>Visit Community Hub</span>
-                </button></a>
             </div>
         </div>
     </section>
@@ -1896,60 +1960,36 @@
     <section id="features" class="features-section">
         <div class="container">
             <div class="section-header">
-                <div class="section-badge">Core Technology</div>
-                <h2>Client-Side Wallet Management</h2>
+                <div class="section-badge">Our Services</div>
+                <h2>Everything You Need for Web3</h2>
                 <p class="section-description">
-                    Generate, encrypt, and manage wallets entirely in your browser. No data leaves your device.
+                    We provide comprehensive Web3 solutions.
                 </p>
             </div>
 
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i data-lucide="key"></i>
+                        <i data-lucide="credit-card"></i>
                     </div>
-                    <h3>Local Wallet Generation</h3>
-                    <p>Generate wallets directly in your browser. Private keys never leave your device.</p>
+                    <h3>Crypto Payment Gateway</h3>
+                    <p>Create payment links in seconds. Accept ETH, MATIC, ARB, and LINEA with automated verification.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i data-lucide="lock"></i>
+                        <i data-lucide="tool"></i>
                     </div>
-                    <h3>AES-256 Encryption</h3>
-                    <p>Encrypt wallet data locally with your passphrase using military-grade AES-256 encryption.</p>
+                    <h3>Tool Discovery</h3>
+                    <p>Find and use hundreds of Web3 tools submitted by our community.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i data-lucide="file-text"></i>
+                        <i data-lucide="book-open"></i>
                     </div>
-                    <h3>Secure Backup Files</h3>
-                    <p>Download encrypted wallet files to your device. Restore anytime with your passphrase.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i data-lucide="zap"></i>
-                    </div>
-                    <h3>Multi-Chain Compatibility</h3>
-                    <p>Works with Ethereum, Base, Arbitrum, Polygon, Optimism, and BSC.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i data-lucide="eye-off"></i>
-                    </div>
-                    <h3>No Data Collection</h3>
-                    <p>We never see your wallet addresses, transactions, or balances.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i data-lucide="download"></i>
-                    </div>
-                    <h3>Offline Support</h3>
-                    <p>Works completely offline once loaded. No internet required for wallet operations.</p>
+                    <h3>Learning Resources</h3>
+                    <p>Educational content to help you master Web3 development and usage.</p>
                 </div>
             </div>
         </div>
@@ -1964,31 +2004,31 @@
                 </div>
                 <div class="warning-content">
                     <h3>Transparency & Focus</h3>
-                    <p>NexaPay is a client-side wallet tool hub. Here's what we don't offer to maintain true sovereignty:</p>
+                    <p>NexaPay is focused on making Web3 accessible. Here's what we provide and what we don't:</p>
                     
                     <div class="warning-grid">
                         <div class="warning-item">
                             <div class="warning-item-icon">
-                                <i data-lucide="database"></i>
+                                <i data-lucide="check-circle" style="color: #10b981;"></i>
                             </div>
-                            <h4>No Server Storage</h4>
-                            <p style="font-size: 0.875rem; color: var(--color-neutral-600);">We never store your wallet data. Everything stays on your device.</p>
+                            <h4>We Provide</h4>
+                            <p style="font-size: 0.875rem; color: var(--color-neutral-600);">Payment gateway, Web3 tools, community resources</p>
                         </div>
                         
                         <div class="warning-item">
                             <div class="warning-item-icon">
-                                <i data-lucide="user-check"></i>
+                                <i data-lucide="x-circle" style="color: #ef4444;"></i>
                             </div>
-                            <h4>No KYC/AML</h4>
-                            <p style="font-size: 0.875rem; color: var(--color-neutral-600);">No identity verification. Use pseudonymously.</p>
+                            <h4>Not a Custodian</h4>
+                            <p style="font-size: 0.875rem; color: var(--color-neutral-600);">We never hold your funds. Payments go directly to your wallet.</p>
                         </div>
                         
                         <div class="warning-item">
                             <div class="warning-item-icon">
-                                <i data-lucide="trending-up"></i>
+                                <i data-lucide="x-circle" style="color: #ef4444;"></i>
                             </div>
                             <h4>No Financial Services</h4>
-                            <p style="font-size: 0.875rem; color: var(--color-neutral-600);">We provide wallet tools only. No trading, staking, or yield services.</p>
+                            <p style="font-size: 0.875rem; color: var(--color-neutral-600);">We provide tools, not trading, staking, or yield services.</p>
                         </div>
                     </div>
                 </div>
@@ -1997,60 +2037,16 @@
     </section>
 
     <!-- How It Works Section -->
-    <section id="how-it-works" class="how-it-works-section">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-badge">How It Works</div>
-                <h2>Self-Sovereignty in 3 Steps</h2>
-                <p class="section-description">
-                    Experience true Web3 sovereignty with our client-side wallet tools.
-                </p>
-            </div>
-
-            <div class="steps-grid">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <div class="step-icon-box">
-                        <i data-lucide="plus-circle"></i>
-                    </div>
-                    <h3>Generate Wallet</h3>
-                    <p>Create a new wallet directly in your browser. Keys are generated locally and never transmitted.</p>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <div class="step-icon-box">
-                        <i data-lucide="lock"></i>
-                    </div>
-                    <h3>Encrypt & Save</h3>
-                    <p>Encrypt your wallet with a secure passphrase using AES-256 and download the encrypted file.</p>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <div class="step-icon-box">
-                        <i data-lucide="upload"></i>
-                    </div>
-                    <h3>Restore Anytime</h3>
-                    <p>Upload your encrypted file and enter your passphrase to restore access to your wallet.</p>
-                </div>
-            </div>
-
-            <div class="cta-center">
-                <a href="create-wallet.html"><button class="btn btn-primary">Start Creating Wallet</button></a>
-            </div>
-        </div>
-    </section>
-
+    
     <!-- Security Section -->
     <section id="security" class="security-section">
         <div class="container">
             <div class="security-content">
                 <div class="security-text">
-                    <div class="section-badge">Security Model</div>
-                    <h2>Your Device, Your Control</h2>
+                    <div class="section-badge">Security & Privacy</div>
+                    <h2>Secure by Design</h2>
                     <p class="security-description">
-                        NexaPay's security model is simple: everything happens on your device. We provide the tools, you maintain complete sovereignty.
+                        Our systems are built with security and privacy as core principles. Your data and funds are protected.
                     </p>
 
                     <div class="security-features-list">
@@ -2060,12 +2056,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
                             </div>
-                            <div class="security-feature-content">
-                                <h4>100% Client-Side</h4>
-                                <p>All wallet operations happen in your browser. No server involvement in key generation or encryption.</p>
-                            </div>
-                        </div>
-
+                        
                         <div class="security-feature-item">
                             <div class="check-icon">
                                 <svg style="width: 16px; height: 16px; color: white;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2073,56 +2064,10 @@
                                 </svg>
                             </div>
                             <div class="security-feature-content">
-                                <h4>AES-256 Encryption</h4>
-                                <p>Wallet files are encrypted locally with military-grade AES-256 before being downloaded.</p>
+                                <h4>Privacy First</h4>
+                                <p>We minimize data collection and never share your information with third parties.</p>
                             </div>
                         </div>
-
-                        <div class="security-feature-item">
-                            <div class="check-icon">
-                                <svg style="width: 16px; height: 16px; color: white;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <div class="security-feature-content">
-                                <h4>Zero Data Collection</h4>
-                                <p>We don't collect wallet addresses, IPs, or any identifying information.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="security-grid">
-                    <div class="security-card">
-                        <div class="security-card-icon">
-                            <i data-lucide="monitor"></i>
-                        </div>
-                        <h4>Browser-Based</h4>
-                        <p>Works entirely in modern browsers. No downloads or installations required.</p>
-                    </div>
-
-                    <div class="security-card">
-                        <div class="security-card-icon">
-                            <i data-lucide="code"></i>
-                        </div>
-                        <h4>Open Source</h4>
-                        <p>Our code is publicly available on GitHub for transparency and security audits.</p>
-                    </div>
-
-                    <div class="security-card">
-                        <div class="security-card-icon">
-                            <i data-lucide="file-x"></i>
-                        </div>
-                        <h4>No Backups</h4>
-                        <p>We don't backup your wallet files. You're responsible for your own data.</p>
-                    </div>
-
-                    <div class="security-card">
-                        <div class="security-card-icon">
-                            <i data-lucide="wifi-off"></i>
-                        </div>
-                        <h4>Offline Capable</h4>
-                        <p>Once loaded, works completely offline for maximum security.</p>
                     </div>
                 </div>
             </div>
@@ -2134,16 +2079,16 @@
         <div class="container">
             <div class="section-header">
                 <div class="section-badge">What's Next</div>
-                <h2>Web3 Learning Platform</h2>
+                <h2>A Web3 Learning System</h2>
                 <p class="section-description">
-                    We're building an interactive learning platform to help you master Web3 development, smart contracts, and decentralized applications.
+                    Imagine you could learn web3 all in one place,track your progress, take quiz, apply your knowledge practiaclly.
                 </p>
             </div>
             
-            <a href="coming-soon.html">
+            <a href="https://mynexa.pythonanywhere.com" target="_blank">
                 <button class="btn btn-primary">
-                    <i data-lucide="rocket" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
-                    <span>Explore Coming Features</span>
+                    <i data-lucide="compass" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                    <span>Explore Community Tools</span>
                 </button>
             </a>
         </div>
@@ -2156,43 +2101,18 @@
 
         <div class="container">
             <div class="cta-content">
-                <h2>Join Our Web3 Tools Community</h2>
+                <h2>Ready to Explore?</h2>
                 <p>
-                    Discover tools, share your creations, and be part of a growing ecosystem of Web3 developers and enthusiasts.
+                    Join users who are already using Nexa in their web3 routine.
                 </p>
 
                 <div class="cta-buttons">
-                    <a href="https://mynexa.pythonanywhere.com" target="_blank"><button class="btn btn-white">
-                        <span>Browse Tool Library</span>
-                        <i data-lucide="arrow-right" style="width: 20px; height: 20px; margin-left: 0.5rem;"></i>
-                    </button></a>
-                    <a href="https://github.com/nexa-io/mynexa" target="_blank"><button class="btn btn-outline-white">
-                        <i data-lucide="github" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
-                        <span>View on GitHub</span>
-                    </button></a>
-                </div>
-
-                <div class="trust-indicators">
-                    <div class="indicators-grid">
-                        <div class="indicator-item">
-                            <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            <span>100% client-side</span>
-                        </div>
-                        <div class="indicator-item">
-                            <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            <span>No data collection</span>
-                        </div>
-                        <div class="indicator-item">
-                            <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            <span>Open source</span>
-                        </div>
-                    </div>
+                    <a href="https://mynexa.pythonanywhere.com" target="_blank">
+                        <button class="btn btn-outline-white">
+                            <i data-lucide="compass" style="width: 20px; height: 20px; margin-right: 0.5rem;"></i>
+                            <span>Browse Tools</span>
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -2208,7 +2128,7 @@
                         <span class="logo-text">NexaPay</span>
                     </a>
                     <p>
-                        Your Web3 Tools Hub. Discover, use, and share client-side Web3 tools and utilities.
+                        Making Web3 accessible with powerful tools, resources.
                     </p>
                     <div class="social-links">
                         <a href="https://twitter.com/myNexaPay" class="social-link" target="_blank">
@@ -2224,22 +2144,12 @@
                 </div>
 
                 <div class="footer-column">
-                    <h3>Quick Tools</h3>
-                    <ul class="footer-links">
-                        <li><a href="gas.html">Gas Tracker</a></li>
-                        <li><a href="create-wallet.html">Wallet Generator</a></li>
-                        <li><a href="decrypt-tool.html">Wallet Decryptor</a></li>
-                        <li><a href="dashboard.html">Wallet Explorer</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
                     <h3>Company</h3>
                     <ul class="footer-links">
                         <li><a href="https://mynexa.pages.dev/about">About Us</a></li>
                         <li><a href="#security">Security</a></li>
                         <li><a href="#what-we-dont">Transparency</a></li>
-                        <li><a href="coming-soon.html">What's Next</a></li>
+                        <li><a href="https://mynexa.pythonanywhere.com" target="_blank">Community Hub</a></li>
                         <li><a href="mailto:infocontactnexa@gmail.com">Contact</a></li>
                     </ul>
                 </div>
@@ -2268,13 +2178,13 @@
             <div class="disclaimer-box">
                 <h4>Important Disclaimer</h4>
                 <p>
-                    NexaPay provides client-side wallet generation tools. We never have access to your funds, private keys, or wallet data. All operations happen locally in your browser. You are solely responsible for securing your encrypted wallet files and passphrases. Cryptocurrency involves risk and is not insured. This is a tool, not a financial service.
+                    NexaPay provides Web3 tools services. We never have access to your funds, private keys, or wallet data. You are solely responsible for securing your wallet and funds. Cryptocurrency involves risk and is not insured. This is a tool, not a financial service.
                 </p>
             </div>
 
             <div class="footer-bottom">
                 <div class="copyright">
-                    © 2025 NexaPay. Web3 Tools Hub.
+                    © 2026 NexaPay. Making Web3 Easier.
                 </div>
             </div>
         </div>
@@ -2482,7 +2392,7 @@
             }
             
             // Add hover effects to cards
-            const cards = document.querySelectorAll('.feature-card, .step-card, .security-card, .warning-item, .quick-tool-card, .hub-feature-card');
+            const cards = document.querySelectorAll('.feature-card, .step-card, .security-card, .warning-item, .quick-tool-card, .hub-feature-card, .payment-gateway-banner');
             cards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-5px)';
@@ -2494,25 +2404,5 @@
             });
         });
     </script>
-        <!-- Floating Coming Soon Button -->
-    <a href="coming-soon.html" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 10000; text-decoration: none;">
-        <button style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.5rem; background: linear-gradient(135deg, #ec4899, #8b5cf6); color: white; border: none; border-radius: 50px; font-size: 1rem; font-weight: 600; font-family: 'Montserrat', sans-serif; cursor: pointer; box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3); transition: all 0.3s ease; position: relative; overflow: hidden;">
-            <i data-lucide="rocket" style="width: 20px; height: 20px;"></i>
-            <span>Coming Soon</span>
-            <span style="position: absolute; top: -5px; right: -5px; background: white; color: #ec4899; padding: 0.25rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; animation: pulse 2s infinite;">NEW</span>
-        </button>
-    </a>
-    
-    <style>
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        a[href="coming-soon.html"] button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px rgba(236, 72, 153, 0.4);
-        }
-    </style>
 </body>
 </html>
